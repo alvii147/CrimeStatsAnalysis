@@ -1,0 +1,35 @@
+1. What you think an ideal client should be able to do
+2. What you plan to actually implement for your client given the time constraints
+3. (At the end of the project, when you write your report) What you actually
+implemented from your plan, and what you left
+4. An explanation justifying each of the above choices
+
+
+Features:
+add/remove/modify/update::
+- location
+- person
+- incident
+	prompt for:
+	- complaint
+	- crime
+	- search
+	- other (no additional info/specialized)
+- update the outcome after a trial for person
+
+(for modification you can't change primary keys)
+(only additional info can be modified)
+
+querying:
+- incidents (Categories) by location
+    -type/nature/incident_id
+- show information based on incident_id (specialized info of incident if available)
+	- group by\
+- code descriptions/categories by organization
+- show incidents based on time, data, location and type of crime,
+- Background check
+    - pull any information regarding the person
+
+- sort by most/least recent crimes (flag for all queries)
+- pull up people involed in a particular crime - ie user specifies the crime ID
+    -specify the suspect flag to pull up all the involved supects
