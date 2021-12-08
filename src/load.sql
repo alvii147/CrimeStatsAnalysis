@@ -3,7 +3,7 @@
 \! rm -f output_load.txt
 tee output_load.txt
 
-LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/UKCrime/london-stop-and-search.csv'
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/UKCrime/london-police-records/london-stop-and-search.csv'
 INTO TABLE Location
 FIELDS
     TERMINATED BY ','
