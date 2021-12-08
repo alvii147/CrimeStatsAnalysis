@@ -1,0 +1,7 @@
+https://www.kaggle.com/sohier/london-police-records
+https://www.kaggle.com/jboysen/london-crime
+https://www.kaggle.com/dabaker/ukregions
+https://www.kaggle.com/currie32/crimes-in-chicago
+https://www.kaggle.com/adamschroeder/crimes-new-york-city
+https://www.kaggle.com/chaitanyakck/crime-data-from-2020-to-present
+https://www.kaggle.com/search?q=openaddresses+in%3Adatasets

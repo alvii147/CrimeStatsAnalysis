@@ -1,0 +1,121 @@
+london_crime_by_lsoa.csv
+
+lsoa_code:          code for Lower Super Output Area in Greater London.
+borough:            Common name for London borough.
+major_category:     High level categorization of crime
+minor_category:     Low level categorization of crime within major category.
+value:              monthly reported count of categorical crime in given borough
+year:               Year of reported counts, 2008-2016
+month:              Month of reported counts, 1-12
+
+london-stop-and-search.csv
+
+Type
+Date
+Part of a policing operation
+Policing operation
+Latitude
+Longitude
+Gender
+Age range
+Self-defined ethnicity
+Officer-defined ethnicity
+Legislation
+Object of search
+Outcome
+Outcome linked to object of search
+Removal of more than just outer clothing
+
+london-outcomes.csv & london-street.csv
+
+Crime ID
+Month
+Reported by:                The force that provided the data about the crime.
+Falls within:               At present, also the force that provided the data about the crime. This is currently being looked into and is likely to change in the near future.
+Longitude and Latitude:     The anonymised coordinates of the crime.
+LSOA code and LSOA name:    References to the Lower Layer Super Output Area that the anonymised point falls into, according to the LSOA boundaries provided by the Office for National Statistics.
+Crime type:                 One of the crime types listed in the Police.UK FAQ.
+Last outcome category:      A reference to whichever of the outcomes associated with the crime occurred most recently. For example, this crime's 'Last outcome category' would be 'Offender fined'.
+Context:                    A field provided for forces to provide additional human-readable data about individual crimes. Currently, for newly added CSVs, this is always empty.
+
+NYPD_Complaint_Data_Historic.csv
+
+CMPLNT_NUM:         Randomly generated persistent ID for each complaint 
+CMPLNT_FR_DT:       Exact date of occurrence for the reported event (or starting date of occurrence, if CMPLNT_TO_DT exists)
+CMPLNT_FR_TM:       Exact time of occurrence for the reported event (or starting time of occurrence, if CMPLNT_TO_TM exists)
+CMPLNT_TO_DT:       Ending date of occurrence for the reported event, if exact time of occurrence is unknown
+CMPLNT_TO_TM:       Ending time of occurrence for the reported event, if exact time of occurrence is unknown
+RPT_DT:             Date event was reported to police
+KY_CD:              Three digit offense classification code
+OFNS_DESC:          Description of offense corresponding with key code
+PD_CD:              Three digit internal classification code (more granular than Key Code)
+PD_DESC:            Description of internal classification corresponding with PD code (more granular than Offense Description)
+CRM_ATPT_CPTD_CD:   Indicator of whether crime was successfully completed or attempted, but failed or was interrupted prematurely
+LAW_CAT_CD:         Level of offense: felony, misdemeanor, violation
+JURIS_DESC:         Jurisdiction responsible for incident. Either internal, like Police, Transit, and Housing; or external, like Correction, Port Authority, etc.
+BORO_NM:            The name of the borough in which the incident occurred
+ADDR_PCT_CD:        The precinct in which the incident occurred
+LOC_OF_OCCUR_DESC:  Specific location of occurrence in or around the premises; inside, opposite of, front of, rear of
+PREM_TYP_DESC:      Specific description of premises; grocery store, residence, street, etc.
+PARKS_NM:           Name of NYC park, playground or greenspace of occurrence, if applicable (state parks are not included)
+HADEVELOPT:         Name of NYCHA housing development of occurrence, if applicable
+X_COORD_CD:         X-coordinate for New York State Plane Coordinate System, Long Island Zone, NAD 83, units feet (FIPS 3104)
+Y_COORD_CD:         Y-coordinate for New York State Plane Coordinate System, Long Island Zone, NAD 83, units feet (FIPS 3104)
+Latitude:           Latitude coordinate for Global Coordinate System, WGS 1984, decimal degrees (EPSG 4326)
+Longitude:          Longitude coordinate for Global Coordinate System, WGS 1984, decimal degrees (EPSG 4326)
+
+Chicago_Crimes_20XX_to_20XX.csv
+
+ID:                     Unique identifier for the record.
+Case Number:            The Chicago Police Department RD Number (Records Division Number), which is unique to the incident.
+Date:                   Date when the incident occurred. this is sometimes a best estimate.
+Block:                  The partially redacted address where the incident occurred, placing it on the same block as the actual address.
+IUCR:                   The Illinois Unifrom Crime Reporting code. This is directly linked to the Primary Type and Description. See the list of IUCR codes at https://data.cityofchicago.org/d/c7ck-438e.
+Primary Type:           The primary description of the IUCR code.
+Description:            The secondary description of the IUCR code, a subcategory of the primary description.
+Location Description:   Description of the location where the incident occurred.
+Arrest:                 Indicates whether an arrest was made.
+Domestic:               Indicates whether the incident was domestic-related as defined by the Illinois Domestic Violence Act.
+Beat:                   Indicates the beat where the incident occurred. A beat is the smallest police geographic area – each beat has a dedicated police beat car. Three to five beats make up a police sector, and three sectors make up a police district. The Chicago Police Department has 22 police districts. See the beats at https://data.cityofchicago.org/d/aerh-rz74.
+District:               Indicates the police district where the incident occurred. See the districts at https://data.cityofchicago.org/d/fthy-xz3r.
+Ward:                   The ward (City Council district) where the incident occurred. See the wards at https://data.cityofchicago.org/d/sp34-6z76.
+Community Area:         Indicates the community area where the incident occurred. Chicago has 77 community areas. See the community areas at https://data.cityofchicago.org/d/cauq-8yn6.
+FBI Code:               Indicates the crime classification as outlined in the FBI's National Incident-Based Reporting System (NIBRS). See the Chicago Police Department listing of these classifications at http://gis.chicagopolice.org/clearmap_crime_sums/crime_types.html.
+X Coordinate:           The x coordinate of the location where the incident occurred in State Plane Illinois East NAD 1983 projection. This location is shifted from the actual location for partial redaction but falls on the same block.
+Y Coordinate:           The y coordinate of the location where the incident occurred in State Plane Illinois East NAD 1983 projection. This location is shifted from the actual location for partial redaction but falls on the same block.
+Year:                   Year the incident occurred.
+Updated On:             Date and time the record was last updated.
+Latitude:               The latitude of the location where the incident occurred. This location is shifted from the actual location for partial redaction but falls on the same block.
+Longitude:              The longitude of the location where the incident occurred. This location is shifted from the actual location for partial redaction but falls on the same block.
+Location:               The location where the incident occurred in a format that allows for creation of maps and other geographic operations on this data portal. This location is shifted from the actual location for partial redaction but falls on the same block.
+
+Crime_Data_from_20XX_to_20XX.csv
+
+DR_NO
+Date Rptd
+DATE OCC
+TIME OCC
+AREA
+AREA NAME
+Rpt Dist No
+Part 1-2
+Crm Cd
+Crm Cd Desc
+Mocodes
+Vict Age
+Vict Sex
+Vict Descent
+Premis Cd
+Premis Desc
+Weapon Used Cd
+Weapon Desc
+Status
+Status Desc
+Crm Cd 1
+Crm Cd 2
+Crm Cd 3
+Crm Cd 4
+LOCATION
+Cross Street
+LAT
+LON
