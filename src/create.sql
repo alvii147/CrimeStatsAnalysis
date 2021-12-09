@@ -3,6 +3,14 @@
 \! rm -f output_create.txt
 tee output_create.txt
 
+DROP TABLE IF EXISTS Crime;
+DROP TABLE IF EXISTS Complaint;
+DROP TABLE IF EXISTS Search;
+DROP TABLE IF EXISTS Person;
+DROP TABLE IF EXISTS Code;
+DROP TABLE IF EXISTS Incident;
+DROP TABLE IF EXISTS Location;
+
 CREATE TABLE Incident (
     incident_id INT NOT NULL AUTO_INCREMENT,
     location_id INT,
@@ -26,8 +34,8 @@ CREATE TABLE Location (
 CREATE TABLE Crime (
     crime_id INT NOT NULL AUTO_INCREMENT,
     incident_id INT,
-    crime_code INT,
-    code_organization INT,
+    code INT,
+    organization INT,
     victim_id INT,
     description VARCHAR(256),
     PRIMARY KEY(crime_id)
@@ -36,8 +44,8 @@ CREATE TABLE Crime (
 CREATE TABLE Complaint (
     complaint_id INT NOT NULL AUTO_INCREMENT,
     incident_id INT,
-    crime_code INT,
-    code_organization INT,
+    code INT,
+    organization INT,
     report_date DATE,
     description VARCHAR(256),
     PRIMARY KEY(complaint_id)
