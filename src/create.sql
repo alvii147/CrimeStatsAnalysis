@@ -35,7 +35,7 @@ CREATE TABLE Crime (
     crime_id INT NOT NULL AUTO_INCREMENT,
     incident_id INT,
     code INT,
-    organization INT,
+    organization VARCHAR(16),
     victim_id INT,
     description VARCHAR(256),
     PRIMARY KEY(crime_id)
@@ -45,7 +45,7 @@ CREATE TABLE Complaint (
     complaint_id INT NOT NULL AUTO_INCREMENT,
     incident_id INT,
     code INT,
-    organization INT,
+    organization VARCHAR(16),
     report_date DATE,
     description VARCHAR(256),
     PRIMARY KEY(complaint_id)
