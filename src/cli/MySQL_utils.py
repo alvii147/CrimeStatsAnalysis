@@ -4,7 +4,7 @@ from mysql.connector import connect, Error
 
 DB_CONFIG_SECTION = 'mysqlconfig'
 
-def getDatabaseConfig(config_file_path='config.ini'):
+def DBConfig(config_file_path='config.ini'):
     config = ConfigParser()
     config.read(config_file_path)
 
@@ -33,7 +33,7 @@ def getDatabaseConfig(config_file_path='config.ini'):
 def DQL(queries):
     results = []
     try:
-        with connect(**getDatabaseConfig()) as connection:
+        with connect(**DBConfig()) as connection:
             with connection.cursor() as cursor:
                 for query in queries:
                     cursor.execute(query)
