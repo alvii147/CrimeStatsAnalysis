@@ -11,7 +11,7 @@ FIELDS
 LINES
     TERMINATED BY '\r\n'
 IGNORE 1 LINES
-(@dummy, @dummy, @dummy, @dummy, latitude, longitude)
+(@dummy, @dummy, @dummy, @dummy, latitude, longitude, @dummy, @dummy, @dummy, @dummy, @dummy, @dummy, @dummy, @dummy, @dummy)
 SET country='United Kingdom';
 
 notee
