@@ -31,11 +31,9 @@ def getDatabaseConfig(config_file_path='config.ini'):
     return config_vars
 
 def MySQL_DQL(queries):
-    DBCONFIG = getDatabaseConfig()
-
     results = []
     try:
-        with connect(**DBCONFIG) as connection:
+        with connect(**getDatabaseConfig()) as connection:
             with connection.cursor() as cursor:
                 for query in queries:
                     cursor.execute(query)
