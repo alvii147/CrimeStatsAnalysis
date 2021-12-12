@@ -23,6 +23,8 @@ DROP TABLE IF EXISTS Code;
 DROP TABLE IF EXISTS Incident;
 DROP TABLE IF EXISTS Location;
 
+DROP TABLE IF EXISTS LondonStopAndSearch;
+
 
 -- ////////////////////////////////////////////////////////////////////////
 -- Create tables
@@ -114,7 +116,7 @@ CREATE TABLE LondonStopAndSearch (
     object VARCHAR(64),
     outcome VARCHAR(128),
     object_caused_outcome BOOL,
-    clothing_removal BOOL,
+    clothing_removal BOOL
 );
 
 
