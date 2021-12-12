@@ -106,7 +106,7 @@ CREATE TABLE Code (
 
 CREATE TABLE LondonStopAndSearch (
     type VARCHAR(128),
-    occurence_date DATE,
+    occurrence_date DATE,
     latitude DECIMAL(11, 8),
     longitude DECIMAL(11, 8),
     gender VARCHAR(16),
