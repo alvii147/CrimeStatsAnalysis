@@ -1,7 +1,19 @@
+-- ////////////////////////////////////////////////////////////////////////
 -- Create Tables for Crime Database
+-- ////////////////////////////////////////////////////////////////////////
+
+
+-- ////////////////////////////////////////////////////////////////////////
+-- Log output to file
+-- ////////////////////////////////////////////////////////////////////////
 
 \! rm -f output_create.txt
 tee output_create.txt
+
+
+-- ////////////////////////////////////////////////////////////////////////
+-- Drop all tables
+-- ////////////////////////////////////////////////////////////////////////
 
 DROP TABLE IF EXISTS Crime;
 DROP TABLE IF EXISTS Complaint;
@@ -11,10 +23,15 @@ DROP TABLE IF EXISTS Code;
 DROP TABLE IF EXISTS Incident;
 DROP TABLE IF EXISTS Location;
 
+
+-- ////////////////////////////////////////////////////////////////////////
+-- Create tables
+-- ////////////////////////////////////////////////////////////////////////
+
 CREATE TABLE Incident (
     incident_id INT NOT NULL AUTO_INCREMENT,
     location_id INT,
-    occurence_date DATE,
+    occurrence_date DATE,
     type VARCHAR(128),
     PRIMARY KEY(incident_id)
 );
@@ -27,6 +44,7 @@ CREATE TABLE Location (
     lsoa_code CHAR(9),
     borough VARCHAR(64),
     city VARCHAR(64),
+    state VARCHAR(64),
     country VARCHAR(32),
     PRIMARY KEY(location_id)
 );
@@ -78,5 +96,26 @@ CREATE TABLE Code (
     description VARCHAR(256),
     PRIMARY KEY(code, organization)
 );
+
+
+-- ////////////////////////////////////////////////////////////////////////
+-- Create temporary tables
+-- ////////////////////////////////////////////////////////////////////////
+
+CREATE TABLE LondonStopAndSearch (
+    type VARCHAR(128),
+    occurence_date DATE,
+    latitude DECIMAL(11, 8),
+    longitude DECIMAL(11, 8),
+    gender VARCHAR(16),
+    age_range VARCHAR(16),
+    ethnicity VARCHAR(16),
+    legislation VARCHAR(128),
+    object VARCHAR(64),
+    outcome VARCHAR(128),
+    object_caused_outcome BOOL,
+    clothing_removal BOOL,
+);
+
 
 notee
