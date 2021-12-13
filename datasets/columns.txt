@@ -26,14 +26,30 @@ Outcome
 Outcome linked to object of search
 Removal of more than just outer clothing
 
-london-outcomes.csv & london-street.csv
+london-outcomes.csv
 
 Crime ID
-Month
+Month                       yyyy-mm
 Reported by:                The force that provided the data about the crime.
 Falls within:               At present, also the force that provided the data about the crime. This is currently being looked into and is likely to change in the near future.
-Longitude and Latitude:     The anonymised coordinates of the crime.
-LSOA code and LSOA name:    References to the Lower Layer Super Output Area that the anonymised point falls into, according to the LSOA boundaries provided by the Office for National Statistics.
+Longitude:                  The anonymised coordinates of the crime.
+Latitude:                   The anonymised coordinates of the crime.
+Location
+LSOA code:                  References to the Lower Layer Super Output Area that the anonymised point falls into, according to the LSOA boundaries provided by the Office for National Statistics.
+LSOA name:                  References to the Lower Layer Super Output Area that the anonymised point falls into, according to the LSOA boundaries provided by the Office for National Statistics.
+Outcome type
+
+london-street.csv
+
+Crime ID
+Month                       yyyy-mm
+Reported by:                The force that provided the data about the crime.
+Falls within:               At present, also the force that provided the data about the crime. This is currently being looked into and is likely to change in the near future.
+Longitude:                  The anonymised coordinates of the crime.
+Latitude:                   The anonymised coordinates of the crime.
+Location
+LSOA code:                  References to the Lower Layer Super Output Area that the anonymised point falls into, according to the LSOA boundaries provided by the Office for National Statistics.
+LSOA name:                  References to the Lower Layer Super Output Area that the anonymised point falls into, according to the LSOA boundaries provided by the Office for National Statistics.
 Crime type:                 One of the crime types listed in the Police.UK FAQ.
 Last outcome category:      A reference to whichever of the outcomes associated with the crime occurred most recently. For example, this crime's 'Last outcome category' would be 'Offender fined'.
 Context:                    A field provided for forces to provide additional human-readable data about individual crimes. Currently, for newly added CSVs, this is always empty.
