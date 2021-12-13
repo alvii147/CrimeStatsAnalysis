@@ -1,18 +1,19 @@
-from configparser import ConfigParser
 from getpass import getpass
+from pathlib import Path
+from configparser import ConfigParser
 import warnings
 
 from mysql.connector import connect
 
-def configDB(config_file_path='config.ini', config_section='mysqlconfig'):
+def configDB(path=Path(__file__).parent / 'config.ini', sec='mysqlconfig'):
     '''
     Parse config file and get user input for database configuration
     variables.
 
     Parameters
     ----------
-    config_file_path : str
-        Absolute or relative path to config file.
+    config_file_path : str or ``pathlib.Path`` object
+        Path to config file as string or ``pathlib.Path`` object.
     config_section : str
         Section name in config file that contains database configuration.
 
@@ -25,7 +26,7 @@ def configDB(config_file_path='config.ini', config_section='mysqlconfig'):
 
     # parse config file
     config = ConfigParser()
-    config.read(config_file_path)
+    config.read(path)
 
     config_var_names = [
         'host',
@@ -38,7 +39,7 @@ def configDB(config_file_path='config.ini', config_section='mysqlconfig'):
 
     for var_name in config_var_names:
         # get config variables from config file
-        var_value = config.get(config_section, var_name, fallback=None)
+        var_value = config.get(sec, var_name, fallback=None)
 
         if var_value is None:
             # if config variable not found, prompt for it using stdin
