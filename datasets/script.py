@@ -14,13 +14,3 @@ def read_csv(filename):
         data.append(row)
 
     return data
-
-filename = 'london-police-records/london-stop-and-search.csv'
-data = read_csv(filename)
-
-field_idx = 12
-field = [row[field_idx] for row in data]
-field_len = [len(row) for row in field]
-
-print('median length', statistics.median(field_len))
-print('max length', max(field_len))
