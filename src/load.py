@@ -11,7 +11,7 @@ if __name__ == '__main__':
     for row in LondonStopAndSearch:
         query = 'INSERT INTO Location '
         query += '(latitude, longitude, city, country) '
-        query += f'VALUES ({row[2]}, {row[3]}, London, United Kingdom);'
+        query += f'VALUES ({row[2]}, {row[3]}, "London", "United Kingdom");'
 
         cursor.execute(query)
         location_id = cursor.lastrowid
