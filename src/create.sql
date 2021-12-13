@@ -26,6 +26,7 @@ DROP TABLE IF EXISTS LondonStopAndSearch;
 DROP TABLE IF EXISTS LondonOutcomes;
 DROP TABLE IF EXISTS LondonStreet;
 DROP TABLE IF EXISTS NYPDComplaint;
+DROP TABLE IF EXISTS ChicagoCrimes;
 
 -- ////////////////////////////////////////////////////////////////////////
 -- Create tables
