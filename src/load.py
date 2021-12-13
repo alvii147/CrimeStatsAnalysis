@@ -43,4 +43,5 @@ if __name__ == '__main__':
 
         cursor.execute(query)
 
+    connection.commit()
     closeDB(connection, cursor)
