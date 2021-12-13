@@ -59,7 +59,7 @@ CREATE TABLE Location (
 CREATE TABLE Crime (
     crime_id INT NOT NULL AUTO_INCREMENT,
     incident_id INT,
-    code INT,
+    code VARCHAR(4),
     organization VARCHAR(16),
     victim_id INT,
     description VARCHAR(256),
@@ -71,7 +71,7 @@ CREATE TABLE Crime (
 CREATE TABLE Complaint (
     complaint_id INT NOT NULL AUTO_INCREMENT,
     incident_id INT,
-    code INT,
+    code VARCHAR(4),
     organization VARCHAR(16),
     reported_date DATE,
     description VARCHAR(256),
@@ -105,7 +105,7 @@ CREATE TABLE Person (
 -- ////////////////////////////////////////////////////////////////////////
 
 CREATE TABLE Code (
-    code DECIMAL(3) NOT NULL,
+    code VARCHAR(4) NOT NULL,
     organization VARCHAR(16) NOT NULL,
     category VARCHAR(256),
     description VARCHAR(256),
@@ -156,10 +156,10 @@ CREATE TABLE LondonStreet (
 
 -- ////////////////////////////////////////////////////////////////////////
 
-CREATE TABLE NYPDComplaint (
+CREATE TABLE NYPDComplaints (
     occurrence_date DATE,
     reported_date DATE,
-    code INT,
+    code VARCHAR(4),
     organization VARCHAR(16),
     latitude DECIMAL(11, 8),
     longitude DECIMAL(11, 8),
@@ -167,6 +167,18 @@ CREATE TABLE NYPDComplaint (
     borough VARCHAR(64),
     type VARCHAR(128),
     description VARCHAR(256)
+);
+
+-- ////////////////////////////////////////////////////////////////////////
+
+CREATE TABLE ChicagoCrimes (
+    occurrence_date DATE,
+    code VARCHAR(4),
+    organization VARCHAR(16),
+    latitude DECIMAL(11, 8),
+    longitude DECIMAL(11, 8),
+    precinct VARCHAR(128),
+    borough VARCHAR(64)
 );
 
 -- ////////////////////////////////////////////////////////////////////////

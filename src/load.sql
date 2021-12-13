@@ -55,7 +55,7 @@ FIELDS
     ENCLOSED BY '"'
 LINES
     TERMINATED BY '\n'
-IGNORE 2946580 LINES
+IGNORE 2946380 LINES
 (@_dummy, @_occurrence_date, precinct, @_dummy, @_longitude, @_latitude, @_dummy, lsoa_code, @_dummy, type, description, @_dummy)
 SET
     occurrence_date = CAST(CONCAT(@_occurrence_date, '-01') AS DATE),
@@ -65,17 +65,33 @@ SET
 -- ////////////////////////////////////////////////////////////////////////
 
 LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/NYPD_Complaint_Data_Historic.csv'
-INTO TABLE NYPDComplaint
+INTO TABLE NYPDComplaints
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\r\n'
+IGNORE 1048476 LINES
+(@_dummy, @_occurrence_date, @_dummy, @_dummy, @_dummy, @_reported_date, code, @_dummy, @_dummy, description, @_dummy, type, @_dummy, borough, precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+SET
+    occurrence_date = CAST(STR_TO_DATE(@_occurrence_date,'%d/%m/%Y') AS DATE),
+    reported_date = CAST(STR_TO_DATE(@_reported_date,'%d/%m/%Y') AS DATE),
+    latitude = NULLIF(@_latitude, ''),
+    longitude = NULLIF(@_longitude, '');
+
+-- ////////////////////////////////////////////////////////////////////////
+
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2001_to_2004.csv'
+INTO TABLE ChicagoCrimes
 FIELDS
     TERMINATED BY ','
     ENCLOSED BY '"'
 LINES
     TERMINATED BY '\n'
-IGNORE 1048477 LINES
-(@_dummy, @_occurrence_date, @_dummy, @_dummy, @_dummy, @_reported_date, code, @_dummy, @_dummy, description, @_dummy, type, @_dummy, @_dummy, borough, precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
+IGNORE 1923418 LINES
+(@_dummy, @_dummy, @_occurrence_date, @_dummy, code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, borough, precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
 SET
     occurrence_date = CAST(@_occurrence_date AS DATE),
-    reported_date = CAST(@_reported_date AS DATE),
     latitude = NULLIF(@_latitude, ''),
     longitude = NULLIF(@_longitude, '');
 
