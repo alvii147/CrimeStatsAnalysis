@@ -19,14 +19,14 @@ def configDB(path=Path(__file__).parent / 'config.ini', sec='mysqlconfig'):
 
     Returns
     -------
-    config_vars : dict
+    config : dict
         Dictionary containing the host name, username, password and
         database name.
     '''
 
     # parse config file
-    config = ConfigParser()
-    config.read(path)
+    parser = ConfigParser()
+    parser.read(path)
 
     config_var_names = [
         'host',
@@ -35,19 +35,19 @@ def configDB(path=Path(__file__).parent / 'config.ini', sec='mysqlconfig'):
         'database',
     ]
 
-    config_vars = {}
+    config = {}
 
     for var_name in config_var_names:
         # get config variables from config file
-        var_value = config.get(sec, var_name, fallback=None)
+        var_value = parser.get(sec, var_name, fallback=None)
 
         if var_value is None:
             # if config variable not found, prompt for it using stdin
             if var_name == 'password':
                 # if password config variable, get stdin without echo
-                config_vars[var_name] = getpass(f'{var_name}: ')
+                config[var_name] = getpass(f'{var_name}: ')
             else:
-                config_vars[var_name] = input(f'{var_name}: ')
+                config[var_name] = input(f'{var_name}: ')
         else:
             # if password config variable found, throw warning
             if var_name == 'password':
@@ -56,33 +56,49 @@ def configDB(path=Path(__file__).parent / 'config.ini', sec='mysqlconfig'):
                     'is not recommended.'
                 )
 
-            config_vars[var_name] = var_value
+            config[var_name] = var_value
 
-    return config_vars
+    return config
 
-def connectDB(operation):
+def connectDB(config=None):
     '''
-    Establish MySQL connection and execute given operation
+    Establish MySQL database connection.
 
     Parameters
     ----------
-    operation : callable
-        Callable to execute with ``connection`` and ``cursor`` objects.
+    config : dict, optional
 
     Returns
     -------
-    output
-        Output of executed ``operation``
+    connection : MySQLConnection
+        ``MySQLConnection`` object of created connection.
+    cursor : MySQLCursor
+        ``MySQLCursor`` object of created connection.
     '''
 
-    output = []
-    # connect to database
-    with connect(**configDB()) as connection:
-        with connection.cursor() as cursor:
-            # run given operation
-            output = operation(
-                connection=connection,
-                cursor=cursor,
-            )
+    # get database configuration
+    if config is None:
+        config = configDB()
 
-    return output
+    # connect to database
+    connection = connect(**config)
+    cursor = connection.cursor()
+
+    return connection, cursor
+
+def closeDB(connection, cursor):
+    '''
+    Close MySQL database connection.
+
+    Parameters
+    ----------
+    connection : MySQLConnection
+        ``MySQLConnection`` object of connection to close.
+    cursor : MySQLCursor
+        ``MySQLCursor`` object of connection to close.
+    '''
+
+    # close cursor
+    cursor.close()
+    # close connection
+    connection.close()
