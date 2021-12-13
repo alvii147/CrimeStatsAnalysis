@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
         query = 'INSERT INTO Search '
         query += '(incident_id, suspect_id, legislation, object, outcome, object_caused_outcome, clothing_removal) '
-        query += f'VALUES ({incident_id}, {suspect_id}, "{row[7]}", "{row[8]}", "{row[9]}", "{row[10]}", "{row[11]})"'
+        query += f'VALUES ({incident_id}, {suspect_id}, "{row[7]}", "{row[8]}", "{row[9]}", "{row[10]}", "{row[11]}");'
 
         cursor.execute(query)
 
