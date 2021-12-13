@@ -1,1 +1,5 @@
-from .utils import configDB, connectDB
+from .utils import (
+    configDB,
+    connectDB,
+    closeDB,
+)
