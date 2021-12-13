@@ -1,1 +1,1 @@
-from utils import ConfigDB, ConnectDB
+from .utils import ConfigDB, ConnectDB

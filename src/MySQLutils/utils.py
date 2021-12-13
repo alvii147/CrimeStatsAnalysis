@@ -4,7 +4,7 @@ import warnings
 
 from mysql.connector import connect
 
-def ConfigDB(config_file_path='config.ini', config_section='mysqlconfig'):
+def configDB(config_file_path='config.ini', config_section='mysqlconfig'):
     '''
     Parse config file and get user input for database configuration
     variables.
@@ -59,7 +59,7 @@ def ConfigDB(config_file_path='config.ini', config_section='mysqlconfig'):
 
     return config_vars
 
-def ConnectDB(operation):
+def connectDB(operation):
     '''
     Establish MySQL connection and execute given operation
 
@@ -76,7 +76,7 @@ def ConnectDB(operation):
 
     output = []
     # connect to database
-    with connect(**ConfigDB()) as connection:
+    with connect(**configDB()) as connection:
         with connection.cursor() as cursor:
             # run given operation
             output = operation(
