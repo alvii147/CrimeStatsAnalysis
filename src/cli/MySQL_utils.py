@@ -2,9 +2,9 @@ from configparser import ConfigParser
 from getpass import getpass
 import warnings
 
-from mysql.connector import connect, Error
+from mysql.connector import connect
 
-def DBConfig(config_file_path='config.ini', config_section='mysqlconfig'):
+def ConfigDB(config_file_path='config.ini', config_section='mysqlconfig'):
     '''
     Parse config file and get user input for database configuration
     variables.
@@ -59,35 +59,29 @@ def DBConfig(config_file_path='config.ini', config_section='mysqlconfig'):
 
     return config_vars
 
-def RunQuery(queries, commit=False):
+def ConnectDB(operation):
     '''
-    Run MySQL query.
+    Establish MySQL connection and execute given operation
 
     Parameters
     ----------
-    queries : list
-        List of queries to run.
-    commit : bool
-        Whether or not to commit transaction. This should be set to true
-        for DDL, DML, DCL and TCL queries, and false for DQL queries.
+    operation : callable
+        Callable to execute with ``connection`` and ``cursor`` objects.
 
     Returns
     -------
-    output : list
-        List of output tables of each query.
+    output
+        Output of executed ``operation``
     '''
 
     output = []
     # connect to database
-    with connect(**DBConfig()) as connection:
+    with connect(**ConfigDB()) as connection:
         with connection.cursor() as cursor:
-            for query in queries:
-                # run each query and store output
-                cursor.execute(query)
-                output.append(cursor.fetchall())
-
-                # commit if needed
-                if commit:
-                    connection.commit()
+            # run given operation
+            output = operation(
+                connection=connection,
+                cursor=cursor,
+            )
 
     return output
