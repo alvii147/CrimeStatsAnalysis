@@ -1,7 +1,7 @@
 from pathlib import Path
 from MySQLutils import connectDB, closeDB
 
-SQL_file_path = str(Path(__file__).parent / 'create.sql')
+SQL_file_path = str(Path(__file__).parent.resolve() / 'create.sql')
 
 connection, cursor = connectDB()
 
