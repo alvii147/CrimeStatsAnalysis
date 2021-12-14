@@ -159,10 +159,24 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 2116140 LINES
-(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, code, @_dummy, @_dummy, age_range, gender, ethnicity, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
+(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, code, @_dummy, @_dummy, age_range, @_gender, @_ethnicity, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
 SET
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
     organization = 'UCR',
+    gender =
+        CASE
+            WHEN UPPER(@_gender) = 'M' THEN 'Male'
+            WHEN UPPER(@_gender) = 'F' THEN 'Female'
+            ELSE 'Other'
+        END,
+    ethnicity =
+        CASE
+            WHEN UPPER(@_ethnicity) = 'H' THEN 'Hispanic'
+            WHEN UPPER(@_ethnicity) = 'W' THEN 'White'
+            WHEN UPPER(@_ethnicity) = 'B' THEN 'Black'
+            WHEN UPPER(@_ethnicity) = 'A' THEN 'Asian'
+            ELSE 'Other'
+        END,
     latitude = NULLIF(@_latitude, ''),
     longitude = NULLIF(@_longitude, '');
 
@@ -175,10 +189,24 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 182536 LINES
-(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, code, @_dummy, @_dummy, age_range, gender, ethnicity, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
+(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, code, @_dummy, @_dummy, age_range, @_gender, @_ethnicity, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
 SET
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
     organization = 'UCR',
+    gender =
+        CASE
+            WHEN UPPER(@_gender) = 'M' THEN 'Male'
+            WHEN UPPER(@_gender) = 'F' THEN 'Female'
+            ELSE 'Other'
+        END,
+    ethnicity =
+        CASE
+            WHEN UPPER(@_ethnicity) = 'H' THEN 'Hispanic'
+            WHEN UPPER(@_ethnicity) = 'W' THEN 'White'
+            WHEN UPPER(@_ethnicity) = 'B' THEN 'Black'
+            WHEN UPPER(@_ethnicity) = 'A' THEN 'Asian'
+            ELSE 'Other'
+        END,
     latitude = NULLIF(@_latitude, ''),
     longitude = NULLIF(@_longitude, '');
 
