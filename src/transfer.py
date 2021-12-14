@@ -63,7 +63,7 @@ for row in LondonOutcomes:
     row = cleanRow(row)
 
     query = 'INSERT INTO Location '
-    query += '(latitude, longitude, precinct, lsoa_code city, country) '
+    query += '(latitude, longitude, precinct, lsoa_code, city, country) '
     query += f'VALUES ({row[1]}, {row[2]}, {row[3]}, {row[4]}, \'London\', \'United Kingdom\');'
 
     cursor.execute(query)
@@ -95,7 +95,7 @@ for row in LondonStreet:
     row = cleanRow(row)
 
     query = 'INSERT INTO Location '
-    query += '(latitude, longitude, precinct, lsoa_code city, country) '
+    query += '(latitude, longitude, precinct, lsoa_code, city, country) '
     query += f'VALUES ({row[1]}, {row[2]}, {row[3]}, {row[4]}, \'London\', \'United Kingdom\');'
 
     cursor.execute(query)
