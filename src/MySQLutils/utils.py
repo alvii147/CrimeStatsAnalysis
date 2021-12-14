@@ -2,7 +2,6 @@ from getpass import getpass
 from pathlib import Path
 from configparser import ConfigParser
 import warnings
-
 from mysql.connector import connect
 
 def configDB(path=Path(__file__).parent / 'config.ini', sec='mysqlconfig'):
