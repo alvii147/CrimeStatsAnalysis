@@ -76,6 +76,7 @@ IGNORE 1048476 LINES
 SET
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date,'%d/%m/%Y') AS DATE),
     reported_date = CAST(STR_TO_DATE(@_reported_date,'%d/%m/%Y') AS DATE),
+    organization = 'NYPD',
     latitude = NULLIF(@_latitude, ''),
     longitude = NULLIF(@_longitude, '');
 
@@ -93,6 +94,7 @@ IGNORE 1923423 LINES
 SET
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
     code = TRIM(LEADING '0' FROM @_code),
+    organization = 'IUCR',
     latitude = NULLIF(@_latitude, ''),
     longitude = NULLIF(@_longitude, '');
 
@@ -109,6 +111,74 @@ IGNORE 1872245 LINES
 SET
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
     code = TRIM(LEADING '0' FROM @_code),
+    organization = 'IUCR',
+    latitude = NULLIF(@_latitude, ''),
+    longitude = NULLIF(@_longitude, '');
+
+
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2008_to_2011.csv'
+INTO TABLE ChicagoCrimes
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 2688611 LINES
+(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, borough, precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+SET
+    occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
+    code = TRIM(LEADING '0' FROM @_code),
+    organization = 'IUCR',
+    latitude = NULLIF(@_latitude, ''),
+    longitude = NULLIF(@_longitude, '');
+
+
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2012_to_2017.csv'
+INTO TABLE ChicagoCrimes
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 1456615 LINES
+(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, borough, precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+SET
+    occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
+    code = TRIM(LEADING '0' FROM @_code),
+    organization = 'IUCR',
+    latitude = NULLIF(@_latitude, ''),
+    longitude = NULLIF(@_longitude, '');
+
+-- ////////////////////////////////////////////////////////////////////////
+
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Crime_Data_from_2010_to_2019.csv'
+INTO TABLE LACrimes
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 2116140 LINES
+(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, code, @_dummy, @_dummy, age_range, gender, ethnicity, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
+SET
+    occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
+    organization = 'UCR',
+    latitude = NULLIF(@_latitude, ''),
+    longitude = NULLIF(@_longitude, '');
+
+
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Crime_Data_from_2020_to_Present.csv'
+INTO TABLE LACrimes
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 182536 LINES
+(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, code, @_dummy, @_dummy, age_range, gender, ethnicity, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
+SET
+    occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
+    organization = 'UCR',
     latitude = NULLIF(@_latitude, ''),
     longitude = NULLIF(@_longitude, '');
 

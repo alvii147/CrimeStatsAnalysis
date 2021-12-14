@@ -1,85 +1,184 @@
-from decimal import Decimal
-from datetime import date
 from MySQLutils import connectDB, closeDB
 
-def cleanRow(row):
-    row = [f'\'{c}\'' if isinstance(c, str)  else c for c in row]
-    row = [f'\'{c}\'' if isinstance(c, date)  else c for c in row]
-    row = ['NULL' if c is None  else c for c in row]
+LOAD_TABLE_QUERIES = [
+'''
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/UKCrime/london-stop-and-search.csv'
+INTO TABLE LondonStopAndSearch
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 302524 LINES
+(type, @_occurrence_date, @_dummy, @_dummy, @_latitude, @_longitude, gender, age_range, @_dummy, ethnicity, legislation, object, outcome, @_object_caused_outcome, @_clothing_removal)
+SET
+    occurrence_date = CAST(@_occurrence_date AS DATE),
+    latitude = NULLIF(@_latitude, ''),
+    longitude = NULLIF(@_longitude, ''),
+    object_caused_outcome = CAST(@_object_caused_outcome = 'True' AS UNSIGNED),
+    clothing_removal = CAST(@_clothing_removal = 'True' AS UNSIGNED);
+''',
 
-    return row
+'''
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/UKCrime/london-outcomes.csv'
+INTO TABLE LondonOutcomes
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 1946951 LINES
+(@_dummy, @_occurrence_date, precinct, @_dummy, @_longitude, @_latitude, @_dummy, lsoa_code, @_dummy, description)
+SET
+    occurrence_date = CAST(CONCAT(@_occurrence_date, '-01') AS DATE),
+    latitude = NULLIF(@_latitude, ''),
+    longitude = NULLIF(@_longitude, '');
+''',
+
+'''
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/UKCrime/london-street.csv'
+INTO TABLE LondonStreet
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 2946380 LINES
+(@_dummy, @_occurrence_date, precinct, @_dummy, @_longitude, @_latitude, @_dummy, lsoa_code, @_dummy, type, description, @_dummy)
+SET
+    occurrence_date = CAST(CONCAT(@_occurrence_date, '-01') AS DATE),
+    latitude = NULLIF(@_latitude, ''),
+    longitude = NULLIF(@_longitude, '');
+''',
+
+'''
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/NYPD_Complaint_Data_Historic.csv'
+INTO TABLE NYPDComplaints
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\r\n'
+IGNORE 1048476 LINES
+(@_dummy, @_occurrence_date, @_dummy, @_dummy, @_dummy, @_reported_date, code, @_dummy, @_dummy, description, @_dummy, type, @_dummy, borough, precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+SET
+    occurrence_date = CAST(STR_TO_DATE(@_occurrence_date,'%d/%m/%Y') AS DATE),
+    reported_date = CAST(STR_TO_DATE(@_reported_date,'%d/%m/%Y') AS DATE),
+    organization = 'NYPD',
+    latitude = NULLIF(@_latitude, ''),
+    longitude = NULLIF(@_longitude, '');
+''',
+
+'''
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2001_to_2004.csv'
+INTO TABLE ChicagoCrimes
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 1923423 LINES
+(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, borough, precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+SET
+    occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
+    code = TRIM(LEADING '0' FROM @_code),
+    organization = 'IUCR',
+    latitude = NULLIF(@_latitude, ''),
+    longitude = NULLIF(@_longitude, '');
+''',
+
+'''
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2005_to_2007.csv'
+INTO TABLE ChicagoCrimes
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 1872245 LINES
+(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, borough, precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+SET
+    occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
+    code = TRIM(LEADING '0' FROM @_code),
+    organization = 'IUCR',
+    latitude = NULLIF(@_latitude, ''),
+    longitude = NULLIF(@_longitude, '');
+''',
+
+'''
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2008_to_2011.csv'
+INTO TABLE ChicagoCrimes
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 2688611 LINES
+(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, borough, precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+SET
+    occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
+    code = TRIM(LEADING '0' FROM @_code),
+    organization = 'IUCR',
+    latitude = NULLIF(@_latitude, ''),
+    longitude = NULLIF(@_longitude, '');
+''',
+
+'''
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2012_to_2017.csv'
+INTO TABLE ChicagoCrimes
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 1456615 LINES
+(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, borough, precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+SET
+    occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
+    code = TRIM(LEADING '0' FROM @_code),
+    organization = 'IUCR',
+    latitude = NULLIF(@_latitude, ''),
+    longitude = NULLIF(@_longitude, '');
+''',
+
+'''
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Crime_Data_from_2010_to_2019.csv'
+INTO TABLE LACrimes
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 2116140 LINES
+(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, code, @_dummy, @_dummy, age_range, gender, ethnicity, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
+SET
+    occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
+    organization = 'UCR',
+    latitude = NULLIF(@_latitude, ''),
+    longitude = NULLIF(@_longitude, '');
+''',
+
+'''
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Crime_Data_from_2020_to_Present.csv'
+INTO TABLE LACrimes
+FIELDS
+    TERMINATED BY ','
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 182536 LINES
+(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, code, @_dummy, @_dummy, age_range, gender, ethnicity, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
+SET
+    occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
+    organization = 'UCR',
+    latitude = NULLIF(@_latitude, ''),
+    longitude = NULLIF(@_longitude, '');
+''',
+]
 
 connection, cursor = connectDB()
 
-# -------------------------
-# London Stop & Search Data
-# -------------------------
-
-query = 'SELECT * FROM LondonStopAndSearch;'
-
-cursor.execute(query)
-LondonStopAndSearch = cursor.fetchall()
-
-for row in LondonStopAndSearch:
-    row = cleanRow(row)
-
-    query = 'INSERT INTO Location '
-    query += '(latitude, longitude, city, country) '
-    query += f'VALUES ({row[2]}, {row[3]}, \'London\', \'United Kingdom\');'
-
-    cursor.execute(query)
-    location_id = cursor.lastrowid
-
-    query = 'INSERT INTO Incident '
-    query += '(location_id, occurrence_date, type) '
-    query += f'VALUES ({location_id}, {row[1]}, {row[0]});'
-
-    cursor.execute(query)
-    incident_id = cursor.lastrowid
-
-    query = 'INSERT INTO Person '
-    query += '(age_range, gender, ethnicity) '
-    query += f'VALUES ({row[4]}, {row[5]}, {row[6]});'
-
-    cursor.execute(query)
-    suspect_id = cursor.lastrowid
-
-    query = 'INSERT INTO Search '
-    query += '(incident_id, suspect_id, legislation, object, outcome, object_caused_outcome, clothing_removal) '
-    query += f'VALUES ({incident_id}, {suspect_id}, {row[7]}, {row[8]}, {row[9]}, {row[10]}, {row[11]})'
-
-    cursor.execute(query)
-
-# -------------------------
-# London Outcomes
-# -------------------------
-
-query = 'SELECT * FROM LondonOutcomes;'
-
-cursor.execute(query)
-LondonOutcomes = cursor.fetchall()
-
-for row in LondonOutcomes:
-    row = cleanRow(row)
-
-    query = 'INSERT INTO Location '
-    query += '(latitude, longitude, precinct, lsoa_code city, country) '
-    query += f'VALUES ({row[1]}, {row[2]}, {row[3]}, {row[4]}, \'London\', \'United Kingdom\');'
-
-    cursor.execute(query)
-    location_id = cursor.lastrowid
-
-    query = 'INSERT INTO Incident '
-    query += '(location_id, occurrence_date) '
-    query += f'VALUES ({location_id}, {row[0]});'
-
-    cursor.execute(query)
-    incident_id = cursor.lastrowid
-
-    query = 'INSERT INTO Crime '
-    query += '(incident_id, description) '
-    query += f'VALUES ({incident_id}, {row[5]})'
-
+for query in LOAD_TABLE_QUERIES:
     cursor.execute(query)
 
 connection.commit()

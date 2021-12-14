@@ -14,6 +14,7 @@ DROP_TABLE_QUERIES = [
 'DROP TABLE IF EXISTS LondonStreet;',
 'DROP TABLE IF EXISTS NYPDComplaints;',
 'DROP TABLE IF EXISTS ChicagoCrimes;',
+'DROP TABLE IF EXISTS LACrimes;',
 ]
 
 CREATE_TABLE_QUERIES = [
@@ -166,6 +167,19 @@ CREATE TABLE ChicagoCrimes (
     borough VARCHAR(64)
 );
 ''',
+
+'''
+CREATE TABLE LACrimes (
+    occurrence_date DATE,
+    code VARCHAR(4),
+    organization VARCHAR(16),
+    latitude DECIMAL(11, 8),
+    longitude DECIMAL(11, 8),
+    age_range VARCHAR(16),
+    gender VARCHAR(16),
+    ethnicity VARCHAR(64)
+);
+'''
 ]
 
 connection, cursor = connectDB()
