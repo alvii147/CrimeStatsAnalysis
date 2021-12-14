@@ -50,9 +50,9 @@ for row in LondonStopAndSearch:
 
     cursor.execute(query)
 
-# -------------------------
+# ---------------
 # London Outcomes
-# -------------------------
+# ---------------
 
 query = 'SELECT * FROM LondonOutcomes;'
 
@@ -79,6 +79,38 @@ for row in LondonOutcomes:
     query = 'INSERT INTO Crime '
     query += '(incident_id, description) '
     query += f'VALUES ({incident_id}, {row[5]})'
+
+    cursor.execute(query)
+
+# -------------
+# London Street
+# -------------
+
+query = 'SELECT * FROM LondonStreet;'
+
+cursor.execute(query)
+LondonStreet = cursor.fetchall()
+
+for row in LondonStreet:
+    row = cleanRow(row)
+
+    query = 'INSERT INTO Location '
+    query += '(latitude, longitude, precinct, lsoa_code city, country) '
+    query += f'VALUES ({row[1]}, {row[2]}, {row[3]}, {row[4]}, \'London\', \'United Kingdom\');'
+
+    cursor.execute(query)
+    location_id = cursor.lastrowid
+
+    query = 'INSERT INTO Incident '
+    query += '(location_id, occurrence_date, type) '
+    query += f'VALUES ({location_id}, {row[0]}, {row[5]});'
+
+    cursor.execute(query)
+    incident_id = cursor.lastrowid
+
+    query = 'INSERT INTO Crime '
+    query += '(incident_id, description) '
+    query += f'VALUES ({incident_id}, {row[6]})'
 
     cursor.execute(query)
 
