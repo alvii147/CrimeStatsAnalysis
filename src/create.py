@@ -1,11 +1,12 @@
 from pathlib import Path
 from MySQLutils import connectDB, closeDB
 
-SQL_file_path = str(Path(__file__).parent.resolve() / 'create.sql')
+path = str(Path(__file__).parent.resolve() / 'create.sql')
+with open(path, 'r') as SQLfilepath:
+    query = SQLfilepath.read()
 
 connection, cursor = connectDB()
 
-query = f'SOURCE {SQL_file_path};'
 cursor.execute(query)
 
 connection.commit()
