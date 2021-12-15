@@ -204,5 +204,43 @@ for row in NYPDComplaints:
 
     cursor.execute(query)
 
+# --------------
+# Chicago Crimes
+# --------------
+
+query = 'SELECT * FROM ChicagoCrimes;'
+
+cursor.execute(query)
+ChicagoCrimes = cursor.fetchall()
+
+for row in ChicagoCrimes:
+    row = cleanRow(row)
+
+    query = 'INSERT INTO Location '
+    query += '(latitude, longitude, precinct, borough, city, state, country) '
+    query += f'VALUES ({row[3]}, {row[4]}, {row[5]}, {row[6]}, \'Chicago\', \'Illinois\', \'United States\');'
+
+    cursor.execute(query)
+    location_id = cursor.lastrowid
+
+    query = 'INSERT INTO Incident '
+    query += '(location_id, occurrence_date) '
+    query += f'VALUES ({location_id}, {row[0]});'
+
+    cursor.execute(query)
+    incident_id = cursor.lastrowid
+
+    code = row[1]
+    organization = '\'IUCR\''
+    if row[1].strip('\'') not in [i[0] for i in IUCR]:
+        code = 'NULL'
+        organization = 'NULL'
+
+    query = 'INSERT INTO Crime '
+    query += '(incident_id, code, organization) '
+    query += f'VALUES ({incident_id}, {code}, {organization});'
+
+    cursor.execute(query)
+
 connection.commit()
 closeDB(connection, cursor)
