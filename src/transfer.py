@@ -275,9 +275,15 @@ for row in LACrimes:
     cursor.execute(query)
     victim_id = cursor.lastrowid
 
+    code = row[1]
+    organization = '\'UCR\''
+    if row[1].strip('\'') not in [i[0] for i in UCR]:
+        code = 'NULL'
+        organization = 'NULL'
+
     query = 'INSERT INTO Crime '
     query += '(incident_id, code, organization, victim_id) '
-    query += f'VALUES ({incident_id}, {row[1]}, {row[2]}, victim_id);'
+    query += f'VALUES ({incident_id}, {code}, {organization}, victim_id);'
 
     cursor.execute(query)
 
