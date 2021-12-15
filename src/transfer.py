@@ -270,7 +270,7 @@ for row in LACrimes:
 
     query = 'INSERT INTO Crime '
     query += '(incident_id, code, organization, victim_id) '
-    query += f'VALUES ({incident_id}, {code}, {organization}, victim_id);'
+    query += f'VALUES ({incident_id}, {code}, {organization}, {victim_id});'
 
     cursor.execute(query)
 
