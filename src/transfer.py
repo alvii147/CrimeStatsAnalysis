@@ -63,9 +63,9 @@ for row in UCR:
 
     cursor.execute(query)
 
-# -------------------------
-# London Stop & Search Data
-# -------------------------
+# --------------------
+# London Stop & Search
+# --------------------
 
 query = 'SELECT * FROM LondonStopAndSearch;'
 
@@ -239,6 +239,45 @@ for row in ChicagoCrimes:
     query = 'INSERT INTO Crime '
     query += '(incident_id, code, organization) '
     query += f'VALUES ({incident_id}, {code}, {organization});'
+
+    cursor.execute(query)
+
+# ---------
+# LA Crimes
+# ---------
+
+query = 'SELECT * FROM LACrimes;'
+
+cursor.execute(query)
+LACrimes = cursor.fetchall()
+
+for row in LACrimes:
+    row = cleanRow(row)
+
+    query = 'INSERT INTO Location '
+    query += '(latitude, longitude, city, state, country) '
+    query += f'VALUES ({row[3]}, {row[4]}, \'Los Angeles\', \'California\', \'United States\');'
+
+    cursor.execute(query)
+    location_id = cursor.lastrowid
+
+    query = 'INSERT INTO Incident '
+    query += '(location_id, occurrence_date) '
+    query += f'VALUES ({location_id}, {row[0]});'
+
+    cursor.execute(query)
+    incident_id = cursor.lastrowid
+
+    query = 'INSERT INTO Person '
+    query += '(age_range, gender, ethnicity) '
+    query += f'VALUES ({row[5]}, {row[6]}, {row[7]});'
+
+    cursor.execute(query)
+    victim_id = cursor.lastrowid
+
+    query = 'INSERT INTO Crime '
+    query += '(incident_id, code, organization, victim_id) '
+    query += f'VALUES ({incident_id}, {row[1]}, {row[2]}, victim_id);'
 
     cursor.execute(query)
 
