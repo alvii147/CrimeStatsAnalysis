@@ -16,7 +16,7 @@ cd CrimeStatsAnalysis
 python3 -m venv env
 # activate virtual environment
 source env/bin/activate
-# install mysql python connector
+# install dependencies
 pip3 install -r requirements.txt
 ```
 
@@ -38,14 +38,14 @@ For `<username>` and `<password>` use your MySQL username and password.
 
 For `<databasename>` use the name of your database.
 
-`config.ini` should then look like this:
+`config.ini` should then look something like this:
 
 ```ini
 [mysqlconfig]
-host = <hostname>
-user = <username>
-password = <password>
-database = <databasename>
+host = marmoset04.shoshin.uwaterloo.ca
+user = waterlooid
+password = mylittlepony
+database = db356_waterlooid
 ```
 
 Storing configuration in file is optional, and if not done, the program will continuously prompt for user input every time a database connection is attempted for every missing configuration variable.
