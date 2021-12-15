@@ -192,9 +192,9 @@ for row in NYPDComplaints:
     cursor.execute(query)
     incident_id = cursor.lastrowid
 
-    code = f'\'{row[2]}\''
+    code = row[2]
     organization = '\'NYPD\''
-    if row[2] not in [i[0] for i in NYPD]:
+    if row[2].strip('\'') not in [i[0] for i in NYPD]:
         code = 'NULL'
         organization = 'NULL'
 
