@@ -1,4 +1,3 @@
-from pathlib import Path
 from MySQLutils import connectDB, closeDB
 
 DROP_TABLE_QUERIES = [

@@ -64,7 +64,6 @@ IGNORE 1048476 LINES
 SET
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date,'%d/%m/%Y') AS DATE),
     reported_date = CAST(STR_TO_DATE(@_reported_date,'%d/%m/%Y') AS DATE),
-    organization = 'NYPD',
     latitude = NULLIF(@_latitude, ''),
     longitude = NULLIF(@_longitude, '');
 ''',
@@ -82,7 +81,6 @@ IGNORE 1923423 LINES
 SET
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
     code = TRIM(LEADING '0' FROM @_code),
-    organization = 'IUCR',
     latitude = NULLIF(@_latitude, ''),
     longitude = NULLIF(@_longitude, '');
 ''',
@@ -100,7 +98,6 @@ IGNORE 1872245 LINES
 SET
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
     code = TRIM(LEADING '0' FROM @_code),
-    organization = 'IUCR',
     latitude = NULLIF(@_latitude, ''),
     longitude = NULLIF(@_longitude, '');
 ''',
@@ -118,7 +115,6 @@ IGNORE 2688611 LINES
 SET
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
     code = TRIM(LEADING '0' FROM @_code),
-    organization = 'IUCR',
     latitude = NULLIF(@_latitude, ''),
     longitude = NULLIF(@_longitude, '');
 ''',
@@ -136,7 +132,6 @@ IGNORE 1456615 LINES
 SET
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
     code = TRIM(LEADING '0' FROM @_code),
-    organization = 'IUCR',
     latitude = NULLIF(@_latitude, ''),
     longitude = NULLIF(@_longitude, '');
 ''',
@@ -153,7 +148,6 @@ IGNORE 2116140 LINES
 (@_dummy, @_dummy, @_occurrence_date, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, code, @_dummy, @_dummy, age_range, @_gender, @_ethnicity, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
 SET
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
-    organization = 'UCR',
     gender =
         CASE
             WHEN UPPER(@_gender) = 'M' THEN 'Male'
@@ -184,7 +178,6 @@ IGNORE 182536 LINES
 (@_dummy, @_dummy, @_occurrence_date, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, code, @_dummy, @_dummy, age_range, @_gender, @_ethnicity, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
 SET
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
-    organization = 'UCR',
     gender =
         CASE
             WHEN UPPER(@_gender) = 'M' THEN 'Male'
