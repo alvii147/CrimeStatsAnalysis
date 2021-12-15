@@ -1,3 +1,4 @@
+from utils import consoleFriendly
 from MySQLutils import connectDB, closeDB
 
 DROP_TABLE_QUERIES = [
@@ -184,9 +185,13 @@ CREATE TABLE LACrimes (
 connection, cursor = connectDB()
 
 for query in DROP_TABLE_QUERIES:
+    console_query = consoleFriendly(query)
+    print(f'Executing query "{console_query}" ...')
     cursor.execute(query)
 
 for query in CREATE_TABLE_QUERIES:
+    console_query = consoleFriendly(query)
+    print(f'Executing query "{console_query}" ...')
     cursor.execute(query)
 
 connection.commit()

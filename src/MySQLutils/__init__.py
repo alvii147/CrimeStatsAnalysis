@@ -1,4 +1,4 @@
-from .utils import (
+from .MySQLutils import (
     configDB,
     connectDB,
     closeDB,

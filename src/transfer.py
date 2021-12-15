@@ -1,28 +1,6 @@
-import csv
-from datetime import date
 from pathlib import Path
+from utils import read_csv, cleanRow
 from MySQLutils import connectDB, closeDB
-
-def read_csv(filename):
-    datafile = csv.reader(open(filename))
-
-    first_row = True
-    data = []
-    for row in datafile:
-        if first_row:
-            first_row = False
-            continue
-
-        data.append(row)
-
-    return data
-
-def cleanRow(row):
-    row = [f'\'{c}\'' if isinstance(c, str)  else c for c in row]
-    row = [f'\'{c}\'' if isinstance(c, date)  else c for c in row]
-    row = ['NULL' if c is None  else c for c in row]
-
-    return row
 
 connection, cursor = connectDB()
 
@@ -30,6 +8,7 @@ connection, cursor = connectDB()
 # Crime Codes
 # -----------
 
+print('Inserting NYPD Crime Codes ...')
 NYPD = read_csv(Path(__file__).parent / 'NYPD_Crime_Codes.csv')
 
 for row in NYPD:
@@ -41,6 +20,7 @@ for row in NYPD:
 
     cursor.execute(query)
 
+print('Inserting IUCR Crime Codes ...')
 IUCR = read_csv(Path(__file__).parent / 'IUCR_Crime_Codes.csv')
 
 for row in IUCR:
@@ -52,6 +32,7 @@ for row in IUCR:
 
     cursor.execute(query)
 
+print('Inserting UCR Crime Codes ...')
 UCR = read_csv(Path(__file__).parent / 'UCR_Crime_Codes.csv')
 
 for row in UCR:
@@ -67,6 +48,7 @@ for row in UCR:
 # London Stop & Search
 # --------------------
 
+print('Transferring London Stop & Search Data ...')
 query = 'SELECT * FROM LondonStopAndSearch;'
 
 cursor.execute(query)
@@ -106,6 +88,7 @@ for row in LondonStopAndSearch:
 # London Outcomes
 # ---------------
 
+print('Transferring London Outcomes Data ...')
 query = 'SELECT * FROM LondonOutcomes;'
 
 cursor.execute(query)
@@ -138,6 +121,7 @@ for row in LondonOutcomes:
 # London Street
 # -------------
 
+print('Transferring London Street Data ...')
 query = 'SELECT * FROM LondonStreet;'
 
 cursor.execute(query)
@@ -170,6 +154,7 @@ for row in LondonStreet:
 # NYPD Complaints
 # ---------------
 
+print('Transferring NYPD Complaints Data ...')
 query = 'SELECT * FROM NYPDComplaints;'
 
 cursor.execute(query)
@@ -208,6 +193,7 @@ for row in NYPDComplaints:
 # Chicago Crimes
 # --------------
 
+print('Transferring Chicago Crimes Data ...')
 query = 'SELECT * FROM ChicagoCrimes;'
 
 cursor.execute(query)
@@ -246,6 +232,7 @@ for row in ChicagoCrimes:
 # LA Crimes
 # ---------
 
+print('Transferring LA Crimes Data ...')
 query = 'SELECT * FROM LACrimes;'
 
 cursor.execute(query)
