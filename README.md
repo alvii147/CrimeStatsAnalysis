@@ -2,24 +2,43 @@
 
 <img alt="Secret Ingredient Meme" src="img/secret_ingredient.png" width="600" />
 
-## Command-Line Interface
-
-*under construction*
-
-### Installation
+## Installation
 
 ```bash
-# create virtual environment
+# clone repository
+git clone https://github.com/alvii147/CrimeStatsAnalysis.git
+# navigate into cloned repository
+cd CrimeStatsAnalysis
+```
+
+```bash
+# create python virtual environment
 python3 -m venv env
 # activate virtual environment
 source env/bin/activate
 # install mysql python connector
-pip3 install mysql-connector-python
+pip3 install -r requirements.txt
 ```
 
-### Configuration
+## Configuration
 
-Create file `config.ini` in `src/cli/` and edit it:
+Store configuration data into file `src/MySQLutils/config.ini`:
+
+```bash
+echo [mysqlconfig] > src/MySQLutils/config.ini
+echo host = <hostname> >> src/MySQLutils/config.ini
+echo user = <username> >> src/MySQLutils/config.ini
+echo password = <password> >> src/MySQLutils/config.ini
+echo database = <databasename> >> src/MySQLutils/config.ini
+```
+
+For `<hostname>` use the hostname of the database, for eg. `marmoset04.shoshin.uwaterloo.ca`.
+
+For `<username>` and `<password>` use your MySQL username and password.
+
+For `<databasename>` use the name of your database.
+
+`config.ini` should then look like this:
 
 ```ini
 [mysqlconfig]
@@ -29,28 +48,20 @@ password = <password>
 database = <databasename>
 ```
 
-### Run Queries
+Storing configuration in file is optional, and if not done, the program will continuously prompt for user input every time a database connection is attempted for every missing configuration variable.
+
+> **WARNING**
+>
+> Storing the password in the configuration file is NOT recommended. Currently, the `.gitignore` is written to ignore the configuration file when committing to version control system. However, this is not completely fool-proof as the configuration file may be committed accidentally if the `.gitignore` is missing or renamed.
+
+## Preparing the database
+
+Once the installation and configuration are complete, run the following python scripts (while inside the virtual environment) to create the appropriate tables, load the data and transfer the data into the right tables:
 
 ```bash
-python3
-```
-
-```python
->>> from MySQL_utils import RunQuery
->>>
->>> queries = ['SHOW TABLES;', 'DESCRIBE Incident']
->>> output = RunQuery(queries)
->>> _ = [print(row[0]) for row in output[0]]
-Code
-Complaint
-Crime
-Incident
-Location
-Person
-Search
->>> _ = [print(row[0], row[1]) for row in output[1]]
-incident_id b'int'
-location_id b'int'
-occurence_date b'date'
-type b'varchar(128)'
+cd src/
+python3 create.py
+python3 load.py
+python3 transfer.py
+python3 drop.py
 ```
