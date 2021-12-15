@@ -19,3 +19,5 @@ __pycache__
 .coverage
 .pytest_cache
 output_*.txt
+
+!*Crime_Codes.csv
