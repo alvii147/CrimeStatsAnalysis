@@ -1,19 +1,12 @@
-from utils import consoleFriendly
-from MySQLutils import connectDB, closeDB
 import log
 
-DROP_TABLE_QUERIES = [
-'DROP TABLE IF EXISTS LondonStopAndSearch;',
-'DROP TABLE IF EXISTS LondonOutcomes;',
-'DROP TABLE IF EXISTS LondonStreet;',
-'DROP TABLE IF EXISTS NYPDComplaints;',
-'DROP TABLE IF EXISTS ChicagoCrimes;',
-'DROP TABLE IF EXISTS LACrimes;',
-]
+from utils import consoleFriendly, loadQueries
+from MySQLutils import connectDB, closeDB
 
 connection, cursor = connectDB()
+queries = loadQueries("drop.sql")
 
-for query in DROP_TABLE_QUERIES:
+for query in queries:
     console_query = consoleFriendly(query)
     log.info(f'Executing query "{console_query}" ...')
     cursor.execute(query)

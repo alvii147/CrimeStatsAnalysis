@@ -1,5 +1,6 @@
 import csv
 import log
+
 from datetime import date
 
 def read_csv(filename):
