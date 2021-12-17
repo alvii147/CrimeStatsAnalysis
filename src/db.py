@@ -29,13 +29,12 @@ def insert(table, **attributes):
     query += f'({columns}) '
     query += f'VALUES ({values});'
 
-    log.debug(query)
-    # either execute or return the query here
+    return query
 
-insert(
+print(insert(
     "Person",
     person_id = 1,
     age_range = "69-420",
     gender = "Apache Attack Helicopter",
     ethnicity = "Smurf"
-)
+))
