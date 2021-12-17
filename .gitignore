@@ -19,5 +19,8 @@ __pycache__
 .coverage
 .pytest_cache
 output_*.txt
+.DS_Store
+.vscode
 
 !*Crime_Codes.csv
+
