@@ -60,6 +60,7 @@ Once the installation and configuration are complete, run the following python s
 
 ```bash
 cd src/
+python3 clean.py
 python3 create.py
 python3 load.py
 python3 transfer.py
