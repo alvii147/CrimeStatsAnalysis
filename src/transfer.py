@@ -70,6 +70,8 @@ LondonStopAndSearch = cursor.fetchall()
 
 log.note("How do we deal with duplicate locations?")
 log.note("Won't the IDs increment automatically?")
+log.note("LSOA names are only for UK?")
+log.note("Can we put LSOA/borough in Location?")
 
 for row in LondonStopAndSearch:
     row = cleanRow(row)
@@ -194,9 +196,7 @@ for row in LondonStreet:
     query += f'VALUES ({incident_id}, {description});'
 
     cursor.execute(query)
-log.note("fix ER disgram for occurrance date")
-log.note("fix reported date column name")
-log.note("investigate LSOA names (neighbourhoods / boroughs")
+
 # ---------------
 # NYPD Complaints
 # ---------------
