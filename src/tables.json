@@ -1,0 +1,70 @@
+{
+    "Incident":
+    [
+        "incident_id",
+        "location_id",
+        "occurrence_date",
+        "type"
+    ],
+
+    "Location":
+    [
+        "location_id",
+        "latitude",
+        "longitude",
+        "precinct",
+        "lsoa_code",
+        "borough",
+        "city",
+        "state",
+        "country"
+    ],
+
+    "Crime":
+    [
+        "crime_id",
+        "incident_id",
+        "code",
+        "organization",
+        "victim_id",
+        "description"
+    ],
+
+    "Complaint":
+    [
+        "complaint_id",
+        "incident_id",
+        "code",
+        "organization",
+        "reported_date",
+        "description"
+    ],
+
+    "Search":
+    [
+        "search_id",
+        "incident_id",
+        "suspect_id",
+        "legislation",
+        "object",
+        "outcome",
+        "object_caused_outcome",
+        "clothing_removal"
+    ],
+
+    "Person":
+    [
+        "person_id",
+        "age_range",
+        "gender",
+        "ethnicity"
+    ],
+
+    "Code":
+    [
+        "code",
+        "organization",
+        "category",
+        "description"
+    ]
+}

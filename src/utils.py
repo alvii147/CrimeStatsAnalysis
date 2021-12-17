@@ -1,5 +1,6 @@
 import csv
 import log
+import json
 
 from datetime import date
 
@@ -39,3 +40,7 @@ def loadQueries(path):
 
     log.success(f"Loaded {len(queries)} queries from '{path}'")
     return queries
+
+def readJSON(path):
+    with open(path, "r") as file:
+        return json.loads(file.read())
