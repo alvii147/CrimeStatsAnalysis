@@ -1,4 +1,5 @@
 import csv
+import log
 from datetime import date
 
 def read_csv(filename):
@@ -24,3 +25,16 @@ def cleanRow(row):
 
 def consoleFriendly(s):
     return list(filter(lambda x: len(x.strip()), s.split('\n')))[0]
+
+def loadQueries(path):
+    with open(path, "r") as file:
+        contents = file.read()
+
+    queries = contents.split(';')
+    queries = queries[:-1]   # last element is always garbage (after last ';')
+
+    for i in range(len(queries)):
+        queries[i] = queries[i].strip('\n')
+
+    log.success(f"Loaded {len(queries)} queries from '{path}'")
+    return queries
