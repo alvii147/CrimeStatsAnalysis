@@ -1,4 +1,6 @@
+from typing import OrderedDict
 import log
+import db
 
 from pathlib import Path
 from utils import read_csv, cleanRow
@@ -19,9 +21,12 @@ for row in NYPD:
     code                = row[0]
     offence_description = row[1]
 
-    query = 'INSERT INTO Code '
-    query += '(code, organization, category) '
-    query += f'VALUES ({code}, \'NYPD\', {offence_description});'
+    query = db.insert(
+        'Code',
+        code = code,
+        organization = 'NYPD',
+        category = offence_description
+    )
 
     cursor.execute(query)
 
@@ -36,9 +41,13 @@ for row in IUCR:
     secondary_description = row[2]
     index_code            = row[3]
 
-    query = 'INSERT INTO Code '
-    query += '(code, organization, category, description) '
-    query += f'VALUES ({code}, \'IUCR\', {primary_description}, {secondary_description});'
+    query = db.insert(
+        'Code',
+        code = code,
+        organization = 'IUCR',
+        category = primary_description,
+        description = secondary_description
+    )
 
     cursor.execute(query)
 
@@ -52,9 +61,13 @@ for row in UCR:
     description = row[1]
     category    = row[2]
 
-    query = 'INSERT INTO Code '
-    query += '(code, organization, category, description) '
-    query += f'VALUES ({code}, \'UCR\', {category}, {description});'
+    query = db.insert(
+        'Code',
+        code = code,
+        organization = 'UCR',
+        category = category,
+        description = description
+    )
 
     cursor.execute(query)
 
@@ -89,30 +102,47 @@ for row in LondonStopAndSearch:
     object_caused_outcome = row[10]
     clothing_removal      = row[11]
 
-    query = 'INSERT INTO Location '
-    query += '(latitude, longitude, city, country) '
-    query += f'VALUES ({latitude}, {longitude}, \'London\', \'United Kingdom\');'
+    query = db.insert(
+        'Location',
+        latitude = latitude,
+        longitude = longitude,
+        city = 'London',
+        country = 'United Kingdom'
+    )
 
     cursor.execute(query)
     location_id = cursor.lastrowid
 
-    query = 'INSERT INTO Incident '
-    query += '(location_id, occurrence_date, type) '
-    query += f'VALUES ({location_id}, {occurrence_date}, {type});'
+    query = db.insert(
+        'Incident',
+        location_id = location_id,
+        occurrence_date = occurrence_date,
+        type = type
+    )
 
     cursor.execute(query)
     incident_id = cursor.lastrowid
 
-    query = 'INSERT INTO Person '
-    query += '(age_range, gender, ethnicity) '
-    query += f'VALUES ({age_range}, {gender}, {ethnicity});'
+    query = db.insert(
+        'Person',
+        age_range = age_range,
+        gender = gender,
+        ethnicity = ethnicity
+    )
 
     cursor.execute(query)
     suspect_id = cursor.lastrowid
 
-    query = 'INSERT INTO Search '
-    query += '(incident_id, suspect_id, legislation, object, outcome, object_caused_outcome, clothing_removal) '
-    query += f'VALUES ({incident_id}, {suspect_id}, {legislation}, {object}, {outcome}, {object_caused_outcome}, {clothing_removal});'
+    query = db.insert(
+        'Search',
+        incident_id = incident_id,
+        suspect_id = suspect_id,
+        legislation = legislation,
+        object = object,
+        outcome = outcome,
+        object_caused_outcome = object_caused_outcome,
+        clothing_removal = clothing_removal
+    )
 
     cursor.execute(query)
 
@@ -136,23 +166,33 @@ for row in LondonOutcomes:
     lsoa_code        = row[4]
     description      = row[5]
 
-    query = 'INSERT INTO Location '
-    query += '(latitude, longitude, precinct, lsoa_code, city, country) '
-    query += f'VALUES ({latitude}, {longitude}, {precinct}, {lsoa_code}, \'London\', \'United Kingdom\');'
+    query = db.insert(
+        'Location',
+        latitude = latitude,
+        longitude = longitude,
+        precinct = precinct,
+        lsoa_code = lsoa_code,
+        city = 'London',
+        country = 'United Kingdom'
+    )
 
     cursor.execute(query)
     location_id = cursor.lastrowid
 
-    query = 'INSERT INTO Incident '
-    query += '(location_id, occurrence_date) '
-    query += f'VALUES ({location_id}, {occurrence_date});'
+    query = db.insert(
+        'Incident',
+        location_id = location_id,
+        occurrence_date = occurrence_date
+    )
 
     cursor.execute(query)
     incident_id = cursor.lastrowid
 
-    query = 'INSERT INTO Crime '
-    query += '(incident_id, description) '
-    query += f'VALUES ({incident_id}, {description});'
+    query = db.insert(
+        'Crime',
+        incident_id = incident_id,
+        description = description
+    )
 
     cursor.execute(query)
 
@@ -177,23 +217,34 @@ for row in LondonStreet:
     type             = row[5]
     description      = row[6]
 
-    query = 'INSERT INTO Location '
-    query += '(latitude, longitude, precinct, lsoa_code, city, country) '
-    query += f'VALUES ({latitude}, {longitude}, {precinct}, {lsoa_code}, \'London\', \'United Kingdom\');'
+    query = db.insert(
+        'Location',
+        latitude = latitude,
+        longitude = longitude,
+        precinct = precinct,
+        lsoa_code = lsoa_code,
+        city = 'London',
+        country = 'United Kingdom'
+    )
 
     cursor.execute(query)
     location_id = cursor.lastrowid
 
-    query = 'INSERT INTO Incident '
-    query += '(location_id, occurrence_date, type) '
-    query += f'VALUES ({location_id}, {occurrence_date}, {type});'
+    query = db.insert(
+        'Incident',
+        location_id = location_id,
+        occurrence_date = occurrence_date,
+        type = type
+    )
 
     cursor.execute(query)
     incident_id = cursor.lastrowid
 
-    query = 'INSERT INTO Crime '
-    query += '(incident_id, description) '
-    query += f'VALUES ({incident_id}, {description});'
+    query = db.insert(
+        'Crime',
+        incident_id = incident_id,
+        description = description
+    )
 
     cursor.execute(query)
 
@@ -221,16 +272,26 @@ for row in NYPDComplaints:
     type            = row[8]
     description     = row[9]
 
-    query = 'INSERT INTO Location '
-    query += '(latitude, longitude, precinct, borough, city, state, country) '
-    query += f'VALUES ({latitude}, {longitude}, {precinct}, {borough}, \'New York\', \'New York\', \'United States\');'
+    query = db.insert(
+        'Location',
+        latitude = latitude,
+        longitude = longitude,
+        precinct = precinct,
+        borough = borough,
+        city = 'New York',
+        state = 'New York',
+        country = 'United States'
+    )
 
     cursor.execute(query)
     location_id = cursor.lastrowid
 
-    query = 'INSERT INTO Incident '
-    query += '(location_id, occurrence_date, type) '
-    query += f'VALUES ({location_id}, {occurrence_date}, {type});'
+    query = db.insert(
+        'Incident',
+        location_id = location_id,
+        occurrence_date = occurrence_date,
+        type = type
+    )
 
     cursor.execute(query)
     incident_id = cursor.lastrowid
@@ -240,9 +301,14 @@ for row in NYPDComplaints:
         code = 'NULL'
         organization = 'NULL'
 
-    query = 'INSERT INTO Complaint '
-    query += '(incident_id, code, organization, reported_date, description) '
-    query += f'VALUES ({incident_id}, {code}, {organization}, {reported_date}, {description});'
+    query = db.insert(
+        'Complaint',
+        incident_id = incident_id,
+        code = code,
+        organization = organization,
+        reported_date = reported_date,
+        description = description
+    )
 
     cursor.execute(query)
 
@@ -267,16 +333,25 @@ for row in ChicagoCrimes:
     precinct        = row[5]
     borough         = row[6]
 
-    query = 'INSERT INTO Location '
-    query += '(latitude, longitude, precinct, borough, city, state, country) '
-    query += f'VALUES ({latitude}, {longitude}, {precinct}, {borough}, \'Chicago\', \'Illinois\', \'United States\');'
+    query = db.insert(
+        'Location',
+        latitude = latitude,
+        longitude = longitude,
+        precinct = precinct,
+        borough = borough,
+        city = 'Chicago',
+        state = 'Illinois',
+        country = 'United States'
+    )
 
     cursor.execute(query)
     location_id = cursor.lastrowid
 
-    query = 'INSERT INTO Incident '
-    query += '(location_id, occurrence_date) '
-    query += f'VALUES ({location_id}, {occurrence_date});'
+    query = db.insert(
+        'Incident',
+        location_id = location_id,
+        occurrence_date = occurrence_date
+    )
 
     cursor.execute(query)
     incident_id = cursor.lastrowid
@@ -286,9 +361,12 @@ for row in ChicagoCrimes:
         code = 'NULL'
         organization = 'NULL'
 
-    query = 'INSERT INTO Crime '
-    query += '(incident_id, code, organization) '
-    query += f'VALUES ({incident_id}, {code}, {organization});'
+    query = db.insert(
+        'Crime',
+        incident_id = incident_id,
+        code = code,
+        organization = organization
+    )
 
     cursor.execute(query)
 
@@ -314,23 +392,33 @@ for row in LACrimes:
     gender          = row[6]
     ethnicity       = row[7]
 
-    query = 'INSERT INTO Location '
-    query += '(latitude, longitude, city, state, country) '
-    query += f'VALUES ({latitude}, {longitude}, \'Los Angeles\', \'California\', \'United States\');'
+    query = db.insert(
+        'Location',
+        latitude = latitude,
+        longitude = longitude,
+        city = 'Los Angeles',
+        state = 'California',
+        country = 'United States'
+    )
 
     cursor.execute(query)
     location_id = cursor.lastrowid
 
-    query = 'INSERT INTO Incident '
-    query += '(location_id, occurrence_date) '
-    query += f'VALUES ({location_id}, {occurrence_date});'
+    query = db.insert(
+        'Incident',
+        location_id = location_id,
+        occurrence_date = occurrence_date
+    )
 
     cursor.execute(query)
     incident_id = cursor.lastrowid
 
-    query = 'INSERT INTO Person '
-    query += '(age_range, gender, ethnicity) '
-    query += f'VALUES ({age_range}, {gender}, {ethnicity});'
+    query = db.insert(
+        'Person',
+        age_range = age_range,
+        gender = gender,
+        ethnicity = ethnicity
+    )
 
     cursor.execute(query)
     victim_id = cursor.lastrowid
@@ -340,9 +428,13 @@ for row in LACrimes:
         code = 'NULL'
         organization = 'NULL'
 
-    query = 'INSERT INTO Crime '
-    query += '(incident_id, code, organization, victim_id) '
-    query += f'VALUES ({incident_id}, {code}, {organization}, {victim_id});'
+    query = db.insert(
+        'Crime',
+        incident_id = incident_id,
+        code = code,
+        organization = organization,
+        victim_id = victim_id
+    )
 
     cursor.execute(query)
 

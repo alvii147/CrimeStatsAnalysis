@@ -1,6 +1,8 @@
 import log
 import utils
 
+from decimal import Decimal
+
 TABLES = utils.readJSON("tables.json")
 
 def tableExists(table):
@@ -21,20 +23,23 @@ def insert(table, **attributes):
 
     columns = ", ".join(attributes.keys())
 
-    values = utils.cleanRow(attributes.values())
+    values = attributes.values()
+    values = utils.cleanRow(values)
     values = [f'{c}' if isinstance(c, int)  else c for c in values]
+    values = [f'{c}' if isinstance(c, Decimal)  else c for c in values]
     values = ", ".join(values)
 
-    query = 'INSERT INTO Person '
+
+    query = f'INSERT INTO {table} '
     query += f'({columns}) '
     query += f'VALUES ({values});'
 
     return query
 
-print(insert(
-    "Person",
-    person_id = 1,
-    age_range = "69-420",
-    gender = "Apache Attack Helicopter",
-    ethnicity = "Smurf"
-))
+#print(insert(
+#    "Person",
+#    person_id = 1,
+#    age_range = '69-420',
+#    gender = 'Apache Attack Helicopter',
+#    ethnicity = 'Smurf'
+#))

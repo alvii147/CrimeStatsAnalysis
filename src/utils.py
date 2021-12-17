@@ -18,9 +18,16 @@ def read_csv(filename):
 
     return data
 
+def isNull(s):
+    return s == "\"NULL\"" or s == "\'NULL\'"
+
+def isQuoted(s):
+    return (s.startswith("\"") and s.endswith("\"")) or (s.startswith("\'") and s.endswith("\'"))
+
 def cleanRow(row):
-    row = [f'\'{c}\'' if isinstance(c, str)  else c for c in row]
+    row = [f'\'{c}\'' if isinstance(c, str) and not isQuoted(c)  else c for c in row]
     row = [f'\'{c}\'' if isinstance(c, date)  else c for c in row]
+    row = ['NULL' if isinstance(c, str) and isNull(c)  else c for c in row]
     row = ['NULL' if c is None  else c for c in row]
 
     return row
