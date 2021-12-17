@@ -1,7 +1,7 @@
 from getpass import getpass
 from pathlib import Path
 from configparser import ConfigParser
-import warnings
+import log
 from mysql.connector import connect
 
 def configDB(path=Path(__file__).parent / 'config.ini', sec='mysqlconfig'):
@@ -50,7 +50,7 @@ def configDB(path=Path(__file__).parent / 'config.ini', sec='mysqlconfig'):
         else:
             # if password config variable found, throw warning
             if var_name == 'password':
-                warnings.warn(
+                log.warning(
                     'Storing plain text format password in config file ' \
                     'is not recommended.'
                 )

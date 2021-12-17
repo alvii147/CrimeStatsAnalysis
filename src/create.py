@@ -1,5 +1,6 @@
 from utils import consoleFriendly
 from MySQLutils import connectDB, closeDB
+import log
 
 DROP_TABLE_QUERIES = [
 'DROP TABLE IF EXISTS Crime;',
@@ -186,12 +187,12 @@ connection, cursor = connectDB()
 
 for query in DROP_TABLE_QUERIES:
     console_query = consoleFriendly(query)
-    print(f'Executing query "{console_query}" ...')
+    log.info(f'Executing query "{console_query}" ...')
     cursor.execute(query)
 
 for query in CREATE_TABLE_QUERIES:
     console_query = consoleFriendly(query)
-    print(f'Executing query "{console_query}" ...')
+    log.info(f'Executing query "{console_query}" ...')
     cursor.execute(query)
 
 connection.commit()
