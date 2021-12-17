@@ -16,12 +16,12 @@ NYPD = read_csv(Path(__file__).parent / 'NYPD_Crime_Codes.csv')
 for row in NYPD:
     row = cleanRow(row)
 
-    key_code            = row[0]
+    code                = row[0]
     offence_description = row[1]
 
     query = 'INSERT INTO Code '
     query += '(code, organization, category) '
-    query += f'VALUES ({key_code}, \'NYPD\', {offence_description});'
+    query += f'VALUES ({code}, \'NYPD\', {offence_description});'
 
     cursor.execute(query)
 
@@ -31,14 +31,14 @@ IUCR = read_csv(Path(__file__).parent / 'IUCR_Crime_Codes.csv')
 for row in IUCR:
     row = cleanRow(row)
 
-    IUCR_code             = row[0]
+    code                  = row[0]
     primary_description   = row[1]
     secondary_description = row[2]
     index_code            = row[3]
 
     query = 'INSERT INTO Code '
     query += '(code, organization, category, description) '
-    query += f'VALUES ({IUCR_code}, \'IUCR\', {primary_description}, {secondary_description});'
+    query += f'VALUES ({code}, \'IUCR\', {primary_description}, {secondary_description});'
 
     cursor.execute(query)
 
