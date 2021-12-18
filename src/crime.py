@@ -1,7 +1,7 @@
 import log
 import os
 import utils
-import transfer as tr
+import transfer
 
 from sys import argv
 
@@ -24,8 +24,6 @@ HELP = {
 
     "create":   "Create main and temporary database tables",
     "load":     "Load data from CSVs into temporary tables",
-    "transfer": "Process and transfer data from temporary tables into main tables",
-    "drop":     "Drop all temporary tables",
     "clean":    "Delete all entries in database tables",
     "clear":    "Drop all tables from database",
 }
@@ -38,8 +36,6 @@ def help():
     if ADMIN:
         log.info(f"{INTERPRETER} {PROGRAM}   create               : {HELP['create']}")
         log.info(f"{INTERPRETER} {PROGRAM}     load               : {HELP['load']}")
-        log.info(f"{INTERPRETER} {PROGRAM} transfer               : {HELP['transfer']}")
-        log.info(f"{INTERPRETER} {PROGRAM}     drop               : {HELP['drop']}")
         log.info(f"{INTERPRETER} {PROGRAM}    clear               : {HELP['clear']}")
         log.info(f"{INTERPRETER} {PROGRAM}    clean               : {HELP['clean']}")
 
@@ -54,13 +50,10 @@ def create():
     utils.runQueries("create.sql")
 
 def load():
+    utils.runQueries("create_temp.sql")
     utils.runQueries("load.sql")
-
-def drop():
+    transfer.transfer_all()
     utils.runQueries("drop.sql")
-
-def transfer():
-    tr.transfer_all()
 
 def clean():
     utils.runQueries("clean.sql")
@@ -77,8 +70,6 @@ USER_COMMANDS = {
 ADMIN_COMMANDS = {
     "create":   create,
     "load":     load,
-    "transfer": transfer,
-    "drop":     drop,
     "clean":    clean,
     "clear":    clear,
 }
