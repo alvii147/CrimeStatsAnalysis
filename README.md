@@ -60,11 +60,7 @@ Once the installation and configuration are complete, run the `crime.py` python 
 
 ```bash
 cd src/
-python3 clean.py
-python3 create.py
-python3 load.py
-python3 transfer.py
-python3 drop.py
+python3 crime.py
 ```
 
 **NOTE** You must set `ADMIN` to `True` inside the script to gain access to the databse creation commands
