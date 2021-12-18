@@ -24,6 +24,10 @@ def isNull(s):
 def isQuoted(s):
     return (s.startswith("\"") and s.endswith("\"")) or (s.startswith("\'") and s.endswith("\'"))
 
+def stripQuotes(s):
+    if isQuoted(s):
+        return s[1 : len(s) - 1]
+
 def cleanRow(row):
     row = [f'\'{c}\'' if isinstance(c, str) and not isQuoted(c)  else c for c in row]
     row = [f'\'{c}\'' if isinstance(c, date)  else c for c in row]

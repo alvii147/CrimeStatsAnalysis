@@ -11,7 +11,6 @@ CREATE TABLE Location (
     latitude DECIMAL(11, 8),
     longitude DECIMAL(11, 8),
     precinct VARCHAR(128),
-    lsoa_code CHAR(9),
     borough VARCHAR(64),
     city VARCHAR(64),
     state VARCHAR(64),

@@ -3,10 +3,30 @@ import log
 import db
 
 from pathlib import Path
-from utils import read_csv, cleanRow
+from utils import read_csv, cleanRow, stripQuotes
 from MySQLutils import connectDB, closeDB
 
 connection, cursor = connectDB()
+
+def loadLondonBoroughs():
+    rows = read_csv(Path(__file__).parent / 'London_Boroughs.csv')
+    london_boroughs = {}
+    for row in rows:
+        lsoa = row[0]
+        borough = row[1]
+        london_boroughs[lsoa] = borough
+    return london_boroughs
+
+log.info('Loading London Borough Information ...')
+LONDON_BOROUGHS = loadLondonBoroughs()
+
+def getLondonBorough(lsoa):
+    lsoa = stripQuotes(lsoa_code)
+    if lsoa in LONDON_BOROUGHS:
+        return LONDON_BOROUGHS[lsoa]
+    else:
+        #log.warning(f"Could not determine London borough for LSOA '{lsoa}'")
+        return 'NULL'
 
 # -----------
 # Crime Codes
@@ -166,12 +186,14 @@ for row in LondonOutcomes:
     lsoa_code        = row[4]
     description      = row[5]
 
+    borough = getLondonBorough(lsoa_code)
+
     query = db.insert(
         'Location',
         latitude = latitude,
         longitude = longitude,
         precinct = precinct,
-        lsoa_code = lsoa_code,
+        borough = borough,
         city = 'London',
         country = 'United Kingdom'
     )
@@ -217,12 +239,14 @@ for row in LondonStreet:
     type             = row[5]
     description      = row[6]
 
+    borough = getLondonBorough(lsoa_code)
+
     query = db.insert(
         'Location',
         latitude = latitude,
         longitude = longitude,
         precinct = precinct,
-        lsoa_code = lsoa_code,
+        borough = borough,
         city = 'London',
         country = 'United Kingdom'
     )
