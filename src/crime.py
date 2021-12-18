@@ -18,14 +18,14 @@ ERROR = -1
 HELP = {
     # USER COMMANDS #
 
-    "help":     "Show this message",
+    "help": "Show this message",
 
     # ADMIN COMMANDS #
 
-    "create":   "Create all tables",
-    "load":     "Load data from CSVs into tables",
-    "clear":    "Delete all entries in tables",
-    "clean":    "Drop all tables from database",
+    "create": "Create all tables",
+    "load":   "Load data from CSVs into tables",
+    "clear":  "Delete all entries in tables",
+    "clean":  "Drop all tables from database",
 }
 
 def help():
