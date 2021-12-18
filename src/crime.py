@@ -1,6 +1,7 @@
 import log
 import os
 import utils
+import transfer
 
 from sys import argv
 
@@ -59,8 +60,7 @@ def drop():
     utils.runQueries("drop.sql")
 
 def transfer():
-    log.note("Fix hacky transfer command")
-    import transfer
+    transfer.main()
 
 def clean():
     utils.runQueries("clean.sql")
