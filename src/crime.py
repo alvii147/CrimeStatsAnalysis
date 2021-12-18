@@ -1,7 +1,7 @@
 import log
 import os
 import utils
-import transfer
+import transfer as tr
 
 from sys import argv
 
@@ -60,7 +60,7 @@ def drop():
     utils.runQueries("drop.sql")
 
 def transfer():
-    transfer.main()
+    tr.transfer_all()
 
 def clean():
     utils.runQueries("clean.sql")

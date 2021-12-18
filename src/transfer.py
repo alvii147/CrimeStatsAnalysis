@@ -21,7 +21,7 @@ def getLondonBorough(lsoa, boroughs):
     else:
         return 'NULL'
 
-def main():
+def transfer_all():
     connection, cursor = connectDB()
 
     log.info('Loading London Borough Information ...')
