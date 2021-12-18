@@ -4,8 +4,8 @@ import log
 
 from utils import read_csv
 
-INPUT_CSV = "UK_Regions.csv"
-OUTPUT_CSV = "London_Boroughs.csv"
+INPUT_CSV = "region_data/UK_Regions.csv"
+OUTPUT_CSV = "region_data/London_Boroughs.csv"
 
 UK_REGIONS = read_csv(INPUT_CSV)
 LSOA_BOROUGHS = {}

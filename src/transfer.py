@@ -6,7 +6,7 @@ from utils import read_csv, cleanRow, stripQuotes
 from MySQLutils import connectDB, closeDB
 
 def loadLondonBoroughs():
-    rows = read_csv(Path(__file__).parent / 'London_Boroughs.csv')
+    rows = read_csv(Path(__file__).parent / 'region_data/London_Boroughs.csv')
     london_boroughs = {}
     for row in rows:
         lsoa = row[0]
@@ -32,7 +32,7 @@ def transfer_all():
     # -----------
 
     log.info('Inserting NYPD Crime Codes ...')
-    NYPD = read_csv(Path(__file__).parent / 'NYPD_Crime_Codes.csv')
+    NYPD = read_csv(Path(__file__).parent / 'crimes_codes/NYPD_Crime_Codes.csv')
 
     for row in NYPD:
         row = cleanRow(row)
@@ -50,7 +50,7 @@ def transfer_all():
         cursor.execute(query)
 
     log.info('Inserting IUCR Crime Codes ...')
-    IUCR = read_csv(Path(__file__).parent / 'IUCR_Crime_Codes.csv')
+    IUCR = read_csv(Path(__file__).parent / 'crimes_codes/IUCR_Crime_Codes.csv')
 
     for row in IUCR:
         row = cleanRow(row)
@@ -71,7 +71,7 @@ def transfer_all():
         cursor.execute(query)
 
     log.info('Inserting UCR Crime Codes ...')
-    UCR = read_csv(Path(__file__).parent / 'UCR_Crime_Codes.csv')
+    UCR = read_csv(Path(__file__).parent / 'crimes_codes/UCR_Crime_Codes.csv')
 
     for row in UCR:
         row = cleanRow(row)
