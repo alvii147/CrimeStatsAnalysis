@@ -63,4 +63,4 @@ cd src/
 python3 crime.py
 ```
 
-**NOTE** You must set `ADMIN` to `True` inside the script to gain access to the databse creation commands
+**NOTE:** You must set `ADMIN` to `True` inside the script to gain access to the database creation commands
