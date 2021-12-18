@@ -13,7 +13,6 @@
         "latitude",
         "longitude",
         "precinct",
-        "lsoa_code",
         "borough",
         "city",
         "state",
