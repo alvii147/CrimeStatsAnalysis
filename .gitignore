@@ -23,4 +23,5 @@ output_*.txt
 .vscode
 
 !*Crime_Codes.csv
-
+!UK_Regions.csv
+!London_Boroughs.csv
