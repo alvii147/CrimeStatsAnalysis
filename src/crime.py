@@ -22,10 +22,10 @@ HELP = {
 
     # ADMIN COMMANDS #
 
-    "create":   "Create main and temporary database tables",
-    "load":     "Load data from CSVs into temporary tables",
-    "clean":    "Delete all entries in database tables",
-    "clear":    "Drop all tables from database",
+    "create":   "Create all tables",
+    "load":     "Load data from CSVs into tables",
+    "clear":    "Delete all entries in tables",
+    "clean":    "Drop all tables from database",
 }
 
 def help():
@@ -34,32 +34,31 @@ def help():
     log.info("---------------------------------------------")
 
     if ADMIN:
-        log.info(f"{INTERPRETER} {PROGRAM}   create               : {HELP['create']}")
-        log.info(f"{INTERPRETER} {PROGRAM}     load               : {HELP['load']}")
-        log.info(f"{INTERPRETER} {PROGRAM}    clear               : {HELP['clear']}")
-        log.info(f"{INTERPRETER} {PROGRAM}    clean               : {HELP['clean']}")
+        log.info(f"{INTERPRETER} {PROGRAM} create                   : {HELP['create']}")
+        log.info(f"{INTERPRETER} {PROGRAM} load                     : {HELP['load']}")
+        log.info(f"{INTERPRETER} {PROGRAM} clear                    : {HELP['clear']}")
+        log.info(f"{INTERPRETER} {PROGRAM} clean                    : {HELP['clean']}")
 
-    log.info(f"{INTERPRETER} {PROGRAM}     help               : {HELP['help']}")
-    log.info(f"{INTERPRETER} {PROGRAM}     foo  [arg_name(s)] : idk")
+    log.info(f"{INTERPRETER} {PROGRAM} help                     : {HELP['help']}")
 
     return SUCCESS
 
 # ===================== ADMIN COMMANDS ===================== #
 
 def create():
-    utils.runQueries("create.sql")
+    utils.runQueries("SQL/create.sql")
 
 def load():
-    utils.runQueries("create_temp.sql")
-    utils.runQueries("load.sql")
+    utils.runQueries("SQL/create_temp.sql")
+    utils.runQueries("SQL/load.sql")
     transfer.transfer_all()
-    utils.runQueries("drop.sql")
+    utils.runQueries("SQL/drop.sql")
 
 def clean():
-    utils.runQueries("clean.sql")
+    utils.runQueries("SQL/clean.sql")
 
 def clear():
-    utils.runQueries("clear.sql")
+    utils.runQueries("SQL/clear.sql")
 
 # ===================== PROGRAM ===================== #
 
