@@ -103,8 +103,6 @@ LondonStopAndSearch = cursor.fetchall()
 
 log.note("How do we deal with duplicate locations?")
 log.note("Won't the IDs increment automatically?")
-log.note("LSOA names are only for UK?")
-log.note("Can we put LSOA/borough in Location?")
 
 for row in LondonStopAndSearch:
     row = cleanRow(row)
