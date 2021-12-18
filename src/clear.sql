@@ -1,0 +1,7 @@
+DELETE FROM Incident;
+DELETE FROM Location;
+DELETE FROM Crime;
+DELETE FROM Complaint;
+DELETE FROM Search;
+DELETE FROM Person;
+DELETE FROM Code;
