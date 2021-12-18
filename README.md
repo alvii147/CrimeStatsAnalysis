@@ -56,7 +56,7 @@ Storing configuration in file is optional, and if not done, the program will con
 
 ## Preparing the database
 
-Once the installation and configuration are complete, run the following python scripts (while inside the virtual environment) to create the appropriate tables, load the data and transfer the data into the right tables:
+Once the installation and configuration are complete, run the `crime.py` python script (while inside the virtual environment) to create the appropriate tables, load the data and transfer the data into the right tables:
 
 ```bash
 cd src/
@@ -66,3 +66,5 @@ python3 load.py
 python3 transfer.py
 python3 drop.py
 ```
+
+**NOTE** You must set `ADMIN` to `True` inside the script to gain access to the databse creation commands

@@ -3,6 +3,7 @@ import log
 import json
 
 from datetime import date
+from MySQLutils import connectDB, closeDB
 
 def read_csv(filename):
     datafile = csv.reader(open(filename))
@@ -51,6 +52,18 @@ def loadQueries(path):
 
     log.success(f"Loaded {len(queries)} queries from '{path}'")
     return queries
+
+def runQueries(path):
+    connection, cursor = connectDB()
+    queries = loadQueries(path)
+
+    for query in queries:
+        console_query = consoleFriendly(query)
+        log.info(f'Executing query "{console_query}" ...')
+        cursor.execute(query)
+
+    connection.commit()
+    closeDB(connection, cursor)
 
 def readJSON(path):
     with open(path, "r") as file:
