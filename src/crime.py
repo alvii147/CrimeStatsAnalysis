@@ -29,17 +29,19 @@ HELP = {
 }
 
 def help():
-    log.info("---------------------------------------------")
+    log.info("--------------------------------------------------------------------------------")
     log.info(f"Usage: {INTERPRETER} {PROGRAM} <command> [arguments]")
-    log.info("---------------------------------------------")
+    log.info("--------------------------------------------------------------------------------")
 
     if ADMIN:
-        log.info(f"{INTERPRETER} {PROGRAM} create                   : {HELP['create']}")
-        log.info(f"{INTERPRETER} {PROGRAM} load                     : {HELP['load']}")
-        log.info(f"{INTERPRETER} {PROGRAM} clear                    : {HELP['clear']}")
-        log.info(f"{INTERPRETER} {PROGRAM} clean                    : {HELP['clean']}")
+        log.info(f"{INTERPRETER} {PROGRAM} create : {HELP['create']}")
+        log.info(f"{INTERPRETER} {PROGRAM} load   : {HELP['load']}")
+        log.info(f"{INTERPRETER} {PROGRAM} clear  : {HELP['clear']}")
+        log.info(f"{INTERPRETER} {PROGRAM} clean  : {HELP['clean']}")
 
-    log.info(f"{INTERPRETER} {PROGRAM} help                     : {HELP['help']}")
+    log.info(f"{INTERPRETER} {PROGRAM} help   : {HELP['help']}")
+
+    log.info("--------------------------------------------------------------------------------")
 
     return SUCCESS
 
@@ -67,10 +69,10 @@ USER_COMMANDS = {
 }
 
 ADMIN_COMMANDS = {
-    "create":   create,
-    "load":     load,
-    "clean":    clean,
-    "clear":    clear,
+    "create": create,
+    "load":   load,
+    "clean":  clean,
+    "clear":  clear,
 }
 
 COMMANDS = USER_COMMANDS
