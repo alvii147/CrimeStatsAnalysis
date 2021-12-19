@@ -308,7 +308,7 @@ def transfer_all():
         cursor.execute(query)
         incident_id = cursor.lastrowid
 
-        organization = '\'NYPD\''
+        organization = 'NYPD'
         if code.strip('\'') not in [i[0] for i in NYPD]:
             code = 'NULL'
             organization = 'NULL'
@@ -368,7 +368,7 @@ def transfer_all():
         cursor.execute(query)
         incident_id = cursor.lastrowid
 
-        organization = '\'IUCR\''
+        organization = 'IUCR'
         if code.strip('\'') not in [i[0] for i in IUCR]:
             code = 'NULL'
             organization = 'NULL'
@@ -439,7 +439,7 @@ def transfer_all():
         cursor.execute(query)
         victim_id = cursor.lastrowid
 
-        organization = '\'LAPD\''
+        organization = 'LAPD'
         if code.strip('\'') not in [i[0] for i in LAPD]:
             code = 'NULL'
             organization = 'NULL'
