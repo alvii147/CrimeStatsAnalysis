@@ -12,6 +12,7 @@
         "location_id",
         "latitude",
         "longitude",
+        "premises",
         "precinct",
         "borough",
         "city",
