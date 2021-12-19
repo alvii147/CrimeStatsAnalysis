@@ -28,9 +28,8 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 1946951 LINES
-(@_dummy, @_occurrence_date, @_precinct, @_dummy, @_longitude, @_latitude, @_dummy, @_dummy, @_borough, @_description)
+(@_dummy, @_occurrence_date, @_dummy, @_dummy, @_longitude, @_latitude, @_dummy, @_dummy, @_borough, @_description)
 SET
-    precinct = NULLIF(@_precinct, ''),
     description = NULLIF(@_description, ''),
     occurrence_date = CAST(CONCAT(@_occurrence_date, '-01') AS DATE),
     latitude = NULLIF(@_latitude, ''),
@@ -45,9 +44,8 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 2946380 LINES
-(@_dummy, @_occurrence_date, @_precinct, @_dummy, @_longitude, @_latitude, @_dummy, @_dummy, @_borough, @_type, @_description, @_dummy)
+(@_dummy, @_occurrence_date, @_dummy, @_longitude, @_latitude, @_dummy, @_dummy, @_borough, @_type, @_description, @_dummy)
 SET
-    precinct = NULLIF(@_precinct, ''),
     type = NULLIF(@_type, ''),
     description = NULLIF(@_description, ''),
     occurrence_date = CAST(CONCAT(@_occurrence_date, '-01') AS DATE),

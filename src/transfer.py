@@ -174,15 +174,13 @@ def transfer_all():
         occurrence_date  = row[0]
         latitude         = row[1]
         longitude        = row[2]
-        precinct         = row[3]
-        borough          = row[4]
-        description      = row[5]
+        borough          = row[3]
+        description      = row[4]
 
         query = db.insert(
             'Location',
             latitude = latitude,
             longitude = longitude,
-            precinct = precinct,
             borough = borough,
             city = 'London',
             country = 'United Kingdom'
@@ -224,16 +222,14 @@ def transfer_all():
         occurrence_date  = row[0]
         latitude         = row[1]
         longitude        = row[2]
-        precinct         = row[3]
-        borough          = row[4]
-        type             = row[5]
-        description      = row[6]
+        borough          = row[3]
+        type             = row[4]
+        description      = row[5]
 
         query = db.insert(
             'Location',
             latitude = latitude,
             longitude = longitude,
-            precinct = precinct,
             borough = borough,
             city = 'London',
             country = 'United Kingdom'

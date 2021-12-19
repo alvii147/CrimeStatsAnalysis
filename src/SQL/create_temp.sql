@@ -17,7 +17,6 @@ CREATE TABLE LondonOutcomes (
     occurrence_date DATE,
     latitude DECIMAL(11, 8),
     longitude DECIMAL(11, 8),
-    precinct VARCHAR(128),
     borough VARCHAR(64),
     description VARCHAR(256)
 );
@@ -26,7 +25,6 @@ CREATE TABLE LondonStreet (
     occurrence_date DATE,
     latitude DECIMAL(11, 8),
     longitude DECIMAL(11, 8),
-    precinct VARCHAR(128),
     borough VARCHAR(64),
     type VARCHAR(128),
     description VARCHAR(256)
