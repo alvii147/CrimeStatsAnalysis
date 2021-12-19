@@ -85,7 +85,7 @@ IGNORE 1923423 LINES
 (@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_borough, @_precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
 SET
     borough = NULLIF(@_borough, ''),
-    precinct = NULLIF(@_precinct, ''),
+    precinct = NULLIF(FLOOR(@_precinct), ''),
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
     code = TRIM(LEADING '0' FROM @_code),
     latitude = NULLIF(@_latitude, ''),
@@ -102,7 +102,7 @@ IGNORE 1872245 LINES
 (@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_borough, @_precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
 SET
     borough = NULLIF(@_borough, ''),
-    precinct = NULLIF(@_precinct, ''),
+    precinct = NULLIF(FLOOR(@_precinct), ''),
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
     code = TRIM(LEADING '0' FROM @_code),
     latitude = NULLIF(@_latitude, ''),
@@ -119,7 +119,7 @@ IGNORE 2688611 LINES
 (@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_borough, @_precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
 SET
     borough = NULLIF(@_borough, ''),
-    precinct = NULLIF(@_precinct, ''),
+    precinct = NULLIF(FLOOR(@_precinct), ''),
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
     code = TRIM(LEADING '0' FROM @_code),
     latitude = NULLIF(@_latitude, ''),
@@ -136,7 +136,7 @@ IGNORE 1456615 LINES
 (@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_borough, @_precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
 SET
     borough = NULLIF(@_borough, ''),
-    precinct = NULLIF(@_precinct, ''),
+    precinct = NULLIF(FLOOR(@_precinct), ''),
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
     code = TRIM(LEADING '0' FROM @_code),
     latitude = NULLIF(@_latitude, ''),
