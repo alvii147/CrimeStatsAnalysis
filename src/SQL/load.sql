@@ -44,7 +44,7 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 2946380 LINES
-(@_dummy, @_occurrence_date, @_dummy, @_longitude, @_latitude, @_dummy, @_dummy, @_borough, @_type, @_description, @_dummy)
+(@_dummy, @_occurrence_date, @_dummy, @_dummy, @_longitude, @_latitude, @_dummy, @_dummy, @_borough, @_type, @_description, @_dummy)
 SET
     type = NULLIF(@_type, ''),
     description = NULLIF(@_description, ''),
