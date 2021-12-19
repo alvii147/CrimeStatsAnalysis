@@ -127,7 +127,7 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 2116140 LINES
-(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_dummy, @_borough, @_dummy, @_dummy, code, @_dummy, @_dummy, age_range, @_gender, @_ethnicity, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
+(@_dummy, @_dummy, @_occurrence_date, @_dummy, precinct, @_borough, @_dummy, @_dummy, code, @_dummy, @_dummy, age_range, @_gender, @_ethnicity, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
 SET
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
     gender =
@@ -156,7 +156,7 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 182536 LINES
-(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_dummy, @_borough, @_dummy, @_dummy, code, @_dummy, @_dummy, age_range, @_gender, @_ethnicity, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
+(@_dummy, @_dummy, @_occurrence_date, @_dummy, precinct, @_borough, @_dummy, @_dummy, code, @_dummy, @_dummy, age_range, @_gender, @_ethnicity, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
 SET
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
     gender =

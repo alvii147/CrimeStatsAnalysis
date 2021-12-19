@@ -51,6 +51,7 @@ def create():
     utils.runQueries("SQL/create.sql")
 
 def load():
+    log.note("Add arg for number of lines to load from each CSV")
     utils.runQueries("SQL/create_temp.sql")
     utils.runQueries("SQL/load.sql")
     transfer.transfer_all()

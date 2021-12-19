@@ -2,7 +2,7 @@ from pathlib import Path
 
 import log
 import db
-from utils import read_csv, cleanRow
+from utils import read_csv, cleanRow, stripQuotes
 from MySQLutils import connectDB, closeDB
 
 def transfer_all():
@@ -270,7 +270,7 @@ def transfer_all():
             'Location',
             latitude = latitude,
             longitude = longitude,
-            precinct = precinct,
+            precinct = f"NYPD {stripQuotes(precinct)}",
             borough = borough,
             city = 'New York',
             state = 'New York',
@@ -331,7 +331,7 @@ def transfer_all():
             'Location',
             latitude = latitude,
             longitude = longitude,
-            precinct = precinct,
+            precinct = f"Chicago PD {stripQuotes(precinct)}",
             borough = borough,
             city = 'Chicago',
             state = 'Illinois',
@@ -386,6 +386,7 @@ def transfer_all():
         gender          = row[6]
         ethnicity       = row[7]
         borough         = row[8]
+        precinct        = row[9]
 
         query = db.insert(
             'Location',
@@ -394,7 +395,8 @@ def transfer_all():
             city = 'Los Angeles',
             state = 'California',
             country = 'United States',
-            borough = borough
+            borough = borough,
+            precinct = f"LAPD {stripQuotes(precinct)}"
         )
 
         cursor.execute(query)
