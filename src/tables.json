@@ -14,6 +14,7 @@
         "longitude",
         "premises",
         "precinct",
+        "ward",
         "borough",
         "city",
         "state",

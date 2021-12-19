@@ -12,6 +12,7 @@ CREATE TABLE Location (
     longitude DECIMAL(11, 8),
     premises VARCHAR(128),
     precinct DECIMAL(4),
+    ward DECIMAL(3),
     borough VARCHAR(64),
     city VARCHAR(64),
     state VARCHAR(64),
