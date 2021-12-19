@@ -127,11 +127,11 @@ def cleanRow(row):
     '''
 
     row = [
-        f'\'{json.dumps(c)}\'' if isinstance(c, str) else c
+        json.dumps(c) if isinstance(c, str) else c
         for c in row
     ]
     row = [
-        f'\'{c}\'' if isinstance(c, date) else c
+        f'"{c}"' if isinstance(c, date) else c
         for c in row
     ]
     row = [
