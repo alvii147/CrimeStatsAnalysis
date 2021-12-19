@@ -52,7 +52,6 @@ CREATE TABLE ChicagoCrimes (
     organization VARCHAR(16),
     latitude DECIMAL(11, 8),
     longitude DECIMAL(11, 8),
-    premises VARCHAR(128),
     precinct VARCHAR(128),
     borough VARCHAR(64)
 );

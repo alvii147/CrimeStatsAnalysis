@@ -344,15 +344,13 @@ def transfer_all():
         organization    = row[2]
         latitude        = row[3]
         longitude       = row[4]
-        premises        = row[5]
-        precinct        = row[6]
-        borough         = row[7]
+        precinct        = row[5]
+        borough         = row[6]
 
         query = db.insert(
             'Location',
             latitude = latitude,
             longitude = longitude,
-            premises = premises,
             precinct = precinct,
             borough = borough,
             city = 'Chicago',
