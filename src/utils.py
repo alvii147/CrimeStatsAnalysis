@@ -129,6 +129,10 @@ def cleanRow(row):
     '''
 
     row = [
+        c.replace('\'', '') if isinstance(c, str) else c
+        for c in row
+    ]
+    row = [
         f'\'{c}\'' if isinstance(c, str) and not isQuoted(c) else c
         for c in row
     ]
