@@ -63,5 +63,6 @@ CREATE TABLE LACrimes (
     longitude DECIMAL(11, 8),
     age_range VARCHAR(16),
     gender VARCHAR(16),
-    ethnicity VARCHAR(64)
+    ethnicity VARCHAR(64),
+    borough VARCHAR(64)
 );

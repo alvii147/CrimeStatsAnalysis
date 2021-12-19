@@ -385,6 +385,7 @@ def transfer_all():
         age_range       = row[5]
         gender          = row[6]
         ethnicity       = row[7]
+        borough         = row[8]
 
         query = db.insert(
             'Location',
@@ -392,7 +393,8 @@ def transfer_all():
             longitude = longitude,
             city = 'Los Angeles',
             state = 'California',
-            country = 'United States'
+            country = 'United States',
+            borough = borough
         )
 
         cursor.execute(query)
