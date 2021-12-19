@@ -246,12 +246,14 @@ def transfer_all():
         borough           = row[3]
         description       = row[4]
         police_department = row[5]
+        area              = row[6]
 
         query = db.insert(
             'Location',
             latitude = latitude,
             longitude = longitude,
             borough = borough,
+            area = area,
             city = 'London',
             country = 'United Kingdom'
         )
@@ -324,12 +326,14 @@ def transfer_all():
         type              = row[4]
         description       = row[5]
         police_department = row[6]
+        area              = row[7]
 
         query = db.insert(
             'Location',
             latitude = latitude,
             longitude = longitude,
             borough = borough,
+            area = area,
             city = 'London',
             country = 'United Kingdom'
         )
@@ -407,12 +411,14 @@ def transfer_all():
         borough         = row[8]
         type            = row[9]
         description     = row[10]
+        area            = row[11]
 
         query = db.insert(
             'Location',
             latitude = latitude,
             longitude = longitude,
             premises = premises,
+            area = area,
             precinct = precinct,
             borough = borough,
             city = 'New York',
@@ -497,6 +503,7 @@ def transfer_all():
         longitude       = row[4]
         ward            = row[5]
         borough         = row[6]
+        area            = row[7]
 
         query = db.insert(
             'Location',
@@ -504,6 +511,7 @@ def transfer_all():
             longitude = longitude,
             ward = ward,
             borough = borough,
+            area = area,
             city = 'Chicago',
             state = 'Illinois',
             country = 'United States'
@@ -588,6 +596,7 @@ def transfer_all():
         premises        = row[9]
         precinct        = row[10]
         borough         = row[11]
+        area            = row[12]
 
         query = db.insert(
             'Location',
@@ -597,6 +606,7 @@ def transfer_all():
             state = 'California',
             country = 'United States',
             premises = premises,
+            area = area,
             precinct = precinct,
             borough = borough
         )

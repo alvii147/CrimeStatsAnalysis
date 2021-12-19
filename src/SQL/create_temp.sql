@@ -19,7 +19,8 @@ CREATE TABLE LondonOutcomes (
     longitude DECIMAL(11, 8),
     borough VARCHAR(64),
     description VARCHAR(256),
-    police_department VARCHAR(256)
+    police_department VARCHAR(256),
+    area VARCHAR(256)
 );
 
 CREATE TABLE LondonStreet (
@@ -29,7 +30,8 @@ CREATE TABLE LondonStreet (
     borough VARCHAR(64),
     type VARCHAR(128),
     description VARCHAR(256),
-    police_department VARCHAR(256)
+    police_department VARCHAR(256),
+    area VARCHAR(256)
 );
 
 CREATE TABLE NYPDComplaints (
@@ -43,7 +45,8 @@ CREATE TABLE NYPDComplaints (
     precinct DECIMAL(4),
     borough VARCHAR(64),
     type VARCHAR(128),
-    description VARCHAR(256)
+    description VARCHAR(256),
+    area VARCHAR(256)
 );
 
 CREATE TABLE ChicagoCrimes (
@@ -53,7 +56,8 @@ CREATE TABLE ChicagoCrimes (
     latitude DECIMAL(11, 8),
     longitude DECIMAL(11, 8),
     ward DECIMAL(3),
-    borough VARCHAR(64)
+    borough VARCHAR(64),
+    area VARCHAR(256)
 );
 
 CREATE TABLE LACrimes (
@@ -68,5 +72,6 @@ CREATE TABLE LACrimes (
     weapon VARCHAR(256),
     premises VARCHAR(128),
     precinct DECIMAL(4),
-    borough VARCHAR(64)
+    borough VARCHAR(64),
+    area VARCHAR(256)
 );

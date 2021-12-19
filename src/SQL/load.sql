@@ -28,8 +28,9 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 1946951 LINES
-(@_dummy, @_occurrence_date, @_police_department, @_dummy, @_longitude, @_latitude, @_dummy, @_dummy, @_borough, @_description)
+(@_dummy, @_occurrence_date, @_police_department, @_dummy, @_longitude, @_latitude, @_area, @_dummy, @_borough, @_description)
 SET
+    area = NULLIF(@_area, ''),
     police_department = NULLIF(@_police_department, ''),
     description = NULLIF(@_description, ''),
     occurrence_date = CAST(CONCAT(@_occurrence_date, '-01') AS DATE),
@@ -45,8 +46,9 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 2946380 LINES
-(@_dummy, @_occurrence_date, @_police_department, @_dummy, @_longitude, @_latitude, @_dummy, @_dummy, @_borough, @_type, @_description, @_dummy)
+(@_dummy, @_occurrence_date, @_police_department, @_dummy, @_longitude, @_latitude, @_area, @_dummy, @_borough, @_type, @_description, @_dummy)
 SET
+    area = NULLIF(@_area, ''),
     police_department = NULLIF(@_police_department, ''),
     type = NULLIF(@_type, ''),
     description = NULLIF(@_description, ''),
@@ -63,12 +65,13 @@ FIELDS
 LINES
     TERMINATED BY '\r\n'
 IGNORE 1048476 LINES
-(@_dummy, @_occurrence_date, @_dummy, @_dummy, @_dummy, @_reported_date, @_code, @_dummy, @_dummy, @_description, @_dummy, @_type, @_dummy, @_borough, @_precinct, @_premises_preposition, @_premises_description, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+(@_dummy, @_occurrence_date, @_dummy, @_dummy, @_dummy, @_reported_date, @_code, @_dummy, @_dummy, @_description, @_dummy, @_type, @_dummy, @_borough, @_precinct, @_area, @_premises, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
 SET
     code = NULLIF(@_code, ''),
     description = NULLIF(@_description, ''),
     type = NULLIF(@_type, ''),
-    premises = TRIM(CONCAT(@_premises_preposition, ' ', @_premises_description)),
+    premises = area = NULLIF(@_premises, ' '),
+    area = NULLIF(@_area, ' '),
     precinct = NULLIF(@_precinct, ''),
     borough = NULLIF(@_borough, ''),
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date,'%d/%m/%Y') AS DATE),
@@ -84,8 +87,9 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 1923423 LINES
-(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_borough, @_ward, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_area, @_dummy, @_dummy, @_dummy, @_borough, @_ward, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
 SET
+    area = NULLIF(@_area, ''),
     borough = NULLIF(@_borough, ''),
     ward = NULLIF(FLOOR(@_ward), ''),
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
@@ -101,8 +105,9 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 1872245 LINES
-(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_borough, @_ward, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_area, @_dummy, @_dummy, @_dummy, @_borough, @_ward, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
 SET
+    area = NULLIF(@_area, ''),
     borough = NULLIF(@_borough, ''),
     ward = NULLIF(FLOOR(@_ward), ''),
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
@@ -118,8 +123,9 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 2688611 LINES
-(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_borough, @_ward, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_area, @_dummy, @_dummy, @_dummy, @_borough, @_ward, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
 SET
+    area = NULLIF(@_area, ''),
     borough = NULLIF(@_borough, ''),
     ward = NULLIF(FLOOR(@_ward), ''),
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
@@ -135,8 +141,9 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 1456615 LINES
-(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_borough, @_ward, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_area, @_dummy, @_dummy, @_dummy, @_borough, @_ward, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
 SET
+    area = NULLIF(@_area, ''),
     borough = NULLIF(@_borough, ''),
     ward = NULLIF(FLOOR(@_ward), ''),
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
@@ -152,9 +159,10 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 2116140 LINES
-(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_precinct, @_borough, @_dummy, @_dummy, @_code, @_dummy, @_dummy, @_age_range, @_gender, @_ethnicity, @_dummy, premises, @_dummy, @_weapon, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
+(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_precinct, @_borough, @_dummy, @_dummy, @_code, @_dummy, @_dummy, @_age_range, @_gender, @_ethnicity, @_dummy, premises, @_dummy, @_weapon, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_area, @_dummy, @_latitude, @_longitude)
 SET
     precinct = NULLIF(@_precinct, ''),
+    area = NULLIF(@_area, ''),
     code = NULLIF(@_code, ''),
     age_range = NULLIF(@_age_range, ''),
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
@@ -192,9 +200,10 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 182536 LINES
-(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_precinct, @_borough, @_dummy, @_dummy, @_code, @_dummy, @_dummy, @_age_range, @_gender, @_ethnicity, @_dummy, premises, @_dummy, weapon, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
+(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_precinct, @_borough, @_dummy, @_dummy, @_code, @_dummy, @_dummy, @_age_range, @_gender, @_ethnicity, @_dummy, premises, @_dummy, weapon, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_area, @_dummy, @_latitude, @_longitude)
 SET
     precinct = NULLIF(@_precinct, ''),
+    area = NULLIF(@_area, ''),
     code = NULLIF(@_code, ''),
     age_range = NULLIF(@_age_range, ''),
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
