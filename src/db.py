@@ -24,7 +24,7 @@ def insert(table, **attributes):
     columns = ", ".join(attributes.keys())
 
     values = attributes.values()
-    # values = utils.cleanRow(values)
+    values = utils.cleanRow(values)
     values = [f'{c}' if isinstance(c, int)  else c for c in values]
     values = [f'{c}' if isinstance(c, Decimal)  else c for c in values]
     values = ", ".join(values)
