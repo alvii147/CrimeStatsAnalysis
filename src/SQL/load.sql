@@ -151,7 +151,7 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 2116140 LINES
-(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_precinct, @_borough, @_dummy, @_dummy, @_code, @_dummy, @_dummy, @_age_range, @_gender, @_ethnicity, @_dummy, @_dummy, @_dummy, weapon, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
+(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_precinct, @_borough, @_dummy, @_dummy, @_code, @_dummy, @_dummy, @_age_range, @_gender, @_ethnicity, @_dummy, @_dummy, @_dummy, @_weapon, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
 SET
     precinct = NULLIF(@_precinct, ''),
     code = NULLIF(@_code, ''),
@@ -180,7 +180,8 @@ SET
         END,
     latitude = NULLIF(@_latitude, ''),
     longitude = NULLIF(@_longitude, ''),
-    borough = NULLIF(@_borough, '');
+    borough = NULLIF(@_borough, ''),
+    weapon = NULLIF(@_weapon, '');
 
 LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Crime_Data_from_2020_to_Present.csv'
 INTO TABLE LACrimes
@@ -219,4 +220,5 @@ SET
         END,
     latitude = NULLIF(@_latitude, ''),
     longitude = NULLIF(@_longitude, ''),
-    borough = NULLIF(@_borough, '');
+    borough = NULLIF(@_borough, ''),
+    weapon = NULLIF(@_weapon, '');
