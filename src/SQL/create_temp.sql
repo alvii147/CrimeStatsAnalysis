@@ -18,7 +18,8 @@ CREATE TABLE LondonOutcomes (
     latitude DECIMAL(11, 8),
     longitude DECIMAL(11, 8),
     borough VARCHAR(64),
-    description VARCHAR(256)
+    description VARCHAR(256),
+    police_department VARCHAR(256)
 );
 
 CREATE TABLE LondonStreet (
@@ -27,7 +28,8 @@ CREATE TABLE LondonStreet (
     longitude DECIMAL(11, 8),
     borough VARCHAR(64),
     type VARCHAR(128),
-    description VARCHAR(256)
+    description VARCHAR(256),
+    police_department VARCHAR(256)
 );
 
 CREATE TABLE NYPDComplaints (

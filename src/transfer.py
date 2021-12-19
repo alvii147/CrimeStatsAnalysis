@@ -131,12 +131,7 @@ def transfer_all():
     cursor.execute(query)
     LondonStopAndSearch = cursor.fetchall()
 
-    log.note("How do we deal with duplicate locations?")
-    log.note("Won't the IDs increment automatically?")
-
     for row in LondonStopAndSearch:
-        # row = cleanRow(row)
-
         type                  = row[0]
         occurrence_date       = row[1]
         latitude              = row[2]
@@ -175,6 +170,7 @@ def transfer_all():
             'Incident',
             location_id = location_id,
             occurrence_date = occurrence_date,
+            police_department = 'City of London Police',
             type = type
         )
 
@@ -244,13 +240,12 @@ def transfer_all():
     LondonOutcomes = cursor.fetchall()
 
     for row in LondonOutcomes:
-        # row = cleanRow(row)
-
-        occurrence_date  = row[0]
-        latitude         = row[1]
-        longitude        = row[2]
-        borough          = row[3]
-        description      = row[4]
+        occurrence_date   = row[0]
+        latitude          = row[1]
+        longitude         = row[2]
+        borough           = row[3]
+        description       = row[4]
+        police_department = row[5]
 
         query = db.insert(
             'Location',
@@ -277,6 +272,7 @@ def transfer_all():
         query = db.insert(
             'Incident',
             location_id = location_id,
+            police_department = police_department,
             occurrence_date = occurrence_date
         )
 
@@ -321,14 +317,13 @@ def transfer_all():
     LondonStreet = cursor.fetchall()
 
     for row in LondonStreet:
-        # row = cleanRow(row)
-
-        occurrence_date  = row[0]
-        latitude         = row[1]
-        longitude        = row[2]
-        borough          = row[3]
-        type             = row[4]
-        description      = row[5]
+        occurrence_date   = row[0]
+        latitude          = row[1]
+        longitude         = row[2]
+        borough           = row[3]
+        type              = row[4]
+        description       = row[5]
+        police_department = row[6]
 
         query = db.insert(
             'Location',
@@ -356,6 +351,7 @@ def transfer_all():
             'Incident',
             location_id = location_id,
             occurrence_date = occurrence_date,
+            police_department = police_department,
             type = type
         )
 
@@ -400,8 +396,6 @@ def transfer_all():
     NYPDComplaints = cursor.fetchall()
 
     for row in NYPDComplaints:
-        # row = cleanRow(row)
-
         occurrence_date = row[0]
         reported_date   = row[1]
         code            = row[2]
@@ -443,6 +437,7 @@ def transfer_all():
             'Incident',
             location_id = location_id,
             occurrence_date = occurrence_date,
+            police_department = 'New York Police Department',
             type = type
         )
 
@@ -495,8 +490,6 @@ def transfer_all():
     ChicagoCrimes = cursor.fetchall()
 
     for row in ChicagoCrimes:
-        # row = cleanRow(row)
-
         occurrence_date = row[0]
         code            = row[1]
         organization    = row[2]
@@ -532,6 +525,7 @@ def transfer_all():
         query = db.insert(
             'Incident',
             location_id = location_id,
+            police_department = 'Chicago Police Department',
             occurrence_date = occurrence_date
         )
 
@@ -582,8 +576,6 @@ def transfer_all():
     LACrimes = cursor.fetchall()
 
     for row in LACrimes:
-        # row = cleanRow(row)
-
         occurrence_date = row[0]
         code            = row[1]
         organization    = row[2]
@@ -625,6 +617,7 @@ def transfer_all():
         query = db.insert(
             'Incident',
             location_id = location_id,
+            police_department = 'Los Angeles Police Department',
             occurrence_date = occurrence_date
         )
 

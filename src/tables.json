@@ -4,6 +4,7 @@
         "incident_id",
         "location_id",
         "occurrence_date",
+        "police_department",
         "type"
     ],
 
