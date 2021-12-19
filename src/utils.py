@@ -69,7 +69,7 @@ def isNull(s):
 
     return s == "\"NULL\"" or s == "\'NULL\'"
 
-def isQuoted(s):
+def isQuoted(s, quote='\''):
     '''
     Check if string is quoted.
 
@@ -77,6 +77,8 @@ def isQuoted(s):
     ----------
     s : str
         Given string.
+    q : str
+        Quote type to check for. Must be set to either ' or ".
 
     Returns
     -------
@@ -84,14 +86,10 @@ def isQuoted(s):
         True if quoted, False if not quoted.
     '''
 
-    return (
-        (
-            s.startswith("\"") and s.endswith("\"")
-        ) or
-        (
-            s.startswith("\'") and s.endswith("\'")
-        )
-    )
+    if quote not in ['\'', '"']:
+        raise ValueError('quote must be \' or ".')
+
+    return s.startswith(quote) and s.endswith(quote)
 
 def stripQuotes(s):
     '''
@@ -129,7 +127,7 @@ def cleanRow(row):
     '''
 
     row = [
-        f'\'{c}\'' if isinstance(c, str) and not isQuoted(c) else c
+        f'\'{json.dumps(c)}\'' if isinstance(c, str) else c
         for c in row
     ]
     row = [

@@ -2,7 +2,7 @@ from pathlib import Path
 
 import log
 import db
-from utils import read_csv, cleanRow, stripQuotes, isNull
+from utils import read_csv, cleanRow
 from MySQLutils import connectDB, closeDB
 
 def transfer_all():
