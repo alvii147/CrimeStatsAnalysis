@@ -35,11 +35,3 @@ def insert(table, **attributes):
     query += f'VALUES ({values});'
 
     return query
-
-#print(insert(
-#    "Person",
-#    person_id = 1,
-#    age_range = '69-420',
-#    gender = 'Apache Attack Helicopter',
-#    ethnicity = 'Smurf'
-#))
