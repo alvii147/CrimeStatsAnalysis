@@ -64,6 +64,7 @@ CREATE TABLE LACrimes (
     age_range VARCHAR(16),
     gender VARCHAR(16),
     ethnicity VARCHAR(64),
+    weapon VARCHAR(256),
     borough VARCHAR(64),
     precinct VARCHAR(128)
 );

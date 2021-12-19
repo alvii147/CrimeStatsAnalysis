@@ -403,8 +403,9 @@ def transfer_all():
         age_range       = row[5]
         gender          = row[6]
         ethnicity       = row[7]
-        borough         = row[8]
-        precinct        = row[9]
+        weapon          = row[8]
+        borough         = row[9]
+        precinct        = row[10]
 
         query = db.insert(
             'Location',
@@ -449,7 +450,8 @@ def transfer_all():
             incident_id = incident_id,
             code = code,
             organization = organization,
-            victim_id = victim_id
+            victim_id = victim_id,
+            weapon = weapon
         )
 
         cursor.execute(query)

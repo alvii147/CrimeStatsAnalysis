@@ -151,7 +151,7 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 2116140 LINES
-(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_precinct, @_borough, @_dummy, @_dummy, @_code, @_dummy, @_dummy, @_age_range, @_gender, @_ethnicity, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
+(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_precinct, @_borough, @_dummy, @_dummy, @_code, @_dummy, @_dummy, @_age_range, @_gender, @_ethnicity, @_dummy, @_dummy, @_dummy, weapon, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
 SET
     precinct = NULLIF(@_precinct, ''),
     code = NULLIF(@_code, ''),
@@ -165,10 +165,17 @@ SET
         END,
     ethnicity =
         CASE
-            WHEN UPPER(@_ethnicity) = 'H' THEN 'Hispanic'
-            WHEN UPPER(@_ethnicity) = 'W' THEN 'White'
-            WHEN UPPER(@_ethnicity) = 'B' THEN 'Black'
             WHEN UPPER(@_ethnicity) = 'A' THEN 'Asian'
+            WHEN UPPER(@_ethnicity) = 'B' THEN 'Black'
+            WHEN UPPER(@_ethnicity) = 'C' THEN 'Asian'
+            WHEN UPPER(@_ethnicity) = 'D' THEN 'Asian'
+            WHEN UPPER(@_ethnicity) = 'F' THEN 'Asian'
+            WHEN UPPER(@_ethnicity) = 'H' THEN 'Hispanic'
+            WHEN UPPER(@_ethnicity) = 'J' THEN 'Asian'
+            WHEN UPPER(@_ethnicity) = 'K' THEN 'Asian'
+            WHEN UPPER(@_ethnicity) = 'V' THEN 'Asian'
+            WHEN UPPER(@_ethnicity) = 'W' THEN 'White'
+            WHEN UPPER(@_ethnicity) = 'Z' THEN 'Asian'
             ELSE 'Other'
         END,
     latitude = NULLIF(@_latitude, ''),
@@ -183,7 +190,7 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 182536 LINES
-(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_precinct, @_borough, @_dummy, @_dummy, @_code, @_dummy, @_dummy, @_age_range, @_gender, @_ethnicity, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
+(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_precinct, @_borough, @_dummy, @_dummy, @_code, @_dummy, @_dummy, @_age_range, @_gender, @_ethnicity, @_dummy, @_dummy, @_dummy, weapon, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
 SET
     precinct = NULLIF(@_precinct, ''),
     code = NULLIF(@_code, ''),
@@ -197,10 +204,17 @@ SET
         END,
     ethnicity =
         CASE
-            WHEN UPPER(@_ethnicity) = 'H' THEN 'Hispanic'
-            WHEN UPPER(@_ethnicity) = 'W' THEN 'White'
-            WHEN UPPER(@_ethnicity) = 'B' THEN 'Black'
             WHEN UPPER(@_ethnicity) = 'A' THEN 'Asian'
+            WHEN UPPER(@_ethnicity) = 'B' THEN 'Black'
+            WHEN UPPER(@_ethnicity) = 'C' THEN 'Asian'
+            WHEN UPPER(@_ethnicity) = 'D' THEN 'Asian'
+            WHEN UPPER(@_ethnicity) = 'F' THEN 'Asian'
+            WHEN UPPER(@_ethnicity) = 'H' THEN 'Hispanic'
+            WHEN UPPER(@_ethnicity) = 'J' THEN 'Asian'
+            WHEN UPPER(@_ethnicity) = 'K' THEN 'Asian'
+            WHEN UPPER(@_ethnicity) = 'V' THEN 'Asian'
+            WHEN UPPER(@_ethnicity) = 'W' THEN 'White'
+            WHEN UPPER(@_ethnicity) = 'Z' THEN 'Asian'
             ELSE 'Other'
         END,
     latitude = NULLIF(@_latitude, ''),

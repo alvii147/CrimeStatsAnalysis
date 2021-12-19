@@ -24,6 +24,7 @@ CREATE TABLE Crime (
     code VARCHAR(4),
     organization VARCHAR(16),
     victim_id INT,
+    weapon VARCHAR(256),
     description VARCHAR(256),
     PRIMARY KEY(crime_id)
 );
