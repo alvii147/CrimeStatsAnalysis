@@ -68,7 +68,7 @@ SET
     code = NULLIF(@_code, ''),
     description = NULLIF(@_description, ''),
     type = NULLIF(@_type, ''),
-    premises = CONCAT(@_premises_preposition, ' ', @_premises_description),
+    premises = TRIM(CONCAT(@_premises_preposition, ' ', @_premises_description)),
     precinct = NULLIF(@_precinct, ''),
     borough = NULLIF(@_borough, ''),
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date,'%d/%m/%Y') AS DATE),
