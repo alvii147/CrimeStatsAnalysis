@@ -618,6 +618,7 @@ def transfer_all():
             log.error('Exception:')
             log.error(e)
             log.error('Skipping row')
+            log.error(query)
             continue
 
         location_id = cursor.lastrowid
