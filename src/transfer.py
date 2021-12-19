@@ -71,6 +71,24 @@ def transfer_all():
 
         cursor.execute(query)
 
+    log.info('Inserting LA Crime Codes ...')
+    LAPD = read_csv(Path(__file__).parent / 'codes/LAPD_Crime_Codes.csv')
+
+    for row in LAPD:
+        row = cleanRow(row)
+
+        code        = row[0]
+        description = row[1]
+
+        query = db.insert(
+            'Code',
+            code = code,
+            organization = 'LAPD',
+            description = description
+        )
+
+        cursor.execute(query)
+
     log.info('Transferring London Stop & Search Data ...')
     query = 'SELECT * FROM LondonStopAndSearch;'
 
@@ -421,8 +439,8 @@ def transfer_all():
         cursor.execute(query)
         victim_id = cursor.lastrowid
 
-        organization = '\'UCR\''
-        if code.strip('\'') not in [i[0] for i in UCR]:
+        organization = '\'LAPD\''
+        if code.strip('\'') not in [i[0] for i in LAPD]:
             code = 'NULL'
             organization = 'NULL'
 
