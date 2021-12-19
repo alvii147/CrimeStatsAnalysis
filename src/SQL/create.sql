@@ -10,6 +10,7 @@ CREATE TABLE Location (
     location_id INT NOT NULL AUTO_INCREMENT,
     latitude DECIMAL(11, 8),
     longitude DECIMAL(11, 8),
+    premises VARCHAR(128),
     precinct VARCHAR(128),
     borough VARCHAR(64),
     city VARCHAR(64),

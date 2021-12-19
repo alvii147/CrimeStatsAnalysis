@@ -279,15 +279,17 @@ def transfer_all():
         organization    = row[3]
         latitude        = row[4]
         longitude       = row[5]
-        precinct        = row[6]
-        borough         = row[7]
-        type            = row[8]
-        description     = row[9]
+        premises        = row[6]
+        precinct        = row[7]
+        borough         = row[8]
+        type            = row[9]
+        description     = row[10]
 
         query = db.insert(
             'Location',
             latitude = latitude,
             longitude = longitude,
+            premises = premises,
             precinct = precinct,
             borough = borough,
             city = 'New York',
@@ -342,13 +344,15 @@ def transfer_all():
         organization    = row[2]
         latitude        = row[3]
         longitude       = row[4]
-        precinct        = row[5]
-        borough         = row[6]
+        premises        = row[5]
+        precinct        = row[6]
+        borough         = row[7]
 
         query = db.insert(
             'Location',
             latitude = latitude,
             longitude = longitude,
+            premises = premises,
             precinct = precinct,
             borough = borough,
             city = 'Chicago',
@@ -404,8 +408,9 @@ def transfer_all():
         gender          = row[6]
         ethnicity       = row[7]
         weapon          = row[8]
-        borough         = row[9]
+        premises        = row[9]
         precinct        = row[10]
+        borough         = row[11]
 
         query = db.insert(
             'Location',
@@ -414,8 +419,9 @@ def transfer_all():
             city = 'Los Angeles',
             state = 'California',
             country = 'United States',
-            borough = borough,
-            precinct = precinct
+            premises = premises,
+            precinct = precinct,
+            borough = borough
         )
 
         cursor.execute(query)

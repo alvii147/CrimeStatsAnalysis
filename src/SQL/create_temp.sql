@@ -39,6 +39,7 @@ CREATE TABLE NYPDComplaints (
     organization VARCHAR(16),
     latitude DECIMAL(11, 8),
     longitude DECIMAL(11, 8),
+    premises VARCHAR(128),
     precinct VARCHAR(128),
     borough VARCHAR(64),
     type VARCHAR(128),
@@ -51,6 +52,7 @@ CREATE TABLE ChicagoCrimes (
     organization VARCHAR(16),
     latitude DECIMAL(11, 8),
     longitude DECIMAL(11, 8),
+    premises VARCHAR(128),
     precinct VARCHAR(128),
     borough VARCHAR(64)
 );
@@ -65,6 +67,7 @@ CREATE TABLE LACrimes (
     gender VARCHAR(16),
     ethnicity VARCHAR(64),
     weapon VARCHAR(256),
-    borough VARCHAR(64),
-    precinct VARCHAR(128)
+    premises VARCHAR(128),
+    precinct VARCHAR(128),
+    borough VARCHAR(64)
 );

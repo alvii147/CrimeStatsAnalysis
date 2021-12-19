@@ -63,7 +63,7 @@ FIELDS
 LINES
     TERMINATED BY '\r\n'
 IGNORE 1048476 LINES
-(@_dummy, @_occurrence_date, @_dummy, @_dummy, @_dummy, @_reported_date, @_code, @_dummy, @_dummy, @_description, @_dummy, @_type, @_dummy, @_borough, @_precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+(@_dummy, @_occurrence_date, @_dummy, @_dummy, @_dummy, @_reported_date, @_code, @_dummy, @_dummy, @_description, @_dummy, @_type, @_dummy, @_borough, @_precinct, premises, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
 SET
     code = NULLIF(@_code, ''),
     description = NULLIF(@_description, ''),
@@ -83,7 +83,7 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 1923423 LINES
-(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_borough, @_precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_borough, @_precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, premises)
 SET
     borough = NULLIF(@_borough, ''),
     precinct = NULLIF(@_precinct, ''),
@@ -100,7 +100,7 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 1872245 LINES
-(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_borough, @_precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_borough, @_precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, premises)
 SET
     borough = NULLIF(@_borough, ''),
     precinct = NULLIF(@_precinct, ''),
@@ -117,7 +117,7 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 2688611 LINES
-(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_borough, @_precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_borough, @_precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, premises)
 SET
     borough = NULLIF(@_borough, ''),
     precinct = NULLIF(@_precinct, ''),
@@ -134,7 +134,7 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 1456615 LINES
-(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_borough, @_precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_borough, @_precinct, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, premises)
 SET
     borough = NULLIF(@_borough, ''),
     precinct = NULLIF(@_precinct, ''),
@@ -151,7 +151,7 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 2116140 LINES
-(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_precinct, @_borough, @_dummy, @_dummy, @_code, @_dummy, @_dummy, @_age_range, @_gender, @_ethnicity, @_dummy, @_dummy, @_dummy, @_weapon, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
+(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_precinct, @_borough, @_dummy, @_dummy, @_code, @_dummy, @_dummy, @_age_range, @_gender, @_ethnicity, @_dummy, @_dummy, @_dummy, @_weapon, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, premises, @_dummy, @_latitude, @_longitude)
 SET
     precinct = NULLIF(@_precinct, ''),
     code = NULLIF(@_code, ''),
@@ -191,7 +191,7 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 182536 LINES
-(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_precinct, @_borough, @_dummy, @_dummy, @_code, @_dummy, @_dummy, @_age_range, @_gender, @_ethnicity, @_dummy, @_dummy, @_dummy, weapon, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude)
+(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_precinct, @_borough, @_dummy, @_dummy, @_code, @_dummy, @_dummy, @_age_range, @_gender, @_ethnicity, @_dummy, @_dummy, @_dummy, weapon, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, premises, @_dummy, @_latitude, @_longitude)
 SET
     precinct = NULLIF(@_precinct, ''),
     code = NULLIF(@_code, ''),
