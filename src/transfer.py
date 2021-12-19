@@ -28,7 +28,16 @@ def transfer_all():
             category = offence_description
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Code')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
 
     log.info('Inserting IUCR Crime Codes ...')
     IUCR = read_csv(Path(__file__).parent / 'codes/IUCR_Crime_Codes.csv')
@@ -49,7 +58,16 @@ def transfer_all():
             description = secondary_description
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Code')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
 
     log.info('Inserting UCR Crime Codes ...')
     UCR = read_csv(Path(__file__).parent / 'codes/UCR_Crime_Codes.csv')
@@ -69,7 +87,16 @@ def transfer_all():
             description = description
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Code')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
 
     log.info('Inserting LA Crime Codes ...')
     LAPD = read_csv(Path(__file__).parent / 'codes/LAPD_Crime_Codes.csv')
@@ -87,7 +114,16 @@ def transfer_all():
             description = description
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Code')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
 
     log.info('Transferring London Stop & Search Data ...')
     query = 'SELECT * FROM LondonStopAndSearch;'
@@ -122,7 +158,17 @@ def transfer_all():
             country = 'United Kingdom'
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Location')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
+
         location_id = cursor.lastrowid
 
         query = db.insert(
@@ -132,7 +178,17 @@ def transfer_all():
             type = type
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Incident')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
+
         incident_id = cursor.lastrowid
 
         query = db.insert(
@@ -142,7 +198,17 @@ def transfer_all():
             ethnicity = ethnicity
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Person')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
+
         suspect_id = cursor.lastrowid
 
         query = db.insert(
@@ -156,7 +222,16 @@ def transfer_all():
             clothing_removal = clothing_removal
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Search')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
 
     # ---------------
     # London Outcomes
@@ -186,7 +261,17 @@ def transfer_all():
             country = 'United Kingdom'
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Location')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
+
         location_id = cursor.lastrowid
 
         query = db.insert(
@@ -195,7 +280,17 @@ def transfer_all():
             occurrence_date = occurrence_date
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Incident')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
+
         incident_id = cursor.lastrowid
 
         query = db.insert(
@@ -204,7 +299,16 @@ def transfer_all():
             description = description
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Crime')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
 
     # -------------
     # London Street
@@ -235,7 +339,17 @@ def transfer_all():
             country = 'United Kingdom'
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Location')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
+
         location_id = cursor.lastrowid
 
         query = db.insert(
@@ -245,7 +359,17 @@ def transfer_all():
             type = type
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Incident')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
+
         incident_id = cursor.lastrowid
 
         query = db.insert(
@@ -254,7 +378,16 @@ def transfer_all():
             description = description
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Crime')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
 
     # ---------------
     # NYPD Complaints
@@ -293,7 +426,17 @@ def transfer_all():
             country = 'United States'
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Location')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
+
         location_id = cursor.lastrowid
 
         query = db.insert(
@@ -303,7 +446,17 @@ def transfer_all():
             type = type
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Incident')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
+
         incident_id = cursor.lastrowid
 
         organization = 'NYPD'
@@ -320,7 +473,16 @@ def transfer_all():
             description = description
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Complaint')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
 
     # --------------
     # Chicago Crimes
@@ -354,7 +516,17 @@ def transfer_all():
             country = 'United States'
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Location')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
+
         location_id = cursor.lastrowid
 
         query = db.insert(
@@ -363,7 +535,17 @@ def transfer_all():
             occurrence_date = occurrence_date
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Incident')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
+
         incident_id = cursor.lastrowid
 
         organization = 'IUCR'
@@ -378,7 +560,16 @@ def transfer_all():
             organization = organization
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Crime')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
 
     # ---------
     # LA Crimes
@@ -418,7 +609,17 @@ def transfer_all():
             borough = borough
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Location')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
+
         location_id = cursor.lastrowid
 
         query = db.insert(
@@ -427,7 +628,17 @@ def transfer_all():
             occurrence_date = occurrence_date
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Incident')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
+
         incident_id = cursor.lastrowid
 
         query = db.insert(
@@ -437,7 +648,17 @@ def transfer_all():
             ethnicity = ethnicity
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Person')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
+
         victim_id = cursor.lastrowid
 
         organization = 'LAPD'
@@ -454,7 +675,16 @@ def transfer_all():
             weapon = weapon
         )
 
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            log.error('Unable to insert row into table Crime')
+            log.error('Row contents:')
+            log.error(row)
+            log.error('Exception:')
+            log.error(e)
+            log.error('Skipping row')
+            continue
 
     connection.commit()
     closeDB(connection, cursor)
