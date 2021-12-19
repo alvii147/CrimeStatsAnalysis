@@ -18,7 +18,7 @@ CREATE TABLE LondonOutcomes (
     latitude DECIMAL(11, 8),
     longitude DECIMAL(11, 8),
     precinct VARCHAR(128),
-    lsoa_code CHAR(9),
+    borough VARCHAR(64),
     description VARCHAR(256)
 );
 
@@ -27,7 +27,7 @@ CREATE TABLE LondonStreet (
     latitude DECIMAL(11, 8),
     longitude DECIMAL(11, 8),
     precinct VARCHAR(128),
-    lsoa_code CHAR(9),
+    borough VARCHAR(64),
     type VARCHAR(128),
     description VARCHAR(256)
 );

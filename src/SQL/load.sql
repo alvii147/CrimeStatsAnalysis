@@ -22,11 +22,12 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 1946951 LINES
-(@_dummy, @_occurrence_date, precinct, @_dummy, @_longitude, @_latitude, @_dummy, lsoa_code, @_dummy, description)
+(@_dummy, @_occurrence_date, precinct, @_dummy, @_longitude, @_latitude, @_dummy, @_dummy, @_borough, description)
 SET
     occurrence_date = CAST(CONCAT(@_occurrence_date, '-01') AS DATE),
     latitude = NULLIF(@_latitude, ''),
-    longitude = NULLIF(@_longitude, '');
+    longitude = NULLIF(@_longitude, ''),
+    borough = NULLIF(@_borough, '');
 
 LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/UKCrime/london-street.csv'
 INTO TABLE LondonStreet
@@ -36,11 +37,12 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 2946380 LINES
-(@_dummy, @_occurrence_date, precinct, @_dummy, @_longitude, @_latitude, @_dummy, lsoa_code, @_dummy, type, description, @_dummy)
+(@_dummy, @_occurrence_date, precinct, @_dummy, @_longitude, @_latitude, @_dummy, @_dummy, @_borough, type, description, @_dummy)
 SET
     occurrence_date = CAST(CONCAT(@_occurrence_date, '-01') AS DATE),
     latitude = NULLIF(@_latitude, ''),
-    longitude = NULLIF(@_longitude, '');
+    longitude = NULLIF(@_longitude, ''),
+    borough = NULLIF(@_borough, '');
 
 LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/NYPD_Complaint_Data_Historic.csv'
 INTO TABLE NYPDComplaints

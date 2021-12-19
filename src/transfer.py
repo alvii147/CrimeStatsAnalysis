@@ -2,30 +2,11 @@ from pathlib import Path
 
 import log
 import db
-from utils import read_csv, cleanRow, stripQuotes
+from utils import read_csv, cleanRow
 from MySQLutils import connectDB, closeDB
-
-def loadLondonBoroughs():
-    rows = read_csv(Path(__file__).parent / 'region_data/London_Boroughs.csv')
-    london_boroughs = {}
-    for row in rows:
-        lsoa = row[0]
-        borough = row[1]
-        london_boroughs[lsoa] = borough
-    return london_boroughs
-
-def getLondonBorough(lsoa, boroughs):
-    lsoa = stripQuotes(lsoa)
-    if lsoa in boroughs:
-        return boroughs[lsoa]
-    else:
-        return 'NULL'
 
 def transfer_all():
     connection, cursor = connectDB()
-
-    log.info('Loading London Borough Information ...')
-    LONDON_BOROUGHS = loadLondonBoroughs()
 
     # -----------
     # Crime Codes
@@ -176,10 +157,8 @@ def transfer_all():
         latitude         = row[1]
         longitude        = row[2]
         precinct         = row[3]
-        lsoa_code        = row[4]
+        borough          = row[4]
         description      = row[5]
-
-        borough = getLondonBorough(lsoa_code, LONDON_BOROUGHS)
 
         query = db.insert(
             'Location',
@@ -228,11 +207,9 @@ def transfer_all():
         latitude         = row[1]
         longitude        = row[2]
         precinct         = row[3]
-        lsoa_code        = row[4]
+        borough          = row[4]
         type             = row[5]
         description      = row[6]
-
-        borough = getLondonBorough(lsoa_code, LONDON_BOROUGHS)
 
         query = db.insert(
             'Location',
