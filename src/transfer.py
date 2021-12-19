@@ -16,7 +16,7 @@ def transfer_all():
     NYPD = read_csv(Path(__file__).parent / 'codes/NYPD_Crime_Codes.csv')
 
     for row in NYPD:
-        row = cleanRow(row)
+        # row = cleanRow(row)
 
         code                = row[0]
         offence_description = row[1]
@@ -43,7 +43,7 @@ def transfer_all():
     IUCR = read_csv(Path(__file__).parent / 'codes/IUCR_Crime_Codes.csv')
 
     for row in IUCR:
-        row = cleanRow(row)
+        # row = cleanRow(row)
 
         code                  = row[0]
         primary_description   = row[1]
@@ -73,7 +73,7 @@ def transfer_all():
     UCR = read_csv(Path(__file__).parent / 'codes/UCR_Crime_Codes.csv')
 
     for row in UCR:
-        row = cleanRow(row)
+        # row = cleanRow(row)
 
         code        = row[0]
         description = row[1]
@@ -102,7 +102,7 @@ def transfer_all():
     LAPD = read_csv(Path(__file__).parent / 'codes/LAPD_Crime_Codes.csv')
 
     for row in LAPD:
-        row = cleanRow(row)
+        # row = cleanRow(row)
 
         code        = row[0]
         description = row[1]
@@ -135,7 +135,7 @@ def transfer_all():
     log.note("Won't the IDs increment automatically?")
 
     for row in LondonStopAndSearch:
-        row = cleanRow(row)
+        # row = cleanRow(row)
 
         type                  = row[0]
         occurrence_date       = row[1]
@@ -244,7 +244,7 @@ def transfer_all():
     LondonOutcomes = cursor.fetchall()
 
     for row in LondonOutcomes:
-        row = cleanRow(row)
+        # row = cleanRow(row)
 
         occurrence_date  = row[0]
         latitude         = row[1]
@@ -321,7 +321,7 @@ def transfer_all():
     LondonStreet = cursor.fetchall()
 
     for row in LondonStreet:
-        row = cleanRow(row)
+        # row = cleanRow(row)
 
         occurrence_date  = row[0]
         latitude         = row[1]
@@ -400,7 +400,7 @@ def transfer_all():
     NYPDComplaints = cursor.fetchall()
 
     for row in NYPDComplaints:
-        row = cleanRow(row)
+        # row = cleanRow(row)
 
         occurrence_date = row[0]
         reported_date   = row[1]
@@ -495,7 +495,7 @@ def transfer_all():
     ChicagoCrimes = cursor.fetchall()
 
     for row in ChicagoCrimes:
-        row = cleanRow(row)
+        # row = cleanRow(row)
 
         occurrence_date = row[0]
         code            = row[1]
@@ -582,7 +582,7 @@ def transfer_all():
     LACrimes = cursor.fetchall()
 
     for row in LACrimes:
-        row = cleanRow(row)
+        # row = cleanRow(row)
 
         occurrence_date = row[0]
         code            = row[1]
@@ -618,7 +618,6 @@ def transfer_all():
             log.error('Exception:')
             log.error(e)
             log.error('Skipping row')
-            log.error(query)
             continue
 
         location_id = cursor.lastrowid
