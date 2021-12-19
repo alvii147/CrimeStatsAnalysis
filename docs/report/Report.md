@@ -1,4 +1,4 @@
-<img alt="Waterloo ECE Logo" src="img/waterloo_logo.png" width="250" />
+<img alt="Waterloo ECE Logo" src="../img/waterloo_logo.png" width="250" />
 
 <h1 style="color: steelblue; text-align: center;">ECE 356&nbsp;•&nbsp;Crime Statistics Database Project</h1>
 

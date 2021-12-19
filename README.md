@@ -1,14 +1,12 @@
 # Crime Stats Analysis
 
-<img alt="Secret Ingredient Meme" src="img/secret_ingredient.png" width="600" />
-
 ## Installation
 
 ```bash
 # clone repository
 git clone https://github.com/alvii147/CrimeStatsAnalysis.git
 # navigate into cloned repository
-cd CrimeStatsAnalysis
+cd CrimeStatsAnalysis/
 ```
 
 ```bash
@@ -54,7 +52,7 @@ Storing configuration in file is optional, and if not done, the program will con
 >
 > Storing the password in the configuration file is NOT recommended. Currently, the `.gitignore` is written to ignore the configuration file when committing to version control system. However, this is not completely fool-proof as the configuration file may be committed accidentally if the `.gitignore` is missing or renamed.
 
-## Preparing the database
+## Command-Line Interface
 
 Once the installation and configuration are complete, run the `crime.py` python script (while inside the virtual environment) to create the appropriate tables, load the data and transfer the data into the right tables:
 
@@ -64,3 +62,5 @@ python3 crime.py
 ```
 
 **NOTE:** You must set `ADMIN` to `True` inside the script to gain access to the database creation commands
+
+<img alt="Secret Ingredient Meme" src="docs/img/secret_ingredient.png" width="600" />
