@@ -5,6 +5,12 @@ from decimal import Decimal
 
 TABLES = utils.readJSON("tables.json")
 
+def tableStats():
+    num_attributes = 0
+    for table in TABLES:
+        num_attributes += len(TABLES[table])
+    log.debug(f"{num_attributes} attributes over {len(TABLES)} tables")
+
 def tableExists(table):
     return table in TABLES
 
@@ -35,3 +41,5 @@ def insert(table, **attributes):
     query += f'VALUES ({values});'
 
     return query
+
+tableStats()
