@@ -5,6 +5,8 @@ import transfer
 import db
 
 from sys import argv
+from MySQLutils import connectDB, closeDB
+from utils import consoleFriendly
 
 argc = len(argv)
 
@@ -13,6 +15,9 @@ PROGRAM = os.path.basename(argv[0])
 TABLES = utils.readJSON("tables.json")
 SUCCESS = 0
 ERROR = -1
+
+connection = None
+cursor = None
 
 # ===================== COMMANDS ===================== #
 
@@ -51,11 +56,9 @@ def prompt_attributes(table, ignore = []):
         record[attribute] = value
     return record
 
-# return person id
 def insert_person(person):
     query = db.insert(
         "Person",
-        #person_id = person["person_id"],
         first_name = person["first_name"],
         last_name = person["last_name"],
         phone_number = person["phone_number"],
@@ -64,38 +67,145 @@ def insert_person(person):
         ethnicity = person["ethnicity"]
     )
 
-    print(query)
-    return
+    try:
+        cursor.execute(query)
+        log.info(f'Executing query "{consoleFriendly(query)}" ...')
+    except Exception as e:
+        log.error('Unable to insert into table Person:')
+        log.error(query)
+        log.error('Exception:')
+        log.error(e)
+        return None
 
-# return incident ID
-def insert_incident(location, incident):
-    #query = db.insert(
-    #    'Location',
-    #    latitude = location['latitude'],
-    #    longitude = location['longitude'],
-    #    premises = location['premises'],
-    #    area = location['area'],
-    #    precinct = location['precinct'],
-    #    ward = location['ward'],
-    #    borough = location['borough'],
-    #    city = location['city'],
-    #    state = location['state'],
-    #    country = location['country']
-    #)
-    pass
+    person_id = cursor.lastrowid
+    return person_id
 
-def insert_complaint(complaint, incident_id):
-    pass
+def insert_location(location):
+    query = db.insert(
+        "Location",
+        latitude = location["latitude"],
+        longitude = location["longitude"],
+        premises = location["premises"],
+        area = location["area"],
+        precinct = location["precinct"],
+        ward = location["ward"],
+        borough = location["borough"],
+        city = location["city"],
+        state = location["state"],
+        country = location["country"]
+    )
 
-def insert_crime(crime, incident_id, victim_id):
-    pass
+    try:
+        cursor.execute(query)
+        log.info(f'Executing query "{consoleFriendly(query)}" ...')
+    except Exception as e:
+        log.error('Unable to insert into table Location:')
+        log.error(query)
+        log.error('Exception:')
+        log.error(e)
+        return None
 
-def insert_search(search, incident_id, suspect_id):
-    pass
+    location_id = cursor.lastrowid
+    return location_id
+
+def insert_incident(incident):
+    query = db.insert(
+        "Incident",
+        location_id = incident["location_id"],
+        occurrence_date = incident["occurrence_date"],
+        police_department = incident["police_department"],
+        type = incident["type"],
+        status = incident["status"],
+        last_updated = incident["last_updated"]
+    )
+
+    try:
+        cursor.execute(query)
+        log.info(f'Executing query "{consoleFriendly(query)}" ...')
+    except Exception as e:
+        log.error('Unable to insert into table incident:')
+        log.error(query)
+        log.error('Exception:')
+        log.error(e)
+        return None
+
+    incident_id = cursor.lastrowid
+    return incident_id
+
+def insert_complaint(complaint):
+    query = db.insert(
+       "Complaint",
+       incident_id = complaint["incident_id"],
+       code = complaint["code"],
+       organization = complaint["organization"],
+       reported_date = complaint["reported_date"],
+       description = complaint["description"]
+    )
+
+    try:
+        cursor.execute(query)
+        log.info(f'Executing query "{consoleFriendly(query)}" ...')
+    except Exception as e:
+        log.error('Unable to insert into table Compliant:')
+        log.error(query)
+        log.error('Exception:')
+        log.error(e)
+        return None
+
+    complaint_id = cursor.lastrowid
+    return complaint_id
+
+def insert_crime(crime):
+    query = db.insert(
+        "Crime",
+        incident_id = crime["incident_id"],
+        code = crime["code"],
+        organization = crime["organization"],
+        victim_id = crime["victim_id"],
+        weapon = crime["weapon"],
+        description = crime["description"],
+        domestic = crime["domestic"]
+    )
+
+    try:
+        cursor.execute(query)
+        log.info(f'Executing query "{consoleFriendly(query)}" ...')
+    except Exception as e:
+        log.error('Unable to insert into table Crime:')
+        log.error(query)
+        log.error('Exception:')
+        log.error(e)
+        return None
+
+    crime_id = cursor.lastrowid
+    return crime_id
+
+def insert_search(search):
+    query = db.insert(
+        "Search",
+        incident_id = search["incident_id"],
+        suspect_id = search["suspect_id"],
+        legislation = search["legislation"],
+        object = search["object"],
+        outcome = search["outcome"],
+        object_caused_outcome = search["object_caused_outcome"],
+        clothing_removal = search["clothing_removal"]
+    )
+
+    try:
+        cursor.execute(query)
+        log.info(f'Executing query "{consoleFriendly(query)}" ...')
+    except Exception as e:
+        log.error('Unable to insert into table Search:')
+        log.error(query)
+        log.error('Exception:')
+        log.error(e)
+        return None
+
+    search_id = cursor.lastrowid
+    return search_id
 
 def add_incident():
-    #prompt_incident_info()
-    # prompt for if its a compliant search or crime
     log.info(f"Choose one of the following options: ")
     log.info(f"1. Complaint : Incidents reported to police")
     log.info(f"2. Crimes    : Crimes that have actually taken place")
@@ -110,37 +220,76 @@ def add_incident():
 
     log.info("Location:")
     location = prompt_attributes('Location', ignore = ['location_id'])
+    location_id = insert_location(location)
+
+    if location_id is None:
+        log.error("Failed to insert location")
+        return ERROR
+
     log.info("Incident:")
     incident = prompt_attributes('Incident', ignore = ['location_id', 'incident_id'])
+    incident['location_id'] = location_id
+    incident_id = insert_incident(incident)
+
+    if incident_id is None:
+        log.error("Failed to insert incident")
+        return ERROR
 
     if choice == '1':
         log.info("Complaint:")
         complaint = prompt_attributes('Complaint', ignore = ['complaint_id', 'incident_id'])
-        #query = db.insert('Incident',
-        #    "Complaint":
-        #    #complaint_id = complaint_id,
-        #    #incident_id = incident_id,
-        #    code = code,
-        #    organization = organization,
-        #    reported_date = reported_date,
-        #    description = description
+        complaint['incident_id'] = incident_id
+
+        complaint_id = insert_complaint(complaint)
+        if complaint_id is None:
+            log.error("Failed to insert complaint")
+            return ERROR
+
+        log.success(f"Added complaint incident '{complaint_id}' to database")
+
     elif choice == '2':
-        log.info("Crime:")
-        crime = prompt_attributes('Crime', ignore = ['crime_id', 'incident_id', 'victim_id'])
         log.info("Victim:")
         victim = prompt_attributes('Person', ignore = ['person_id'])
+        victim_id = insert_person(victim)
 
-        #insert_incident(location, incident)
-        insert_person(victim)
+        if victim_id is None:
+            log.error("Failed to insert victim")
+            return ERROR
 
-        log.note("add person id to crime after getting person id then insert person ID")
+        log.info("Crime:")
+        crime = prompt_attributes('Crime', ignore = ['crime_id', 'incident_id', 'victim_id'])
+        crime['victim_id'] = victim_id
+        crime['incident_id'] = incident_id
+
+        crime_id = insert_crime(crime)
+        if crime_id is None:
+            log.error("Failed to insert crime")
+            return ERROR
+
+        log.success(f"Added crime incident '{crime_id}' to database")
+
     elif choice == '3':
-        log.info("Search:")
-        search = prompt_attributes('Search', ignore = ['search_id', 'incident_id', 'suspect_id'])
         log.info("Suspect:")
         suspect = prompt_attributes('Person', ignore = ['person_id'])
+        suspect_id = insert_person(suspect)
 
-    log.note("insert location first followed by incident with correct id")
+        if suspect_id is None:
+            log.error("Failed to insert suspect")
+            return ERROR
+
+        log.info("Search:")
+        search = prompt_attributes('Search', ignore = ['search_id', 'incident_id', 'suspect_id'])
+        search['suspect_id'] = suspect_id
+        search['incident_id'] = incident_id
+
+        search_id = insert_search(search)
+        if search_id is None:
+            log.error("Failed to insert search")
+            return ERROR
+
+        log.success(f"Added search incident '{search_id}' to database")
+
+    return SUCCESS
 
 def add_location():
     pass
@@ -196,9 +345,9 @@ HELP = {
 }
 
 def help():
-    log.info("--------------------------------------------------------------------------------")
+    log.info("--------------------------------------------------------------")
     log.info(f"Usage: {INTERPRETER} {PROGRAM} <command> [arguments]")
-    log.info("--------------------------------------------------------------------------------")
+    log.info("--------------------------------------------------------------")
 
     log.info(f"{INTERPRETER} {PROGRAM} help   : {HELP['help']}")
     log.info(f"{INTERPRETER} {PROGRAM} create : {HELP['create']}")
@@ -207,11 +356,26 @@ def help():
     log.info(f"{INTERPRETER} {PROGRAM} clean  : {HELP['clean']}")
     log.info(f"{INTERPRETER} {PROGRAM} add    : {HELP['add']}")
 
-    log.info("--------------------------------------------------------------------------------")
+    log.info("--------------------------------------------------------------")
+
+    log.note("TODO:")
+    log.note("finish add location ")
+    log.note("Remove nulls from database by adding default values ex last_updated")
+    log.note("add in the modify query statements ")
+    log.note("add in the show statements for querying ")
+    log.note("add in delete ")
+    log.note("add in indexes into the database ")
+    log.note("finish the report ")
+    log.note("create presentation ")
+    log.note("create the video ")
+    log.note("update ER model ")
+
+    log.note("add in the extra attributes into the database to hit 50 (maybe) ")
+    log.note("Do a datamine ")
 
     return SUCCESS
 
-# ===================== PROGRAM ===================== #
+# ===================== MAIN ===================== #
 
 COMMANDS = {
     "help":   help,
@@ -224,6 +388,7 @@ COMMANDS = {
 
 MIN_ARGC = 1
 MAX_ARGC = 3
+
 
 def usage():
     log.info(f"Usage: {INTERPRETER} {PROGRAM} <command> [arguments]")
@@ -245,4 +410,11 @@ if command not in COMMANDS:
     usage()
     exit(ERROR)
 
-exit(COMMANDS[command]())
+connection, cursor = connectDB()
+result = COMMANDS[command]()
+
+if result == SUCCESS:
+    connection.commit()
+
+closeDB(connection, cursor)
+exit(result)
