@@ -1,18 +1,18 @@
 CREATE VIEW CrimeView AS
 SELECT
     Cr.crime_id,
-    In.incident_id,
-    In.occurrence_date,
+    Inc.incident_id,
+    Inc.occurrence_date,
     Cd.code,
     Cd.organization,
     Cd.category,
     Cd.description AS code_description,
-    In.type,
+    Inc.type,
     Cr.weapon,
     Cr.domestic,
     Cr.description,
-    In.status,
-    In.police_department,
+    Inc.status,
+    Inc.police_department,
     Lo.location_id,
     Lo.latitude,
     Lo.longitude,
@@ -24,7 +24,7 @@ SELECT
     Lo.city,
     Lo.state,
     Lo.country,
-    Ps.victim_id,
+    Cr.victim_id,
     Ps.first_name AS victim_first_name,
     Ps.last_name AS victim_last_name,
     Ps.age_range AS victim_age_range,
@@ -33,7 +33,7 @@ SELECT
     Ps.phone_number AS victim_phone_number
 FROM
     Crime AS Cr
-    INNER JOIN Incident AS In
+    INNER JOIN Incident AS Inc
     USING (incident_id)
     INNER JOIN Location AS Lo
     USING (location_id)
