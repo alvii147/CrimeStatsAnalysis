@@ -16,8 +16,6 @@ def transfer_all():
     NYPD = read_csv(Path(__file__).parent / 'codes/NYPD_Crime_Codes.csv')
 
     for row in NYPD:
-        # row = cleanRow(row)
-
         code                = row[0]
         offence_description = row[1]
 
@@ -43,8 +41,6 @@ def transfer_all():
     IUCR = read_csv(Path(__file__).parent / 'codes/IUCR_Crime_Codes.csv')
 
     for row in IUCR:
-        # row = cleanRow(row)
-
         code                  = row[0]
         primary_description   = row[1]
         secondary_description = row[2]
@@ -73,8 +69,6 @@ def transfer_all():
     UCR = read_csv(Path(__file__).parent / 'codes/UCR_Crime_Codes.csv')
 
     for row in UCR:
-        # row = cleanRow(row)
-
         code        = row[0]
         description = row[1]
         category    = row[2]
