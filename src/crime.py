@@ -224,6 +224,7 @@ def insert_location(location):
 def create():
     utils.runQueries("SQL/create.sql")
     utils.runQueries("SQL/keys.sql")
+    utils.runQueries("SQL/views.sql")
 
 def load():
     log.note("Add arg for number of lines to load from each CSV")
