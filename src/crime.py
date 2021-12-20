@@ -42,8 +42,17 @@ def clear():
 
 # --------------------- ADD --------------------- #
 
-def add_codes():
-    pass
+def executeQuery(query):
+    try:
+        cursor.execute(query)
+        log.info(f'Executing query "{consoleFriendly(query)}" ...')
+    except Exception as e:
+        log.error('Unable to execute query:')
+        log.error(query)
+        log.error('Exception:')
+        log.error(e)
+        return None
+    return SUCCESS
 
 def prompt_attributes(table, ignore = []):
     record = {}
@@ -67,14 +76,7 @@ def insert_person(person):
         ethnicity = person["ethnicity"]
     )
 
-    try:
-        cursor.execute(query)
-        log.info(f'Executing query "{consoleFriendly(query)}" ...')
-    except Exception as e:
-        log.error('Unable to insert into table Person:')
-        log.error(query)
-        log.error('Exception:')
-        log.error(e)
+    if executeQuery(query) is None:
         return None
 
     person_id = cursor.lastrowid
@@ -95,14 +97,7 @@ def insert_location(location):
         country = location["country"]
     )
 
-    try:
-        cursor.execute(query)
-        log.info(f'Executing query "{consoleFriendly(query)}" ...')
-    except Exception as e:
-        log.error('Unable to insert into table Location:')
-        log.error(query)
-        log.error('Exception:')
-        log.error(e)
+    if executeQuery(query) is None:
         return None
 
     location_id = cursor.lastrowid
@@ -119,14 +114,7 @@ def insert_incident(incident):
         last_updated = incident["last_updated"]
     )
 
-    try:
-        cursor.execute(query)
-        log.info(f'Executing query "{consoleFriendly(query)}" ...')
-    except Exception as e:
-        log.error('Unable to insert into table incident:')
-        log.error(query)
-        log.error('Exception:')
-        log.error(e)
+    if executeQuery(query) is None:
         return None
 
     incident_id = cursor.lastrowid
@@ -142,14 +130,7 @@ def insert_complaint(complaint):
        description = complaint["description"]
     )
 
-    try:
-        cursor.execute(query)
-        log.info(f'Executing query "{consoleFriendly(query)}" ...')
-    except Exception as e:
-        log.error('Unable to insert into table Compliant:')
-        log.error(query)
-        log.error('Exception:')
-        log.error(e)
+    if executeQuery(query) is None:
         return None
 
     complaint_id = cursor.lastrowid
@@ -167,14 +148,7 @@ def insert_crime(crime):
         domestic = crime["domestic"]
     )
 
-    try:
-        cursor.execute(query)
-        log.info(f'Executing query "{consoleFriendly(query)}" ...')
-    except Exception as e:
-        log.error('Unable to insert into table Crime:')
-        log.error(query)
-        log.error('Exception:')
-        log.error(e)
+    if executeQuery(query) is None:
         return None
 
     crime_id = cursor.lastrowid
@@ -192,14 +166,7 @@ def insert_search(search):
         clothing_removal = search["clothing_removal"]
     )
 
-    try:
-        cursor.execute(query)
-        log.info(f'Executing query "{consoleFriendly(query)}" ...')
-    except Exception as e:
-        log.error('Unable to insert into table Search:')
-        log.error(query)
-        log.error('Exception:')
-        log.error(e)
+    if executeQuery(query) is None:
         return None
 
     search_id = cursor.lastrowid
@@ -294,6 +261,52 @@ def add_incident():
 def add_location():
     pass
 
+def insert_code(code):
+    #check if the code and Organization already exists
+    code_value = code['code']
+    organization = code['organization']
+
+    query = db.select(
+        "Code",
+        f"code = '{code_value}' and organization = '{organization}'",
+    )
+
+    if executeQuery(query) is None:
+        return None
+
+    result = cursor.fetchall()
+    if(len(result)):
+        log.error(f"'{organization}' code '{code_value}' already exists")
+        return None
+
+    # add the code to the DB
+    query = db.insert(
+        "Code",
+        code = code["code"],
+        organization = code["organization"],
+        category = code["category"],
+        description = code["description"]
+    )
+
+    if executeQuery(query) is None:
+        return None
+
+    return SUCCESS
+
+def add_code():
+    log.info("Crime Code:")
+    code = prompt_attributes('Code')
+    #check for code and organization
+    if code["code"] == "NULL" or code["organization"] == "NULL":
+        return ERROR
+
+    if insert_code(code) is None:
+            log.error("Failed to insert code")
+            return ERROR
+
+    log.success(f"Added '{code['organization']}' code '{code['code']}'")
+    return SUCCESS
+
 ADD_HELP = {
     "codes":    "Add new crime codes from a crime enforcement organization",
     "incident": "Add a new crime, complaint, or search",
@@ -301,7 +314,7 @@ ADD_HELP = {
 }
 
 ADD_COMMANDS = {
-    "codes":    add_codes,
+    "code":     add_code,
     "incident": add_incident,
     "location": add_location,
 }

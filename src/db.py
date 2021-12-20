@@ -17,6 +17,12 @@ def tableExists(table):
 def attributeExists(table, attribute):
     return attribute in TABLES[table]
 
+def enhancedCleanRow(row):
+    row = utils.cleanRow(row)
+    row = [f'{c}' if isinstance(c, int)  else c for c in row]
+    row = [f'{c}' if isinstance(c, Decimal)  else c for c in row]
+    return row
+
 def insert(table, **attributes):
     if not tableExists(table):
         log.error(f"No such table '{table}'")
@@ -30,14 +36,28 @@ def insert(table, **attributes):
     columns = ", ".join(attributes.keys())
 
     values = attributes.values()
-    values = utils.cleanRow(values)
-    values = [f'{c}' if isinstance(c, int)  else c for c in values]
-    values = [f'{c}' if isinstance(c, Decimal)  else c for c in values]
+    values = enhancedCleanRow(values)
     values = ", ".join(values)
-
 
     query = f'INSERT INTO {table} '
     query += f'({columns}) '
     query += f'VALUES ({values});'
 
+    return query
+
+def select(table, where = "", attributes = None):
+    if not tableExists(table):
+        log.error(f"No such table '{table}'")
+        return
+
+    if attributes is None:
+        project = "*"
+    else:
+        for a in attributes:
+            if not attributeExists(table, a):
+                log.error(f"No such attribute '{a}' in table '{table}'")
+                return
+        project = ", ".join(attributes)
+
+    query = f'SELECT {project} FROM {table} WHERE {where};'
     return query
