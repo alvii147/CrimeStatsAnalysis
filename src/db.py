@@ -41,5 +41,3 @@ def insert(table, **attributes):
     query += f'VALUES ({values});'
 
     return query
-
-tableStats()
