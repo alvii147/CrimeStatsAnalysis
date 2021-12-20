@@ -1,18 +1,43 @@
-CREATE VIEW CrimesData AS
+CREATE VIEW CrimeView AS
 SELECT
-    crime_id,
-    code,
-    organization,
-    occurrence_date,
-    latitude,
-    longitude,
-    country,
-    age_range,
-    gender,
-    ethnicity
+    Cr.crime_id,
+    In.incident_id,
+    In.occurrence_date,
+    Cd.code,
+    Cd.organization,
+    Cd.category,
+    Cd.description AS code_description,
+    In.type,
+    Cr.weapon,
+    Cr.domestic,
+    Cr.description,
+    In.status,
+    In.police_department,
+    Lo.location_id,
+    Lo.latitude,
+    Lo.longitude,
+    Lo.premises,
+    Lo.area,
+    Lo.precinct,
+    Lo.ward,
+    Lo.borough,
+    Lo.city,
+    Lo.state,
+    Lo.country,
+    Ps.victim_id,
+    Ps.first_name AS victim_first_name,
+    Ps.last_name AS victim_last_name,
+    Ps.age_range AS victim_age_range,
+    Ps.gender AS victim_gender,
+    Ps.ethnicity AS victim_ethnicity,
+    Ps.phone_number AS victim_phone_number
 FROM
-    Crime INNER JOIN
-    Incident USING (incident_id) INNER JOIN
-    Location USING (location_id) LEFT JOIN
-    Code USING (code, organization) LEFT JOIN
-    Person ON victim_id = person_id;
+    Crime AS Cr
+    INNER JOIN Incident AS In
+    USING (incident_id)
+    INNER JOIN Location AS Lo
+    USING (location_id)
+    LEFT JOIN Code AS Cd
+    USING (code, organization)
+    LEFT JOIN Person AS Ps
+    ON Cr.victim_id = Ps.person_id;
