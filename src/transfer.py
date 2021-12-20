@@ -1,8 +1,9 @@
-from pathlib import Path
-
 import log
 import db
-from utils import read_csv, cleanRow
+import person
+
+from pathlib import Path
+from utils import read_csv
 from MySQLutils import connectDB, closeDB
 
 def transfer_all():
@@ -187,8 +188,13 @@ def transfer_all():
 
         incident_id = cursor.lastrowid
 
+        first_name, last_name, phone_number = person.info(gender)
+
         query = db.insert(
             'Person',
+            first_name = first_name,
+            last_name = last_name,
+            phone_number = phone_number,
             age_range = age_range,
             gender = gender,
             ethnicity = ethnicity
@@ -650,8 +656,13 @@ def transfer_all():
 
         incident_id = cursor.lastrowid
 
+        first_name, last_name, phone_number = person.info(gender)
+
         query = db.insert(
             'Person',
+            first_name = first_name,
+            last_name = last_name,
+            phone_number = phone_number,
             age_range = age_range,
             gender = gender,
             ethnicity = ethnicity
