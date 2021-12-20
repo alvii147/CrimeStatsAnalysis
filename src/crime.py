@@ -33,6 +33,7 @@ def load():
     utils.runQueries("SQL/create_temp.sql")
     utils.runQueries("SQL/load.sql")
     transfer.transfer_all()
+    utils.runQueries("SQL/indexes.sql")
     utils.runQueries("SQL/drop.sql")
 
 def clean():
