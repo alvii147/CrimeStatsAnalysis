@@ -208,3 +208,18 @@ def runQueries(path):
 
     connection.commit()
     closeDB(connection, cursor)
+
+def yes(message):
+    log.info(message)
+    choice = ""
+
+    while choice != "no" and choice != "yes":
+        choice = input("[yes/no]: ").lower()
+
+    if choice == "yes":
+        return True
+    else:
+        return False
+
+def no(message):
+    return not yes(message)
