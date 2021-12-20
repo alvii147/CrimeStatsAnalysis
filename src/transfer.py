@@ -96,8 +96,6 @@ def transfer_all():
     LAPD = read_csv(Path(__file__).parent / 'codes/LAPD_Crime_Codes.csv')
 
     for row in LAPD:
-        # row = cleanRow(row)
-
         code        = row[0]
         description = row[1]
 
