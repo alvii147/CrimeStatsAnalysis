@@ -10,11 +10,11 @@ add/remove/modify/update::
 - location
 - person
 - incident
-	prompt for:
-	- complaint
-	- crime
-	- search
-	- other (no additional info/specialized)
+    prompt for:
+    - complaint
+    - crime
+    - search
+    - other (no additional info/specialized)
 - update the outcome after a trial for person
 
 (for modification you can't change primary keys)
@@ -24,7 +24,7 @@ querying:
 - incidents (Categories) by location
     -type/nature/incident_id
 - show information based on incident_id (specialized info of incident if available)
-	- group by\
+    - group by\
 - code descriptions/categories by organization
 - show incidents based on time, data, location and type of crime,
 - Background check
@@ -33,3 +33,37 @@ querying:
 - sort by most/least recent crimes (flag for all queries)
 - pull up people involed in a particular crime - ie user specifies the crime ID
     -specify the suspect flag to pull up all the involved supects
+
+ADD
+- incident
+    - Crime
+    - Complaint
+    - Search
+    - people (prompted during add complaint and add search)
+        - people are always linked to either a crime or search but not a complaint
+   - location is prompted if needed (existing vs new)
+- add new departments/code (no linking require)  (low priority)
+- add a new location
+
+DELETE (low priority)
+- Crime
+- Complaint
+- Search
+
+UPDATE (modify)
+- any non-id or key attribute (any supplementary info can be modified)
+    - user provides the incident_id
+    - prompt user with modifiable attributes for that incident (and any specializations i.e., Crime, Search, Complaint)
+- update location info base don a location id
+- info about people (based on person_id)
+    - potentially the cases that they are involved in (low prio)
+
+SHOW (select queries)
+- person info and which cases they are involved in
+- incidents and who was involved
+- location info
+- crime codes by organization
+- look up type and nature of crimes by location (city, borough)
+- look up any incidents that occured based on location
+    - flags for in depth info (crime, search, complaint) defaults to just incident info
+- find all incidents based on a crime code
