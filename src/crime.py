@@ -84,27 +84,6 @@ def insert_person(person):
     person_id = cursor.lastrowid
     return person_id
 
-# def insert_location(location):
-#     query = db.insert(
-#         "Location",
-#         latitude = location["latitude"],
-#         longitude = location["longitude"],
-#         premises = location["premises"],
-#         area = location["area"],
-#         precinct = location["precinct"],
-#         ward = location["ward"],
-#         borough = location["borough"],
-#         city = location["city"],
-#         state = location["state"],
-#         country = location["country"]
-#     )
-
-#     if executeQuery(query) is None:
-#         return None
-
-#     location_id = cursor.lastrowid
-#     #return location_id
-
 def insert_incident(incident):
     query = db.insert(
         "Incident",
@@ -179,11 +158,7 @@ def insert_code(code):
     code_value = code['code']
     organization = code['organization']
 
-    query = db.select(
-        "Code",
-        f"code = '{code_value}' and organization = '{organization}'",
-    )
-
+    query = db.select("Code", f"code = '{code_value}' and organization = '{organization}'",)
     if executeQuery(query) is None:
         return None
 
