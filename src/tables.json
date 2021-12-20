@@ -1,80 +1,80 @@
 {
     "Incident":
-    [
-        "incident_id",
-        "location_id",
-        "occurrence_date",
-        "police_department",
-        "type",
-        "status",
-        "last_updated"
-    ],
+    {
+        "incident_id":       "INT",
+        "location_id":       "INT",
+        "occurrence_date":   "DATE",
+        "last_updated":      "DATE",
+        "status":            "VARCHAR(128)",
+        "police_department": "VARCHAR(256)",
+        "type":              "VARCHAR(128)"
+    },
 
     "Location":
-    [
-        "location_id",
-        "latitude",
-        "longitude",
-        "premises",
-        "area",
-        "precinct",
-        "ward",
-        "borough",
-        "city",
-        "state",
-        "country"
-    ],
+    {
+        "location_id": "INT",
+        "latitude":    "DECIMAL(11, 8)",
+        "longitude":   "DECIMAL(11, 8)",
+        "premises":    "VARCHAR(128)",
+        "area":        "VARCHAR(256)",
+        "precinct":    "DECIMAL(4)",
+        "ward":        "DECIMAL(3)",
+        "borough":     "VARCHAR(64)",
+        "city":        "VARCHAR(64)",
+        "state":       "VARCHAR(64)",
+        "country":     "VARCHAR(64)"
+    },
 
     "Crime":
-    [
-        "crime_id",
-        "incident_id",
-        "code",
-        "organization",
-        "victim_id",
-        "weapon",
-        "description",
-        "domestic"
-    ],
+    {
+        "crime_id":     "INT",
+        "incident_id":  "INT",
+        "code":         "VARCHAR(4)",
+        "organization": "VARCHAR(16)",
+        "victim_id":    "INT",
+        "weapon":       "VARCHAR(256)",
+        "domestic":     "BOOL",
+        "description":  "VARCHAR(256)"
+    },
 
     "Complaint":
-    [
-        "complaint_id",
-        "incident_id",
-        "code",
-        "organization",
-        "reported_date",
-        "description"
-    ],
+    {
+        "complaint_id":  "INT",
+        "incident_id":   "INT",
+        "code":          "VARCHAR(4)",
+        "organization":  "VARCHAR(16)",
+        "reported_date": "DATE",
+        "description":   "VARCHAR(256)"
+    },
 
     "Search":
-    [
-        "search_id",
-        "incident_id",
-        "suspect_id",
-        "legislation",
-        "object",
-        "outcome",
-        "object_caused_outcome",
-        "clothing_removal"
-    ],
+    {
+        "search_id":             "INT",
+        "incident_id":           "INT",
+        "suspect_id":            "INT",
+        "legislation":           "VARCHAR(256)",
+        "object":                "VARCHAR(256)",
+        "outcome":               "VARCHAR(256)",
+        "object_caused_outcome": "BOOL",
+        "clothing_removal":      "BOOL"
+    },
 
     "Person":
-    [
-        "person_id",
-        "first_name",
-        "last_name",
-        "phone_number",
-        "age_range",
-        "gender",
-        "ethnicity"
-    ],
+    {
+        "person_id":    "INT",
+        "first_name":   "VARCHAR(64)",
+        "last_name":    "VARCHAR(64)",
+        "age_range":    "VARCHAR(16)",
+        "gender":       "VARCHAR(16)",
+        "ethnicity":    "VARCHAR(64)",
+        "phone_number": "VARCHAR(16)"
+    },
 
     "Code":
-    [
-        "code",
-        "organization",
-        "category",
-        "description"
-    ]
+    {
+        "code":         "VARCHAR(4)",
+        "organization": "VARCHAR(16)",
+        "category":     "VARCHAR(256)",
+        "description":  "VARCHAR(256)"
+    }
 }

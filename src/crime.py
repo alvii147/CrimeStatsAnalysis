@@ -6,7 +6,7 @@ import db
 
 from sys import argv
 from MySQLutils import connectDB, closeDB
-from utils import consoleFriendly, yes, no
+from utils import consoleFriendly, isQuoted, stripQuotes, yes, no
 
 argc = len(argv)
 
@@ -241,15 +241,27 @@ def clear():
 
 # ===================== ADD ===================== #
 
-def prompt_attributes(table, ignore = []):
+def prompt_attribute(table, attribute):
+    type = TABLES[table][attribute]
+    value = input(f"[{type}] {attribute}: ")
+
+    if isQuoted(value, quote = "\'"):
+        value = stripQuotes(value, quote = "\'")
+    elif isQuoted(value, quote = "\""):
+        value = stripQuotes(value, quote = "\"")
+
+    if value == "":
+        value = 'NULL'
+
+    return value
+
+def prompt_table(table, ignore = []):
     log.info(f"{table}:")
     record = {}
     for attribute in TABLES[table]:
         if attribute in ignore:
             continue
-        value = input(f"{attribute}: ")
-        if value == "":
-            value = 'NULL'
+        value = prompt_attribute(table, attribute)
         record[attribute] = value
     return record
 
@@ -267,13 +279,13 @@ def add_incident():
         add_location_help_message()
         return None
 
-    location_id = input("location_id: ")
+    location_id = prompt_attribute("Incident", "location_id")
     if not location_exists(location_id):
         log.error(f"Location with ID '{location_id}' not found!")
         add_location_help_message()
         return None
 
-    incident = prompt_attributes('Incident', ignore = ['location_id', 'incident_id'])
+    incident = prompt_table('Incident', ignore = ['location_id', 'incident_id'])
     incident['location_id'] = location_id
 
     incident_id = insert_incident(incident)
@@ -288,8 +300,8 @@ def add_complaint():
         add_code_help_message()
         return ERROR
 
-    code = input("code: ")
-    organization = input("organization: ")
+    code = prompt_attribute("Complaint", "code")
+    organization = prompt_attribute("Complaint", "organization")
     if not code_exists(code, organization):
         log.error(f"'{organization}' code '{code}' not found!")
         add_code_help_message()
@@ -299,7 +311,7 @@ def add_complaint():
     if incident_id is None:
         return ERROR
 
-    complaint = prompt_attributes('Complaint', ignore = ['complaint_id', 'incident_id', 'code', 'organization'])
+    complaint = prompt_table('Complaint', ignore = ['complaint_id', 'incident_id', 'code', 'organization'])
     complaint['incident_id'] = incident_id
     complaint["code"] = code
     complaint["organization"] = organization
@@ -317,7 +329,7 @@ def add_crime():
         add_person_help_message()
         return ERROR
 
-    victim_id = input("victim_id: ")
+    victim_id = prompt_attribute("Crime", "victim_id")
     if not person_exists(victim_id):
         log.error(f"Person with ID '{victim_id}' not found")
         add_person_help_message()
@@ -327,8 +339,8 @@ def add_crime():
         add_code_help_message()
         return ERROR
 
-    code = input("code: ")
-    organization = input("organization: ")
+    code = prompt_attribute("Crime", "code")
+    organization = prompt_attribute("Crime", "organization")
     if not code_exists(code, organization):
         log.error(f"'{organization}' code '{code}' not found!")
         add_code_help_message()
@@ -338,11 +350,14 @@ def add_crime():
     if incident_id is None:
         return ERROR
 
-    crime = prompt_attributes('Crime', ignore = ['crime_id', 'incident_id', 'victim_id', 'code', 'organization'])
+    crime = prompt_table('Crime', ignore = ['crime_id', 'incident_id', 'victim_id', 'code', 'organization'])
     crime['victim_id'] = victim_id
     crime['code'] = code
     crime['organization'] = organization
     crime['incident_id'] = incident_id
+
+    for a in crime:
+        print(type(a))
 
     crime_id = insert_crime(crime)
     if crime_id is None:
@@ -357,7 +372,7 @@ def add_search():
         add_person_help_message()
         return ERROR
 
-    suspect_id = input("suspect_id: ")
+    suspect_id = prompt_attribute("Search", "suspect_id")
     if not person_exists(suspect_id):
         log.error(f"Person with ID '{suspect_id}' not found")
         add_person_help_message()
@@ -367,7 +382,7 @@ def add_search():
     if incident_id is None:
         return ERROR
 
-    search = prompt_attributes('Search', ignore = ['search_id', 'incident_id', 'suspect_id'])
+    search = prompt_table('Search', ignore = ['search_id', 'incident_id', 'suspect_id'])
     search['suspect_id'] = suspect_id
     search['incident_id'] = incident_id
     search_id = insert_search(search)
@@ -380,7 +395,7 @@ def add_search():
     return SUCCESS
 
 def add_location():
-    location = prompt_attributes('Location', ignore = ['location_id'])
+    location = prompt_table('Location', ignore = ['location_id'])
 
     location_id = insert_location(location)
     if location_id is None:
@@ -391,7 +406,7 @@ def add_location():
     return SUCCESS
 
 def add_code():
-    code = prompt_attributes('Code')
+    code = prompt_table('Code')
     if code["code"] == "NULL" or code["organization"] == "NULL":
         log.error("code and organization cannot be NULL")
         return ERROR
@@ -404,7 +419,7 @@ def add_code():
     return SUCCESS
 
 def add_person():
-    person = prompt_attributes('Person', ignore = ['person_id'])
+    person = prompt_table('Person', ignore = ['person_id'])
     person_id = insert_person(person)
 
     if person_id is None:

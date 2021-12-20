@@ -91,7 +91,7 @@ def isQuoted(s, quote='\''):
 
     return s.startswith(quote) and s.endswith(quote)
 
-def stripQuotes(s):
+def stripQuotes(s, quote = "\'"):
     '''
     Strip one pair of quotes from string from start and end if quoted.
 
@@ -106,7 +106,7 @@ def stripQuotes(s):
         Processed string.
     '''
 
-    if isQuoted(s):
+    if isQuoted(s, quote = quote):
         return s[1 : len(s) - 1]
 
     return s
