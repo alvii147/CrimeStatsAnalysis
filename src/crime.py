@@ -433,7 +433,7 @@ ADD_HELP = {
     "codes":     "Crime codes from a crime enforcement organization",
     "complaint": "Incidents reported to police",
     "crime":     "Crimes that have actually taken place",
-    "search":    "Suspect who were detained and searched",
+    "search":    "Suspect who was detained and searched",
     "location":  "Location of a complaint, crime, or search",
     "person":    "Add a criminal or victim",
     "help":      "Show this message",
