@@ -2,6 +2,8 @@ CREATE TABLE Incident (
     incident_id INT NOT NULL AUTO_INCREMENT,
     location_id INT,
     occurrence_date DATE,
+    last_updated DATE,
+    status VARCHAR(128),
     police_department VARCHAR(256),
     type VARCHAR(128),
     PRIMARY KEY(incident_id)
@@ -29,6 +31,7 @@ CREATE TABLE Crime (
     organization VARCHAR(16),
     victim_id INT,
     weapon VARCHAR(256),
+    domestic BOOL,
     description VARCHAR(256),
     PRIMARY KEY(crime_id)
 );
@@ -57,9 +60,12 @@ CREATE TABLE Search (
 
 CREATE TABLE Person (
     person_id INT NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(64),
+    last_name VARCHAR(64),
     age_range VARCHAR(16),
     gender VARCHAR(16),
     ethnicity VARCHAR(64),
+    phone_number VARCHAR(16),
     PRIMARY KEY(person_id)
 );
 

@@ -57,7 +57,9 @@ CREATE TABLE ChicagoCrimes (
     longitude DECIMAL(11, 8),
     ward DECIMAL(3),
     borough VARCHAR(64),
-    area VARCHAR(256)
+    area VARCHAR(256),
+    last_updated DATE,
+    domestic BOOL
 );
 
 CREATE TABLE LACrimes (
@@ -73,5 +75,6 @@ CREATE TABLE LACrimes (
     premises VARCHAR(128),
     precinct DECIMAL(4),
     borough VARCHAR(64),
-    area VARCHAR(256)
+    area VARCHAR(256),
+    status VARCHAR(128)
 );

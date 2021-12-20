@@ -504,6 +504,8 @@ def transfer_all():
         ward            = row[5]
         borough         = row[6]
         area            = row[7]
+        last_updated    = row[8]
+        domestic        = row[9]
 
         query = db.insert(
             'Location',
@@ -533,6 +535,7 @@ def transfer_all():
         query = db.insert(
             'Incident',
             location_id = location_id,
+            last_updated = last_updated,
             police_department = 'Chicago Police Department',
             occurrence_date = occurrence_date
         )
@@ -559,6 +562,7 @@ def transfer_all():
             'Crime',
             incident_id = incident_id,
             code = code,
+            domestic = domestic,
             organization = organization
         )
 
@@ -597,6 +601,7 @@ def transfer_all():
         precinct        = row[10]
         borough         = row[11]
         area            = row[12]
+        status          = row[13]
 
         query = db.insert(
             'Location',
@@ -628,6 +633,7 @@ def transfer_all():
             'Incident',
             location_id = location_id,
             police_department = 'Los Angeles Police Department',
+            status = status,
             occurrence_date = occurrence_date
         )
 

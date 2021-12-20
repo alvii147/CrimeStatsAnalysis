@@ -87,8 +87,9 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 1923423 LINES
-(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_area, @_dummy, @_dummy, @_dummy, @_borough, @_ward, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_area, @_dummy, @_domestic, @_dummy, @_borough, @_ward, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
 SET
+    domestic = CAST(@_domestic = 'True' AS UNSIGNED),
     area = NULLIF(@_area, ''),
     borough = NULLIF(@_borough, ''),
     ward = NULLIF(FLOOR(@_ward), ''),
@@ -105,8 +106,10 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 1872245 LINES
-(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_area, @_dummy, @_dummy, @_dummy, @_borough, @_ward, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_area, @_dummy, @_domestic, @_dummy, @_borough, @_ward, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_last_updated, @_latitude, @_longitude, @_dummy)
 SET
+    domestic = CAST(@_domestic = 'True' AS UNSIGNED),
+    last_updated = CAST(STR_TO_DATE(@_last_updated, '%m/%d/%Y %h:%i:%s %p') AS DATE),
     area = NULLIF(@_area, ''),
     borough = NULLIF(@_borough, ''),
     ward = NULLIF(FLOOR(@_ward), ''),
@@ -123,8 +126,9 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 2688611 LINES
-(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_area, @_dummy, @_dummy, @_dummy, @_borough, @_ward, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_area, @_dummy, @_domestic, @_dummy, @_borough, @_ward, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
 SET
+    domestic = CAST(@_domestic = 'True' AS UNSIGNED),
     area = NULLIF(@_area, ''),
     borough = NULLIF(@_borough, ''),
     ward = NULLIF(FLOOR(@_ward), ''),
@@ -141,8 +145,9 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 1456615 LINES
-(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_area, @_dummy, @_dummy, @_dummy, @_borough, @_ward, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
+(@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_area, @_dummy, @_domestic, @_dummy, @_borough, @_ward, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
 SET
+    domestic = CAST(@_domestic = 'True' AS UNSIGNED),
     area = NULLIF(@_area, ''),
     borough = NULLIF(@_borough, ''),
     ward = NULLIF(FLOOR(@_ward), ''),
@@ -159,8 +164,9 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 2116140 LINES
-(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_precinct, @_borough, @_dummy, @_dummy, @_code, @_dummy, @_dummy, @_age_range, @_gender, @_ethnicity, @_dummy, premises, @_dummy, @_weapon, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_area, @_dummy, @_latitude, @_longitude)
+(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_precinct, @_borough, @_dummy, @_dummy, @_code, @_dummy, @_dummy, @_age_range, @_gender, @_ethnicity, @_dummy, premises, @_dummy, @_weapon, @_dummy, @_status, @_dummy, @_dummy, @_dummy, @_dummy, @_area, @_dummy, @_latitude, @_longitude)
 SET
+    status = NULLIF(@_status, ''),
     precinct = NULLIF(@_precinct, ''),
     area = NULLIF(@_area, ''),
     code = NULLIF(@_code, ''),
@@ -200,8 +206,9 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 182536 LINES
-(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_precinct, @_borough, @_dummy, @_dummy, @_code, @_dummy, @_dummy, @_age_range, @_gender, @_ethnicity, @_dummy, premises, @_dummy, weapon, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_area, @_dummy, @_latitude, @_longitude)
+(@_dummy, @_dummy, @_occurrence_date, @_dummy, @_precinct, @_borough, @_dummy, @_dummy, @_code, @_dummy, @_dummy, @_age_range, @_gender, @_ethnicity, @_dummy, premises, @_dummy, weapon, @_dummy, @_status, @_dummy, @_dummy, @_dummy, @_dummy, @_area, @_dummy, @_latitude, @_longitude)
 SET
+    status = NULLIF(@_status, ''),
     precinct = NULLIF(@_precinct, ''),
     area = NULLIF(@_area, ''),
     code = NULLIF(@_code, ''),
