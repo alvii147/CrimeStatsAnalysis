@@ -48,7 +48,7 @@ def storeTableMetaData(path='tables.json'):
     metadata = {}
     for table in TABLES:
         query = db.select(
-            'INFORMATION_SCHEMA',
+            'INFORMATION_SCHEMA.COLUMNS',
             where=f"WHERE TABLE_NAME='{table}' AND TABLE_SCHEMA=DATABASE()",
             attributes=[
                 'COLUMN_NAME',
