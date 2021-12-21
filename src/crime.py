@@ -479,6 +479,65 @@ def add():
 
     return ADD_COMMANDS[command]()
 
+# ------------------ BACKGROUND ------------------ #
+
+def prompt_options(options, message=None):
+    if message is not None:
+        log.info(message)
+
+    for i, opt in enumerate(options):
+        log.info(f'[{i + 1}] {opt}')
+
+    selection_idx = int(input('Enter selection: ')) - 1
+
+    return selection_idx
+
+def background():
+    message = 'Search for person by:'
+    options = [
+        'ID',
+        'First & Last Names',
+    ]
+
+    selection_idx = prompt_options(options, message=message)
+
+    if selection_idx < 0 or selection_idx >= len(options):
+        log.error(f'Invalid selection')
+        log.info('Please try again')
+        return ERROR
+    elif selection_idx == 0:
+        person_id = int(input('Enter ID: '))
+        query = db.select(
+            'Person',
+            where=f'person_id = {person_id}'
+        )
+
+        cursor.execute(query)
+        print(query)
+        print(cursor.fetchall())
+    else:
+        first_name = input('First Name: ')
+        last_name = input('Last Name: ')
+
+        where = ''
+        if len(first_name.strip()) > 0:
+            where += f'first_name LIKE \'%{first_name}%\''
+        if len(last_name.strip()) > 0:
+            if len(first_name.strip()) > 0:
+                where += ' AND '
+            where += f'last_name LIKE \'%{last_name}%\''
+
+        query = db.select(
+            'Person',
+            where=where,
+        )
+
+        cursor.execute(query)
+        print(query)
+        print(cursor.fetchall())
+
+    return SUCCESS
+
 # --------------------- HELP --------------------- #
 
 HELP = {
@@ -530,6 +589,7 @@ COMMANDS = {
     "clean":  clean,
     "clear":  clear,
     "add":    add,
+    "background": background,
 }
 
 MIN_ARGC = 1
