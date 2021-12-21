@@ -322,13 +322,13 @@ def add_incident():
         add_location_help_message()
         return None
 
-    location_id = prompt_attribute("Incident", "location_id")
+    location_id = prompt_attribute("Incident", "location_id", db.TABLES)
     if not location_exists(location_id):
         log.error(f"Location with ID '{location_id}' not found!")
         add_location_help_message()
         return None
 
-    incident = prompt_table('Incident', ignore = ['location_id', 'incident_id'])
+    incident = prompt_table('Incident', db.TABLES, ignore = ['location_id', 'incident_id'])
     incident['location_id'] = location_id
 
     incident_id = insert_incident(incident)
@@ -343,8 +343,8 @@ def add_complaint():
         add_code_help_message()
         return ERROR
 
-    code = prompt_attribute("Complaint", "code")
-    organization = prompt_attribute("Complaint", "organization")
+    code = prompt_attribute("Complaint", "code", db.TABLES)
+    organization = prompt_attribute("Complaint", "organization", db.TABLES)
     if not code_exists(code, organization):
         log.error(f"'{organization}' code '{code}' not found!")
         add_code_help_message()
@@ -354,7 +354,7 @@ def add_complaint():
     if incident_id is None:
         return ERROR
 
-    complaint = prompt_table('Complaint', ignore = ['complaint_id', 'incident_id', 'code', 'organization'])
+    complaint = prompt_table('Complaint', db.TABLES, ignore = ['complaint_id', 'incident_id', 'code', 'organization'])
     complaint['incident_id'] = incident_id
     complaint["code"] = code
     complaint["organization"] = organization
@@ -372,7 +372,7 @@ def add_crime():
         add_person_help_message()
         return ERROR
 
-    victim_id = prompt_attribute("Crime", "victim_id")
+    victim_id = prompt_attribute("Crime", "victim_id", db.TABLES)
     if not person_exists(victim_id):
         log.error(f"Person with ID '{victim_id}' not found")
         add_person_help_message()
@@ -382,8 +382,8 @@ def add_crime():
         add_code_help_message()
         return ERROR
 
-    code = prompt_attribute("Crime", "code")
-    organization = prompt_attribute("Crime", "organization")
+    code = prompt_attribute("Crime", "code", db.TABLES)
+    organization = prompt_attribute("Crime", "organization", db.TABLES)
     if not code_exists(code, organization):
         log.error(f"'{organization}' code '{code}' not found!")
         add_code_help_message()
@@ -393,7 +393,7 @@ def add_crime():
     if incident_id is None:
         return ERROR
 
-    crime = prompt_table('Crime', ignore = ['crime_id', 'incident_id', 'victim_id', 'code', 'organization'])
+    crime = prompt_table('Crime', db.TABLES, ignore = ['crime_id', 'incident_id', 'victim_id', 'code', 'organization'])
     crime['victim_id'] = victim_id
     crime['code'] = code
     crime['organization'] = organization
@@ -412,7 +412,7 @@ def add_search():
         add_person_help_message()
         return ERROR
 
-    suspect_id = prompt_attribute("Search", "suspect_id")
+    suspect_id = prompt_attribute("Search", "suspect_id", db.TABLES)
     if not person_exists(suspect_id):
         log.error(f"Person with ID '{suspect_id}' not found")
         add_person_help_message()
@@ -422,7 +422,7 @@ def add_search():
     if incident_id is None:
         return ERROR
 
-    search = prompt_table('Search', ignore = ['search_id', 'incident_id', 'suspect_id'])
+    search = prompt_table('Search', db.TABLES, ignore = ['search_id', 'incident_id', 'suspect_id'])
     search['suspect_id'] = suspect_id
     search['incident_id'] = incident_id
     search_id = insert_search(search)
@@ -435,7 +435,7 @@ def add_search():
     return SUCCESS
 
 def add_location():
-    location = prompt_table('Location', ignore = ['location_id'])
+    location = prompt_table('Location', db.TABLES, ignore = ['location_id'])
 
     location_id = insert_location(location)
     if location_id is None:
@@ -446,7 +446,7 @@ def add_location():
     return SUCCESS
 
 def add_code():
-    code = prompt_table('Code')
+    code = prompt_table('Code', db.TABLES)
     if code["code"] == "NULL" or code["organization"] == "NULL":
         log.error("code and organization cannot be NULL")
         return ERROR
@@ -459,7 +459,7 @@ def add_code():
     return SUCCESS
 
 def add_person():
-    person = prompt_table('Person', ignore = ['person_id'])
+    person = prompt_table('Person', db.TABLES, ignore = ['person_id'])
     person_id = insert_person(person)
 
     if person_id is None:
@@ -820,7 +820,7 @@ def update_code(args):
         log.error(f"No such '{organization}' code '{code}'")
         return ERROR
 
-    updates = prompt_table_update("Code", ignore = ["code", "organization"])
+    updates = prompt_table_update("Code", db.TABLES, ignore = ["code", "organization"])
 
     if len(updates) != 0:
         query = db.update("Code", where = f"code = '{code}' and organization = '{organization}'", **updates)
@@ -842,7 +842,7 @@ def update_location(args):
         log.error(f"No such location with ID '{location_id}'")
         return ERROR
 
-    updates = prompt_table_update("Location", ignore = ["location_id"])
+    updates = prompt_table_update("Location", db.TABLES, ignore = ["location_id"])
 
     if len(updates) != 0:
         query = db.update("Location", where = f"location_id = '{location_id}'", **updates)
@@ -864,7 +864,7 @@ def update_person(args):
         log.error(f"No such person with ID '{person_id}'")
         return ERROR
 
-    updates = prompt_table_update("Person", ignore = ["person_id"])
+    updates = prompt_table_update("Person", db.TABLES, ignore = ["person_id"])
 
     if len(updates) != 0:
         query = db.update("Person", where = f"person_id = '{person_id}'", **updates)
@@ -899,8 +899,8 @@ def update_complaint(args):
         log.error(f"No such incident with ID '{incident_id}' corresponding to complaint '{complaint_id}'")
         return ERROR
 
-    incident_updates = prompt_table_update("Incident", ignore = ["incident_id"])
-    complaint_updates = prompt_table_update("Complaint", ignore = ["incident_id", "complaint_id"])
+    incident_updates = prompt_table_update("Incident", db.TABLES, ignore = ["incident_id"])
+    complaint_updates = prompt_table_update("Complaint", db.TABLES, ignore = ["incident_id", "complaint_id"])
 
     # check if the updates break any foreign keys
     if "location_id" in incident_updates:
@@ -957,8 +957,8 @@ def update_crime(args):
         log.error(f"No such incident with ID '{incident_id}' corresponding to crime '{crime_id}'")
         return ERROR
 
-    incident_updates = prompt_table_update("Incident", ignore = ["incident_id"])
-    crime_updates = prompt_table_update("Crime", ignore = ["incident_id", "crime_id"])
+    incident_updates = prompt_table_update("Incident", db.TABLES, ignore = ["incident_id"])
+    crime_updates = prompt_table_update("Crime", db.TABLES, ignore = ["incident_id", "crime_id"])
 
     # check if the updates break any foreign keys
     if "location_id" in incident_updates:
@@ -1021,8 +1021,8 @@ def update_search(args):
         log.error(f"No such incident with ID '{search_id}' corresponding to search '{search_id}'")
         return ERROR
 
-    incident_updates = prompt_table_update("Incident", ignore = ["incident_id"])
-    search_updates = prompt_table_update("Search", ignore = ["search_id", "incident_id"])
+    incident_updates = prompt_table_update("Incident", db.TABLES, ignore = ["incident_id"])
+    search_updates = prompt_table_update("Search", db.TABLES, ignore = ["search_id", "incident_id"])
 
     # check if the updates break any foreign keys
     if "location_id" in incident_updates:

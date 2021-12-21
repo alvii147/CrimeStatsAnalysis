@@ -1,12 +1,9 @@
 import csv
 import log
 import json
-import db
 
 from datetime import date
 from MySQLutils import connectDB, closeDB
-
-TABLES = db.TABLES
 
 def read_csv(filename, ignore=1):
     '''
@@ -227,7 +224,7 @@ def yes(message):
 def no(message):
     return not yes(message)
 
-def prompt_attribute(table, attribute):
+def prompt_attribute(table, attribute, TABLES):
     type = TABLES[table][attribute]
     value = input(f"[{type}] {attribute}: ")
 
@@ -241,7 +238,7 @@ def prompt_attribute(table, attribute):
 
     return value
 
-def prompt_table(table, ignore = []):
+def prompt_table(table, TABLES, ignore = []):
     log.info(f"{table}:")
     record = {}
     for attribute in TABLES[table]:
@@ -250,7 +247,7 @@ def prompt_table(table, ignore = []):
         record[attribute] = prompt_attribute(table, attribute)
     return record
 
-def prompt_table_update(table, ignore = []):
+def prompt_table_update(table, TABLES, ignore = []):
     log.info(f"{table}:")
     updates = {}   # new attribute values
     for attribute in TABLES[table]:
