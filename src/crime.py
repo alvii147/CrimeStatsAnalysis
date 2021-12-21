@@ -56,7 +56,8 @@ def storeTableMetaData(path='tables.json'):
                 'CHARACTER_MAXIMUM_LENGTH',
                 'NUMERIC_PRECISION',
                 'NUMERIC_SCALE',
-            ]
+            ],
+            additional_clauses='ORDER BY ORDINAL_POSITION ASC',
         )
 
         executeQuery(query)
@@ -1261,7 +1262,7 @@ def background(args):
     if isinstance(query, int) and query == ERROR:
         return ERROR
 
-    cursor.execute(query)
+    executeQuery(query)
     output = cursor.fetchall()
 
     log.info(f'Search returned {len(output)} results')
@@ -1283,7 +1284,21 @@ def background(args):
 
     person_id = output[selection_idx][0]
 
-    print(person_id)
+    query = db.select('CrimeView', where=f'victim_id = {person_id}')
+    executeQuery(query)
+    person_crimes = cursor.fetchall()
+
+    query = db.select('Search', where=f'suspect_id = {person_id}')
+    executeQuery(query)
+    person_searches = cursor.fetchall()
+
+    log.info('Crimes')
+    for row in person_crimes:
+        log.info(row)
+
+    log.info('Searches')
+    for row in person_searches:
+        log.info(row)
 
     return SUCCESS
 
@@ -1329,7 +1344,7 @@ def help(args):
 
     log.note("add in the extra attributes into the database to hit 50 (maybe) ")
     log.note("Do a datamine ")
-    log.note("add flags to allow for updates like -d for descripti ")
+    log.note("add flags to allow for updates like -d for description ")
 
 
     return SUCCESS
