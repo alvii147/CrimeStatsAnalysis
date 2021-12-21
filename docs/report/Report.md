@@ -119,18 +119,18 @@ In order to avoid making the entities of the database too specific, we can also 
 
 We can consider our outlined options and construct a weighted decision matrix to decide between our design choices. We will weigh our alternatives in terms of the following criteria:
 
-- Generalization of information
-- Simplicity of database relationships
-- Reduced attribute redundancy
-- Reduced possibility of error
-- Accommodation of user needs (assuming users are police station employees)
+- **Generalization:** database should be a good generalization of the combined datasets
+- **Simplicity:** entities and relationships within the database should not be too complex
+- **Minimized Data Loss:** loss of data due to merging should be reduced
+- **Attribute Relevance:** attributes within the entities should be relevant for most of the database entries
+- **Accommodation of Needs:** database should perform operations based on the users' (i.e. police station employees) needs
 
-&nbsp; | Generalization of Information | Simplicity of Relationships | Reduced Redundancy | Reduced Error Possibility | Accommodation of needs | Score
+&nbsp; | Generalization | Simplicity | Minimized Data Loss | Attribute Relevance | Accommodation of needs | Score
 --- | --- | --- | --- | --- | --- | ---
 Weights | 2 | 1 | 3 | 4 | 5 | &nbsp;
-UK & US Data Separation | 1 | 1 | 1 | 4 | 3 | 37
-Crimes, Complaints & Stop-and-Searches | 3 | 4 | 3 | 5 | 5 | **64**
-Crimes Only | 5 | 5 | 2 | 1 | 1 | 30
+UK & US Data Separation | 1 | 1 | 4 | 5 | 2 | 45
+Crimes, Complaints & Stop-and-Searches | 3 | 4 | 3 | 4 | 5 | **60**
+Crimes Only | 5 | 5 | 4 | 1 | 3 | 46
 
 By analyzing our decision options using a decision matrix, we can conclude that separating crimes, complaints and stop-and-searches while merging the UK and US datasets is the most optimal solution given the context of our project.
 
@@ -146,17 +146,48 @@ The *Location* entity is a combination of all the location-based attributes from
 
 The primary key for this entity is an artificial primary key, `location_id`.
 
+Attribute | Description
+--- | ---
+<u>`location_id`</u> | Artificial primary key
+`latitude` | Latitude coordinate where the incident took place
+`latitude` | Longitude coordinate where the incident took place
+`premises` | Contextual premises of the incident
+`area` | Area where the incident took place
+`precinct` | Police precinct where the incident was reported
+`ward` | Ward where the incident took place
+`borough` | Borough where the incident took place
+`city` | City where the incident took place
+`state` | State/province where the incident took place
+`country` | Country where the incident took place
+
 ### Code
 
 The *Code* entity contains all the different US crime codes as reported by the NYPD, IUCR and the LAPD, along with additional information regarding the codes, including `category` and `description`.
 
 Since the uniqueness of the entries of this entity is dependent on both the crime code and the reporting organization, the primary key for this entity is a composite key made up of attributes `code` and `organization`.
 
+Attribute | Description
+--- | ---
+<u>`code`</u> | Crime code
+<u>`organization`</u> | Reporting organization
+`category` | Category of crime code
+`description` | Description of crime code
+
 ### Person
 
 The *Person* entity holds information about individual people that are relevant to the database (including information that may have to be auto-generated, such as `first_name`, `last_name` and `phone_number`).
 
 The primary key for this entity is an artificial primary key, `person_id`.
+
+Attribute | Description
+--- | ---
+<u>`person_id`</u> | Artificial primary key
+`first_name` | First name of person
+`last_name` | Last name of person
+`age_range` | Age range of person
+`gender` | Gender of person
+`ethnicity` | Ethnicity of person
+`phone_number` | Phone number of person
 
 ### Incident
 
@@ -166,13 +197,34 @@ This entity also contains a `location_id` attribute which is related to the *Loc
 
 The primary key for this entity is an artificial primary key, `incident_id`.
 
+Attribute | Description
+--- | ---
+<u>`incident_id`</u> | Artificial primary key
+`location_id` | Primary key of *Location* entity describing location of the incident
+`occurrence_date` | Date of occurrence of incident
+`last_updated` | Date when this record was last updated
+`status` | Current status of the incident
+`police_department` | Police department the incident was reported to
+`type` | Type of crime
+
 ### Complaint
 
 The *Complaint* entity is a specialization of the *Incident* entity and provides additional information about incidents that are complaints about crimes, through attributes such as `reported_date` and `description`.
 
-The `code` and `organization` attributes of the *Complaint* entity are related to the *Code* entity that describes the specific crime code referenced by the complaint, through the relation *complaintOfCode*. Note that this is a weak entity set because a complaint about a crime cannot exist if the criminal law (a.k.a crime code) that prohibits that crime does not exist.
+The `code` and `organization` attributes of the *Complaint* entity are related to the *Code* entity that describes the specific crime code referenced by the complaint, through the relation *complaintOfCode*.
+
+> :scroll: **Note**
+> This is defined as a weak entity set because a complaint about a crime cannot be valid if there exists no criminal law (i.e. crime code) that prohibits that action.
 
 The primary key for this entity is an artificial primary key, `complaint_id`.
+
+Attribute | Description
+--- | ---
+<u>`complaint_id`</u> | Artificial primary key
+`code` | Crime code
+`organization` | Reporting organization
+`reported_date` | Date of complaint report
+`description` | Description of complaint
 
 ### Crime
 
@@ -184,6 +236,16 @@ The `victim_id` attribute is related to the *Person* entity and describes the in
 
 The primary key for this entity is an artificial primary key, `crime_id`.
 
+Attribute | Description
+--- | ---
+<u>`crime_id`</u> | Artificial primary key
+`code` | Crime code
+`organization` | Reporting organization
+`victim_id` | Primary key of *Person* entity victim to crime
+`weapon` | Weapon used
+`domestic` | Indicates whether the crime was domestic
+`description` | Description of the crime committed
+
 ### Search
 
 The *Search* entity is a specialization of the *Incident* entity and provides additional information about incidents that are stop-and-searches conducted by the police, through attributes such as `legislation`, `object`, `outcome`, `object_caused_outcome` and `clothing_removal`.
@@ -192,14 +254,276 @@ The `suspect_id` attribute of the *Search* entity is related to the *Person* ent
 
 The primary key for this entity is an artificial primary key, `search_id`.
 
+Attribute | Description
+--- | ---
+<u>`search_id`</u> | Artificial primary key
+`victim_id` | Primary key of *Person* entity suspect to search
+`legislation` | Legislation under which search was conducted
+`object` | Object of search
+`outcome` | Outcome of search
+`object_caused_outcome` | Indicates whether outcome was a result of search object
+`clothing_removal` | Indicates whether clothing of suspect was removed for search
+
 ## Relational Schema
+
+Now we can convert our entity-relationship model to relational schema. We can start by constructing the `CREATE TABLE` commands for our required tables.
+
+```mysql
+CREATE TABLE Incident (
+    incident_id INT NOT NULL AUTO_INCREMENT,
+    location_id INT,
+    occurrence_date DATE,
+    last_updated DATE,
+    status VARCHAR(128),
+    police_department VARCHAR(256),
+    type VARCHAR(128),
+    PRIMARY KEY(incident_id)
+);
+```
+
+```mysql
+CREATE TABLE Location (
+    location_id INT NOT NULL AUTO_INCREMENT,
+    latitude DECIMAL(11, 8),
+    longitude DECIMAL(11, 8),
+    premises VARCHAR(128),
+    area VARCHAR(256),
+    precinct DECIMAL(4),
+    ward DECIMAL(3),
+    borough VARCHAR(64),
+    city VARCHAR(64),
+    state VARCHAR(64),
+    country VARCHAR(64),
+    PRIMARY KEY(location_id)
+);
+```
+
+```mysql
+CREATE TABLE Crime (
+    crime_id INT NOT NULL AUTO_INCREMENT,
+    incident_id INT,
+    code VARCHAR(4),
+    organization VARCHAR(16),
+    victim_id INT,
+    weapon VARCHAR(256),
+    domestic BOOL,
+    description VARCHAR(256),
+    PRIMARY KEY(crime_id)
+);
+```
+
+```mysql
+CREATE TABLE Complaint (
+    complaint_id INT NOT NULL AUTO_INCREMENT,
+    incident_id INT,
+    code VARCHAR(4),
+    organization VARCHAR(16),
+    reported_date DATE,
+    description VARCHAR(256),
+    PRIMARY KEY(complaint_id)
+);
+```
+
+```mysql
+CREATE TABLE Search (
+    search_id INT NOT NULL AUTO_INCREMENT,
+    incident_id INT,
+    suspect_id INT,
+    legislation VARCHAR(256),
+    object VARCHAR(256),
+    outcome VARCHAR(256),
+    object_caused_outcome BOOL,
+    clothing_removal BOOL,
+    PRIMARY KEY(search_id)
+);
+```
+
+```mysql
+CREATE TABLE Person (
+    person_id INT NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(64),
+    last_name VARCHAR(64),
+    age_range VARCHAR(16),
+    gender VARCHAR(16),
+    ethnicity VARCHAR(64),
+    phone_number VARCHAR(16),
+    PRIMARY KEY(person_id)
+);
+```
+
+```mysql
+CREATE TABLE Code (
+    code VARCHAR(4) NOT NULL,
+    organization VARCHAR(16) NOT NULL,
+    category VARCHAR(256),
+    description VARCHAR(256),
+    PRIMARY KEY(code, organization)
+);
+```
+
+> :scroll: **Note**
+> A difference between the entity-relationship model and our defined tables is that the `Crime`, `Complaint` and `Search` tables now have an additional attribute, `incident_id` which was not reflected on the entity-relationship model. This is because the relationship between `Crime`, `Complaint` and `Search` are specializations of `Incident`, and so must be related using a foreign key attribute, i.e. `incident_id`.
+
+Our relational schema is almost nearly similar to our entity-relationship model. We set the `AUTO_INCREMENT` option for all our artificial primary keys so that they are sequentially incremented automatically on insertion.
+
+Now we can define our foreign key constraints.
+
+```mysql
+ALTER TABLE Complaint ADD CONSTRAINT Complaint_Incident
+    FOREIGN KEY (incident_id) REFERENCES Incident(incident_id);
+```
+
+```mysql
+ALTER TABLE Crime ADD CONSTRAINT Crime_Incident
+    FOREIGN KEY (incident_id) REFERENCES Incident(incident_id);
+```
+
+```mysql
+ALTER TABLE Search ADD CONSTRAINT Search_Incident
+    FOREIGN KEY (incident_id) REFERENCES Incident(incident_id);
+```
+
+```mysql
+ALTER TABLE Incident ADD CONSTRAINT happensIn
+    FOREIGN KEY (location_id) REFERENCES Location(location_id);
+```
+
+```mysql
+ALTER TABLE Complaint ADD CONSTRAINT complaintOfCode
+    FOREIGN KEY (code, organization) REFERENCES Code(code, organization);
+```
+
+```mysql
+ALTER TABLE Crime ADD CONSTRAINT crimeOfCode
+    FOREIGN KEY (code, organization) REFERENCES Code(code, organization);
+```
+
+```mysql
+ALTER TABLE Crime ADD CONSTRAINT victimOf
+    FOREIGN KEY (victim_id) REFERENCES Person(person_id);
+```
+
+```mysql
+ALTER TABLE Search ADD CONSTRAINT suspectOf
+    FOREIGN KEY (suspect_id) REFERENCES Person(person_id);
+```
+
+Based on our primary and foreign keys, we can also set up appropriate indexes in order to improve the performance of our database.
+
+```mysql
+CREATE INDEX Incident_PK_IDX
+ON Incident (incident_id);
+```
+
+```mysql
+CREATE INDEX Incident_Location_FK_IDX
+ON Incident (location_id);
+```
+
+```mysql
+CREATE INDEX Location_PK_IDX
+ON Location (location_id);
+```
+
+```mysql
+CREATE INDEX Crime_PK_IDX
+ON Crime (crime_id);
+```
+
+```mysql
+CREATE INDEX Crime_Incident_FK_IDX
+ON Crime (incident_id);
+```
+
+```mysql
+CREATE INDEX Crime_Code_FK_IDX
+ON Crime (
+    code,
+    organization
+);
+```
+
+```mysql
+CREATE INDEX Crime_Person_FK_IDX
+ON Crime (victim_id);
+
+CREATE INDEX Complaint_PK_IDX
+ON Complaint (complaint_id);
+```
+
+```mysql
+CREATE INDEX Complaint_Incident_FK_IDX
+ON Complaint (incident_id);
+```
+
+```mysql
+CREATE INDEX Complaint_Code_FK_IDX
+ON Complaint (
+    code,
+    organization
+);
+```
+
+```mysql
+CREATE INDEX Search_PK_IDX
+ON Search (search_id);
+
+CREATE INDEX Search_Incident_FK_IDX
+ON Search (incident_id);
+```
+
+```mysql
+CREATE INDEX Search_Person_FK_IDX
+ON Search (suspect_id);
+```
+
+```mysql
+CREATE INDEX Person_PK_IDX
+ON Person (person_id);
+```
+
+```mysql
+CREATE INDEX Code_PK_IDX
+ON Code (
+    code,
+    organization
+);
+```
+
+
 
 # Application
 
 ## Installation
 
-## Database Setup
+Clone the repository:
 
-## Operations
+```bash
+git clone https://github.com/alvii147/CrimeStatsAnalysis.git
+```
+
+Navigate into repository directory:
+
+```bash
+cd CrimeStatsAnalysis/
+```
+
+Create and activate Python virtual environment (optional):
+
+```bash
+python3 -m venv env
+# Linux & MacOS
+source env/bin/activate
+# Windows
+source env/Scripts/activate
+```
+
+Install dependencies:
+
+```bash
+pip3 install -r requirements.txt
+```
+
+## Walkthrough
 
 # Data Mining
