@@ -1305,31 +1305,46 @@ def print_table(records):
         for c in range(len(records[r])):
             value = records[r][c]
             if value != None:
-                paddings[c] = max(paddings[c], len(value))
+                paddings[c] = max(paddings[c], len(str(value)))
 
     for r in range(len(records)):
+        if r == 0:
+            print("\n|", end="")
+            for c in range(len(records[r])):
+                print(" %s |" % ("-" * paddings[c]), end = "")
+            print("")
+
         print("|", end = "")
         for c in range(len(records[r])):
-            print(" %-*s |" % (paddings[c], str(records[r][c])), end = "")
+            value = records[r][c]
+            if value is None:
+                value = "NULL"
+            print(" %-*s |" % (paddings[c], str(value)), end = "")
+
+        if r == 0 or r == len(records) - 1:
+            print("\n|", end="")
+            for c in range(len(records[r])):
+                print(" %s |" % ("-" * paddings[c]), end = "")
+
         print("")
 
 def show_code(args):
-    department = None
+    organization = None
     code = None
 
     if yes("Do you know the crime code?"):
-        code = input("Please enter the code name: ")
-    if yes("Do you know the name of the crime enforcement department?"):
-        department = input("Please enter the department name: ")
+        code = prompt_attribute("Code", "code", db.TABLES)
+    if yes("Do you know the name of the crime enforcement organization?"):
+        organization = prompt_attribute("Code", "organization", db.TABLES)
 
-    if code == None and department == None:
+    if code == None and organization == None:
         query = "SELECT * from Code;"
-    elif code == None and department != None:
-        query = db.select("Code", f"organization = '{department}'")
-    elif code != None and department == None:
+    elif code == None and organization != None:
+        query = db.select("Code", f"organization = '{organization}'")
+    elif code != None and organization == None:
         query = db.select("Code", f"code = '{code}'")
     else:
-        query = db.select("Code", f"code = '{code}' and organization = '{department}'")
+        query = db.select("Code", f"code = '{code}' and organization = '{organization}'")
 
     if executeQuery(query) is None:
         log.error(f"Failed to query for codes")
@@ -1338,34 +1353,131 @@ def show_code(args):
     results = cursor.fetchall()
     if len(results) == 0:
         log.info("No codes found")
+        return SUCCESS
 
-    headers = [('=' * 20, '=' * 20, '=' * 30, '=' * 30)]
-    headers +=  [('Code','Organization','Category','Description')]
-    headers += [('-' * 20, '-' * 20, '-' * 30, '-' * 30)]
-    footer = [('=' * 20, '=' * 20, '=' * 30, '=' * 30)]
-    print_table(headers + results + footer)
+    headers =  [('Code','Organization','Category','Description')]
+    print_table(headers + results)
+    return SUCCESS
 
+def show_person(args):
+    if len(args) != 1:
+        log.error("Incorrect number of arguments")
+        usage_show()
+        return ERROR
+    person_id = args[0]
+
+    query = db.select("Person", f"person_id = {person_id}")
+    if executeQuery(query) is None:
+        log.error(f"Failed to query for Person")
+        return ERROR
+
+    results = cursor.fetchall()
+    header = [('Person ID', 'First Name', 'Last Name', 'Age', 'Gender', 'Ethnicity', 'Primary Phone Number')]
+    print_table(header + results)
+
+def show_location(args):
+    if len(args) != 1:
+        log.error("Incorrect number of arguments")
+        usage_show()
+        return ERROR
+    location_id = args[0]
+
+    query = db.select("Location", f"location_id = {location_id}")
+    if executeQuery(query) is None:
+        log.error(f"Failed to query for Location")
+        return ERROR
+
+    results = cursor.fetchall()
+    header = [('Location ID','Latitude', 'Longitude', 'Premises', 'Area', 'Precinct', 'Ward', 'Borough', 'City', 'State', 'Country')]
+    print_table(header + results)
+    return SUCCESS
+
+def show_complaint(args):
+    if len(args) != 1:
+        log.error("Incorrect number of arguments")
+        usage_show()
+        return ERROR
+    complaint_id = args[0]
+
+    query = db.select("Complaint", f"complaint_id = {complaint_id}")
+    if executeQuery(query) is None:
+        log.error(f"Failed to query for complaint")
+        return ERROR
+
+    results = cursor.fetchall()
+    header = [('Complaint ID', 'Incident ID', 'Code', 'Organization', 'Reported Date', 'Description')]
+    print_table(header + results)
+    return SUCCESS
+
+def show_crime(args):
+    if len(args) != 1:
+        log.error("Incorrect number of arguments")
+        usage_show()
+        return ERROR
+    crime_id = args[0]
+
+    query = db.select("Crime", f"crime_id = {crime_id}")
+    if executeQuery(query) is None:
+        log.error(f"Failed to query for crime")
+        return ERROR
+
+    results = cursor.fetchall()
+    header = [('Crime ID', 'Incident ID', 'Code', 'Organization', 'VictimID', 'Weapon', 'Domestic', 'Description')]
+    print_table(header + results)
+    return SUCCESS
+
+def show_search(args):
+    if len(args) != 1:
+        log.error("Incorrect number of arguments")
+        usage_show()
+        return ERROR
+    search_id = args[0]
+
+    query = db.select("Search", f"search_id = {search_id}")
+    if executeQuery(query) is None:
+        log.error(f"Failed to query for Search")
+        return ERROR
+
+    results = cursor.fetchall()
+    header = [('Search ID', 'Incident ID', 'Suspect ID', 'Legislation', 'Object', 'Outcome', 'Object_caused_outcome', 'Clothing_removal')]
+    print_table(header + results)
     return SUCCESS
 
 SHOW_HELP = {
-    "code": "Show information about an organization's crime code",
-    "help": "Show this message",
+    "code":      "Show information about an organization's crime code",
+    "person":    "Show information about a person",
+    "location":  "Show information about a location",
+    "complaint": "Show information about a complaint",
+    "search":    "Show information about a search",
+    "crime":     "Show information about a crime",
+    "help":      "Show this message",
 }
 
 def help_show(args):
-    log.info(f"{PROGRAM} background code : {SHOW_HELP['code']}")
+    log.info(f"{PROGRAM} background code                     : {SHOW_HELP['code']}")
+    log.info(f"{PROGRAM} background person    <person_id>    : {SHOW_HELP['person']}")
+    log.info(f"{PROGRAM} background location  <location_id>  : {SHOW_HELP['location']}")
+    log.info(f"{PROGRAM} background complaint <complaint_id> : {SHOW_HELP['complaint']}")
+    log.info(f"{PROGRAM} background search    <search_id>    : {SHOW_HELP['search']}")
+    log.info(f"{PROGRAM} background crime     <crime_id>     : {SHOW_HELP['crime']}")
+    log.info(f"{PROGRAM} background help                     : {SHOW_HELP['help']}")
 
 def usage_show():
-    log.info(f"{PROGRAM} background <command> [arguments]")
-    log.info(f"Try '{PROGRAM} background help'")
+    log.info(f"{PROGRAM} show <command> [arguments]")
+    log.info(f"Try '{PROGRAM} show help'")
 
 SHOW_COMMANDS = {
-    "code": show_code,
-    "help": help_show,
+    "code":      show_code,
+    "help":      help_show,
+    "person":    show_person,
+    "location":  show_location,
+    "crime":     show_crime,
+    "complaint": show_complaint,
+    "search":    show_search
 }
 
 SHOW_MIN_ARGC = 0
-SHOW_MAX_ARGC = 1
+SHOW_MAX_ARGC = 2
 
 def show(args):
     argc = len(args)
@@ -1387,6 +1499,258 @@ def show(args):
 
     return SHOW_COMMANDS[command](args)
 
+# ================== FILTER ================== #
+
+def prompt_filters_location():
+    clauses = []
+
+    if yes("Do have a country you want to filter by? "):
+        country = prompt_attribute("Location", "country", db.TABLES)
+        if country != "NULL":
+            clauses.append(f"country = '{country}'")
+
+    if yes("Do have a city you want to filter by? "):
+        city = prompt_attribute("Location", "city", db.TABLES)
+        if city != "NULL":
+            clauses.append(f"city = '{city}'")
+
+    if yes("Do have a state you want to filter by? "):
+        state = prompt_attribute("Location", "state", db.TABLES)
+        if state != "NULL":
+            clauses.append(f"state = '{state}'")
+
+    if yes("Do have a borough you want to filter by? "):
+        borough = prompt_attribute("Location", "borough", db.TABLES)
+        if borough != "NULL":
+            clauses.append(f"borough = '{borough}'")
+
+    if len(clauses) == 0:
+        return None
+
+    return " and ".join(clauses)
+
+def prompt_filters_code():
+    clauses = []
+
+    if yes("Do you know the crime code?"):
+        code = prompt_attribute("Code", "code", db.TABLES)
+        if code != "NULL":
+            clauses.append(f"code = '{code}'")
+
+    if yes("Do you know the name of the crime enforcement organization?"):
+        organization = prompt_attribute("Code", "organization", db.TABLES)
+        if organization != "NULL":
+            clauses.append(f"organization = '{organization}'")
+
+    if len(clauses) == 0:
+        return None
+
+    return " and ".join(clauses)
+
+def prompt_filters_date():
+    clauses = []
+
+    userChoice = 0
+    log.info("[1] Filter by exact date")
+    log.info("[2] Filter by date range")
+    while userChoice != "1" and userChoice != "2":
+        userChoice = input("Enter selection: ")
+
+    if userChoice == "1":
+        occurrence_date = prompt_attribute("Incident", "occurrence_date", db.TABLES)
+        clauses.append(f"occurrence_date = '{occurrence_date}'")
+    elif userChoice == "2":
+        if yes("Do have a max date you want to filter by? "):
+            occurrence_date = prompt_attribute("Incident", "occurrence_date", db.TABLES)
+            if occurrence_date != "NULL":
+                clauses.append(f"occurrence_date < '{occurrence_date}'")
+
+        if yes("Do have a min date you want to filter by? "):
+            occurrence_date = prompt_attribute("Incident", "occurrence_date", db.TABLES)
+            if occurrence_date != "NULL":
+                clauses.append(f"occurrence_date > '{occurrence_date}'")
+    else:
+        return None
+
+    if len(clauses) == 0:
+        return None
+
+    return " and ".join(clauses)
+
+def prompt_filters(location = True, code = True, date = True):
+    clauses = []
+
+    if location:
+        if yes("Do you want to filter by location? "):
+            location = prompt_filters_location()
+            if location is not None:
+                clauses.append(location)
+
+    if code:
+        if yes("Do you want to filter by code? "):
+            code = prompt_filters_code()
+            if code is not None:
+                clauses.append(code)
+
+    if date:
+        if yes("Do you want to filter by date? "):
+            date = prompt_filters_date()
+            if date is not None:
+                clauses.append(date)
+
+    if len(clauses) == 0:
+        log.error("No filters were specified")
+        return None
+
+    return " and ".join(clauses)
+
+def filter_complaint(args):
+    where = prompt_filters()
+    if where is None:
+        return ERROR
+
+    attributes = [
+        "complaint_id",
+        "incident_id",
+        "occurrence_date",
+        "code",
+        "organization",
+        "description",
+        "location_id",
+        "city",
+        "country"
+    ]
+
+    query = db.select("ComplaintView", where, attributes = attributes)
+
+    if executeQuery(query) is None:
+        log.error("Failed to execute filter query")
+        return ERROR
+
+    results = cursor.fetchall()
+    if len(results) == 0:
+        log.info("No results found")
+        return SUCCESS
+
+    headers = [tuple(attributes)]
+    print_table(headers + results)
+    return SUCCESS
+
+def filter_crime(args):
+    where = prompt_filters()
+    if where is None:
+        return ERROR
+
+    attributes = [
+        "crime_id",
+        "incident_id",
+        "occurrence_date",
+        "code",
+        "organization",
+        "description",
+        "location_id",
+        "city",
+        "country",
+        "victim_id",
+        "victim_first_name",
+        "victim_last_name",
+    ]
+
+    query = db.select("CrimeView", where, attributes = attributes)
+
+    if executeQuery(query) is None:
+        log.error("Failed to execute filter query")
+        return ERROR
+
+    results = cursor.fetchall()
+    if len(results) == 0:
+        log.info("No results found")
+        return SUCCESS
+
+    headers =  [tuple(attributes)]
+    print_table(headers + results)
+    return SUCCESS
+
+def filter_search(args):
+    where = prompt_filters(code = False)
+    if where is None:
+        return ERROR
+
+    attributes = [
+        "search_id",
+        "incident_id",
+        "occurrence_date",
+        "object",
+        "location_id",
+        "city",
+        "country",
+        "suspect_id",
+        "suspect_first_name",
+        "suspect_last_name",
+    ]
+
+    query = db.select("SearchView", where, attributes = attributes)
+
+    if executeQuery(query) is None:
+        log.error("Failed to execute filter query")
+        return ERROR
+
+    results = cursor.fetchall()
+    if len(results) == 0:
+        log.info("No results found")
+        return SUCCESS
+
+    headers =  [tuple(attributes)]
+    print_table(headers + results)
+    return SUCCESS
+
+FILTER_HELP = {
+    "complaint": "Filter complaint by location, date, and code",
+    "crime":     "Filter crimes by location, date, and code",
+    "search":    "Filter search by location, date, and code",
+    "help":      "Show this message",
+}
+
+def help_filter(args):
+    log.info(f"{PROGRAM} filter complaint : {FILTER_HELP['complaint']}")
+    log.info(f"{PROGRAM} filter crime     : {FILTER_HELP['crime']}")
+    log.info(f"{PROGRAM} filter search    : {FILTER_HELP['search']}")
+    log.info(f"{PROGRAM} filter help      : {FILTER_HELP['help']}")
+
+def usage_filter():
+    log.info(f"{PROGRAM} filter <command>")
+    log.info(f"Try '{PROGRAM} filter help'")
+
+FILTER_COMMANDS = {
+    "complaint": filter_complaint,
+    "crime":     filter_crime,
+    "search":    filter_search,
+    "help":      help_filter,
+}
+
+FILTER_MIN_ARGC = 0
+FILTER_MAX_ARGC = 1
+
+def filter(args):
+    argc = len(args)
+    if argc < FILTER_MIN_ARGC or argc > FILTER_MAX_ARGC:
+        log.error("Incorrect number of arguments")
+        usage_filter()
+        return ERROR
+
+    # default
+    command = "help"
+    if argc > 0:
+        command = args[0]
+    args = args[1:]
+
+    if command not in FILTER_COMMANDS:
+        log.error(f"Unknown command '{command}'")
+        usage_filter()
+        return ERROR
+
+    return FILTER_COMMANDS[command](args)
+
 # ===================== HELP ===================== #
 
 HELP = {
@@ -1400,6 +1764,7 @@ HELP = {
     "update":       "Update entries in the database",
     "background":   "Run background check on person",
     "show":         "Show detailed record information",
+    "filter":       "Filter records based on location, date, and code",
 }
 
 def help(args):
@@ -1417,6 +1782,7 @@ def help(args):
     log.info(f"{PROGRAM} update     : {HELP['update']}")
     log.info(f"{PROGRAM} background : {HELP['background']}")
     log.info(f"{PROGRAM} show       : {HELP['show']}")
+    log.info(f"{PROGRAM} filter     : {HELP['filter']}")
 
     log.info("--------------------------------------------------------------")
 
@@ -1453,6 +1819,7 @@ COMMANDS = {
     "update":     update,
     "background": background,
     "show":       show,
+    "filter":     filter
 }
 
 CRIME_MIN_ARGC = 1
@@ -1484,12 +1851,20 @@ def crime():
     return COMMANDS[command](args)
 
 # ===================== MAIN ===================== #
+
+def close(commit=False):
+    if commit:
+        connection.commit()
+
+    closeDB(connection, cursor)
+
 connection, cursor = connectDB()
 
 if __name__ == '__main__':
     result = crime()
+    commit = False
     if result == SUCCESS:
-        connection.commit()
+        commit = True
 
-        closeDB(connection, cursor)
-        exit(result)
+    close(commit)
+    exit(result)
