@@ -1258,13 +1258,15 @@ def background(args):
 
     print('')
     log.info('Person Information')
-    for i, row in enumerate(person):
-        log.info(person_attributes[i] + ': ' + str(row))
+    for i, val in enumerate(person):
+        log.info(person_attributes[i] + ': ' + str(val))
 
     print('')
     log.info('Crimes:')
-    for i, row in enumerate(person_crimes):
-        log.info(crime_view_attributes[i] + ': ' + str(row))
+    for row in person_crimes:
+        log.info('---------------------------------------------')
+        for i, val in enumerate(row):
+            log.info(crime_view_attributes[i] + ': ' + str(row))
 
     if len(person_crimes) < 1:
         log.info('No crime records found')
@@ -1272,7 +1274,9 @@ def background(args):
     print('')
     log.info('Stop & Searches:')
     for i, row in enumerate(person_searches):
-        log.info(search_view_attributes[i] + ': ' + str(row))
+        log.info('---------------------------------------------')
+        for i, val in enumerate(row):
+            log.info(search_view_attributes[i] + ': ' + str(row))
 
     if len(person_searches) < 1:
         log.info('No crime records found')
