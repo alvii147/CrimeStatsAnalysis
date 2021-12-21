@@ -1163,11 +1163,6 @@ def background_get_search_method():
         return 'id'
     elif selection_idx == 1:
         return 'name'
-    else:
-        return ERROR
-
-    log.error(f'Invalid selection')
-    log.info('Please try again')
 
     return ERROR
 
@@ -1217,6 +1212,11 @@ def background(args):
     cursor.execute(query)
     output = cursor.fetchall()
 
+    log.info(f'Search returned {len(output)} results')
+
+    if len(output) < 1:
+        return ERROR
+
     options = [' '.join([o[1].strip(), o[2].strip()]) for o in output]
     message = 'Select person to run a background check on'
 
@@ -1229,7 +1229,9 @@ def background(args):
     if selection_idx == len(options):
         return ERROR
 
-    print(output[selection_idx])
+    person_id = output[selection_idx][0]
+
+    print(person_id)
 
     return SUCCESS
 

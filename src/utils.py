@@ -267,9 +267,9 @@ def prompt_options(options, message=None):
     for i, opt in enumerate(options):
         log.info(f'[{i + 1}] {opt}')
 
-    log.info(f'[{len(options)}] Quit')
+    log.info(f'[{len(options) + 1}] Quit')
 
-    selection_idx = int(input('Enter selection: ')) - 1
+    selection_idx = int(input('\nEnter selection: ')) - 1
     if selection_idx > len(options):
         raise ValueError('Invalid selection')
 
