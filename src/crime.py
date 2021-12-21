@@ -8,10 +8,8 @@ from sys import argv
 from MySQLutils import connectDB, closeDB
 from utils import consoleFriendly, isQuoted, stripQuotes, yes, no
 
-argc = len(argv)
-
 INTERPRETER = "python3"
-PROGRAM = os.path.basename(argv[0])
+PROGRAM = f"{INTERPRETER} {os.path.basename(argv[0])}"
 TABLES = utils.readJSON("tables.json")
 SUCCESS = 0
 ERROR = -1
@@ -24,7 +22,7 @@ cursor = None
 def executeQuery(query):
     try:
         cursor.execute(query)
-        log.debug(f'Executing query "{consoleFriendly(query)}" ...')
+        #log.debug(f'Executing query "{consoleFriendly(query)}" ...')
     except Exception as e:
         log.error('Unable to execute query:')
         log.error(query)
@@ -35,29 +33,99 @@ def executeQuery(query):
 
 # ===================== SELECT ===================== #
 
-def location_exists(location_id):
+# --------------------- FIND --------------------- #
+
+def find_complaint(complaint_id):
+    query = db.select("Complaint", where = f"complaint_id = '{complaint_id}'")
+    if executeQuery(query) is None:
+        log.error(f"Failed to find complaint with ID '{complaint_id}'")
+        return None
+    return cursor.fetchall()
+
+def find_crime(crime_id):
+    query = db.select("Crime", where = f"crime_id = '{crime_id}'")
+    if executeQuery(query) is None:
+        log.error(f"Failed to find crime with ID '{crime_id}'")
+        return None
+    return cursor.fetchall()
+
+def find_search(search_id):
+    query = db.select("Search", where = f"search_id = '{search_id}'")
+    if executeQuery(query) is None:
+        log.error(f"Failed to find search with ID '{search_id}'")
+        return None
+    return cursor.fetchall()
+
+def find_location(location_id):
     query = db.select("Location", where = f"location_id = '{location_id}'")
     if executeQuery(query) is None:
-        log.error(f"Failed to determine existence of location with ID '{location_id}'")
-        return False
-    result = cursor.fetchall()
-    return len(result) != 0
+        log.error(f"Failed to find location with ID '{location_id}'")
+        return None
+    return cursor.fetchall()
 
-#check if person with the ID already exists
-def person_exists(person_id):
+def find_code(code, organization):
+    query = db.select("Code", where = f"code = '{code}' and organization = '{organization}'")
+    if executeQuery(query) is None:
+        log.error(f"Failed to find '{organization}' code '{code}'")
+        return None
+    return cursor.fetchall()
+
+def find_person(person_id):
     query = db.select("Person", where = f"person_id = '{person_id}'")
     if executeQuery(query) is None:
-        log.error(f"Failed to determine existence of person with ID '{person_id}'")
+        log.error(f"Failed to find person with ID '{person_id}'")
+        return None
+    return cursor.fetchall()
+
+def find_incident(incident_id):
+    query = db.select("Incident", where = f"incident_id = '{incident_id}'")
+    if executeQuery(query) is None:
+        log.error(f"Failed to find incident with ID '{incident_id}'")
+        return None
+    return cursor.fetchall()
+
+# --------------------- EXISTENCE --------------------- #
+
+def location_exists(location_id):
+    result = find_location(location_id)
+    if result is None:
         return False
-    result = cursor.fetchall()
+    return len(result) != 0
+
+def person_exists(person_id):
+    result = find_person(person_id)
+    if result is None:
+        return False
     return len(result) != 0
 
 def code_exists(code, organization):
-    query = db.select("Code", where = f"code = '{code}' and organization = '{organization}'")
-    if executeQuery(query) is None:
-        log.error(f"Failed to determine existence of '{organization}' code '{code}'")
+    result = find_code(code, organization)
+    if result is None:
         return False
-    result = cursor.fetchall()
+    return len(result) != 0
+
+def incident_exists(incident_id):
+    result = find_incident(incident_id)
+    if result is None:
+        return False
+    return len(result) != 0
+
+def crime_exists(crime_id):
+    result = find_crime(crime_id)
+    if result is None:
+        return False
+    return len(result) != 0
+
+def search_exists(search_id):
+    result = find_search(search_id)
+    if result is None:
+        return False
+    return len(result) != 0
+
+def complaint_exists(complaint_id):
+    result = find_complaint(complaint_id)
+    if result is None:
+        return False
     return len(result) != 0
 
 # ===================== INSERT ===================== #
@@ -221,22 +289,22 @@ def insert_location(location):
 
 # ===================== CREATION ===================== #
 
-def create():
+def create(args):
     utils.runQueries("SQL/create.sql")
     utils.runQueries("SQL/keys.sql")
     utils.runQueries("SQL/views.sql")
 
-def load():
+def load(args):
     log.note("Add arg for number of lines to load from each CSV")
     utils.runQueries("SQL/create_temp.sql")
     utils.runQueries("SQL/load.sql")
     transfer.transfer_all()
     utils.runQueries("SQL/drop.sql")
 
-def clean():
+def clean(args):
     utils.runQueries("SQL/clean.sql")
 
-def clear():
+def clear(args):
     utils.runQueries("SQL/clear.sql")
 
 # ===================== ADD ===================== #
@@ -261,18 +329,17 @@ def prompt_table(table, ignore = []):
     for attribute in TABLES[table]:
         if attribute in ignore:
             continue
-        value = prompt_attribute(table, attribute)
-        record[attribute] = value
+        record[attribute] = prompt_attribute(table, attribute)
     return record
 
 def add_location_help_message():
-    log.info(f"Please add a new location using '{INTERPRETER} {PROGRAM} add location'")
+    log.info(f"Please add a new location using '{PROGRAM} add location'")
 
 def add_person_help_message():
-    log.info(f"Please add a new person using '{INTERPRETER} {PROGRAM} add person'")
+    log.info(f"Please add a new person using '{PROGRAM} add person'")
 
 def add_code_help_message():
-    log.info(f"Please add a new code using '{INTERPRETER} {PROGRAM} add code'")
+    log.info(f"Please add a new code using '{PROGRAM} add code'")
 
 def add_incident():
     if no("Do you know the location ID for this incident?"):
@@ -356,9 +423,6 @@ def add_crime():
     crime['organization'] = organization
     crime['incident_id'] = incident_id
 
-    for a in crime:
-        print(type(a))
-
     crime_id = insert_crime(crime)
     if crime_id is None:
         log.error("Failed to insert crime")
@@ -430,23 +494,27 @@ def add_person():
     return SUCCESS
 
 ADD_HELP = {
-    "codes":     "Crime codes from a crime enforcement organization",
-    "complaint": "Incidents reported to police",
-    "crime":     "Crimes that have actually taken place",
-    "search":    "Suspect who was detained and searched",
-    "location":  "Location of a complaint, crime, or search",
-    "person":    "Add a criminal or victim",
+    "code":      "Add a crime code from a crime enforcement organization",
+    "complaint": "Add a complaint that was made to the police",
+    "crime":     "Add a crimes that has taken place",
+    "search":    "Add a suspect search record",
+    "location":  "Add a location of a complaint, crime, or search",
+    "person":    "Add a suspect or victim",
     "help":      "Show this message",
 }
 
 def help_add():
-    log.info(f"{INTERPRETER} {PROGRAM} add code      : {ADD_HELP['codes']}")
-    log.info(f"{INTERPRETER} {PROGRAM} add location  : {ADD_HELP['location']}")
-    log.info(f"{INTERPRETER} {PROGRAM} add person    : {ADD_HELP['person']}")
-    log.info(f"{INTERPRETER} {PROGRAM} add complaint : {ADD_HELP['complaint']}")
-    log.info(f"{INTERPRETER} {PROGRAM} add crime     : {ADD_HELP['crime']}")
-    log.info(f"{INTERPRETER} {PROGRAM} add search    : {ADD_HELP['search']}")
-    log.info(f"{INTERPRETER} {PROGRAM} add help      : {ADD_HELP['help']}")
+    log.info(f"{PROGRAM} add code      : {ADD_HELP['code']}")
+    log.info(f"{PROGRAM} add location  : {ADD_HELP['location']}")
+    log.info(f"{PROGRAM} add person    : {ADD_HELP['person']}")
+    log.info(f"{PROGRAM} add complaint : {ADD_HELP['complaint']}")
+    log.info(f"{PROGRAM} add crime     : {ADD_HELP['crime']}")
+    log.info(f"{PROGRAM} add search    : {ADD_HELP['search']}")
+    log.info(f"{PROGRAM} add help      : {ADD_HELP['help']}")
+
+def usage_add():
+    log.info(f"{PROGRAM} add <command>")
+    log.info(f"Try '{PROGRAM} add help'")
 
 ADD_COMMANDS = {
     "code":      add_code,
@@ -458,28 +526,622 @@ ADD_COMMANDS = {
     "help":      help_add,
 }
 
-ADD_MIN_ARGC = 2
-ADD_MAX_ARGC = 3
+ADD_MIN_ARGC = 0
+ADD_MAX_ARGC = 1
 
-def add():
+def add(args):
+    argc = len(args)
     if argc < ADD_MIN_ARGC or argc > ADD_MAX_ARGC:
-        log.error(f"Incorrect number of arguments")
-        help_add()
+        log.error("Incorrect number of arguments")
+        usage_add()
         return ERROR
 
-    if argc == ADD_MIN_ARGC:
-        command = "help"
-    else:
-        command = argv[2]
+    command = "help"   # default
+
+    if argc == 1:
+        command = args[0]
 
     if command not in ADD_COMMANDS:
         log.error(f"Unknown command '{command}'")
-        log.info(f"Try '{INTERPRETER} {PROGRAM} add'")
+        usage_add()
         return ERROR
 
     return ADD_COMMANDS[command]()
 
-# ------------------ BACKGROUND ------------------ #
+# ===================== DELETE ===================== #
+
+def usage_delete():
+    log.info(f"{PROGRAM} delete <command> [arguments]")
+    log.info(f"Try '{PROGRAM} delete help'")
+
+def delete_code(args):
+    if len(args) != 2:
+        log.error("Incorrect number of arguments")
+        usage_delete()
+        return ERROR
+    code = args[0]
+    organization = args[1]
+
+    if not code_exists(code, organization):
+        log.error(f"No such '{organization}' code '{code}'")
+        return ERROR
+
+    query = db.select("Complaint", where = f"code = '{code}' and organization = '{organization}'")
+    if executeQuery(query) is None:
+        log.error(f"Failed to query for complaints with '{organization}' code '{code}'")
+        return ERROR
+    complaints = cursor.fetchall()
+    if len(complaints) != 0:
+        log.error(f"{len(complaints)} complaints use this code")
+        log.info(f"Delete these complaints before attempting to delete '{organization}' code '{code}'")
+        return ERROR
+
+    query = db.select("Crimes", where = f"code = '{code}' and organization = '{organization}'")
+    if executeQuery(query) is None:
+        log.error(f"Failed to query for crimes with '{organization}' code '{code}'")
+        return ERROR
+    crimes = cursor.fetchall()
+    if len(crimes) != 0:
+        log.error(f"{len(crimes)} crimes use this code")
+        log.info(f"Delete these crimes before attempting to delete '{organization}' code '{code}'")
+        return ERROR
+
+    query = db.delete("Code", where = f"code = '{code}' and organization = '{organization}'")
+    if executeQuery(query) is None:
+        log.error(f"Failed to delete '{organization}' code '{code}'")
+        return ERROR
+
+    log.success(f"Deleted '{organization}' code '{code}'")
+    return SUCCESS
+
+def delete_location(args):
+    if len(args) != 1:
+        log.error("Incorrect number of arguments")
+        usage_delete()
+        return ERROR
+    location_id = args[0]
+
+    if not location_exists(location_id):
+        log.error(f"No such location with ID '{location_id}'")
+        return ERROR
+
+    query = db.select("Incident", where = f"location_id = '{location_id}'")
+    if executeQuery(query) is None:
+        log.error(f"Failed to query for incidents at location '{location_id}'")
+        return ERROR
+    incidents = cursor.fetchall()
+
+    if len(incidents) != 0:
+        log.error(f"{len(incidents)} incidents refer to this location")
+        log.info(f"Delete these incidents before attempting to delete location '{location_id}'")
+        return ERROR
+
+    query = db.delete("Location", where = f"location_id = '{location_id}'")
+    if executeQuery(query) is None:
+        log.error(f"Failed to delete location '{location_id}'")
+        return ERROR
+
+    log.success(f"Deleted location '{location_id}'")
+    return SUCCESS
+
+def delete_person(args):
+    if len(args) != 1:
+        log.error("Incorrect number of arguments")
+        usage_delete()
+        return ERROR
+    person_id = args[0]
+
+    if not person_exists(person_id):
+        log.error(f"No such person with ID '{person_id}'")
+        return ERROR
+
+    query = db.select("Crime", where = f"victim_id = '{person_id}'")
+    if executeQuery(query) is None:
+        log.error(f"Failed to query for crimes where person '{person_id}' was a victim")
+        return ERROR
+    crimes = cursor.fetchall()
+    if len(crimes) != 0:
+        log.error(f"{len(crimes)} crimes refer to this person")
+        log.info(f"Delete these crimes before attempting to delete person '{person_id}'")
+        return ERROR
+
+    query = db.select("Search", where = f"suspect_id = '{person_id}'")
+    if executeQuery(query) is None:
+        log.error(f"Failed to query for searches where person '{person_id}' was a suspect")
+        return ERROR
+    searches = cursor.fetchall()
+    if len(searches) != 0:
+        log.error(f"{len(searches)} searches refer to this person")
+        log.info(f"Delete these searches before attempting to delete person '{person_id}'")
+        return ERROR
+
+    query = db.delete("Person", where = f"person_id = '{person_id}'")
+    if executeQuery(query) is None:
+        log.error(f"Failed to delete person '{person_id}'")
+        return ERROR
+
+    log.success(f"Deleted person '{person_id}'")
+    return SUCCESS
+
+def delete_complaint(args):
+    if len(args) != 1:
+        log.error("Incorrect number of arguments")
+        usage_delete()
+        return ERROR
+    complaint_id = args[0]
+
+    complaint = find_complaint(complaint_id)
+    if complaint is None:
+        return ERROR
+
+    if len(complaint) == 0:
+        log.error(f"No such complaint with ID '{complaint_id}'")
+        return ERROR
+
+    incident_id = complaint[0][1]
+    incident = find_incident(incident_id)
+    if incident is None:
+        return ERROR
+
+    if len(incident) == 0:
+        log.error(f"No such incident with ID '{incident_id}' corresponding to complaint '{complaint_id}'")
+        return ERROR
+
+    query = db.delete("Complaint", where = f"complaint = '{complaint}'")
+    if executeQuery(query) is None:
+        log.error(f"Failed to delete complaint with ID '{complaint_id}'")
+        return ERROR
+
+    query = db.delete("Incident", where = f"incident_id = '{incident_id}'")
+    if executeQuery(query) is None:
+        log.error(f"Failed to delete incident with ID '{incident_id}'")
+        return ERROR
+
+    log.success(f"Deleted complaint '{complaint_id}'")
+    return SUCCESS
+
+def delete_crime(args):
+    if len(args) != 1:
+        log.error("Incorrect number of arguments")
+        usage_delete()
+        return ERROR
+    crime_id = args[0]
+
+    crime = find_crime(crime_id)
+    if crime is None:
+        return ERROR
+
+    if len(crime) == 0:
+        log.error(f"No such crime with ID '{crime_id}'")
+        return ERROR
+
+    incident_id = crime[0][1]
+    incident = find_incident(incident_id)
+    if incident is None:
+        return ERROR
+
+    if len(incident) == 0:
+        log.error(f"No such incident with ID '{incident_id}' corresponding to crime '{crime_id}'")
+        return ERROR
+
+    query = db.delete("Crime", where = f"crime_id = '{crime_id}'")
+    if executeQuery(query) is None:
+        log.error(f"Failed to delete crime with ID '{crime_id}'")
+        return ERROR
+
+    query = db.delete("Incident", where = f"incident_id = '{incident_id}'")
+    if executeQuery(query) is None:
+        log.error(f"Failed to delete incident with ID '{incident_id}'")
+        return ERROR
+
+    log.success(f"Deleted crime '{crime_id}'")
+    return SUCCESS
+
+def delete_search(args):
+    if len(args) != 1:
+        log.error("Incorrect number of arguments")
+        usage_delete()
+        return ERROR
+    search_id = args[0]
+
+    search = find_search(search_id)
+    if search is None:
+        return ERROR
+
+    if len(search) == 0:
+        log.error(f"No such search with ID '{search_id}'")
+        return ERROR
+
+    incident_id = search[0][1]
+    incident = find_incident(incident_id)
+    if incident is None:
+        return ERROR
+
+    if len(incident) == 0:
+        log.error(f"No such incident with ID '{search_id}' corresponding to search '{search_id}'")
+        return ERROR
+
+    query = db.delete("Search", where = f"search_id = '{search_id}'")
+    if executeQuery(query) is None:
+        log.error(f"Failed to delete search with ID '{search_id}'")
+        return ERROR
+
+    query = db.delete("Incident", where = f"incident_id = '{incident_id}'")
+    if executeQuery(query) is None:
+        log.error(f"Failed to delete incident with ID '{incident_id}'")
+        return ERROR
+
+    log.success(f"Deleted search '{search_id}'")
+    return SUCCESS
+
+DELETE_HELP = {
+    "code":      "Delete a code from a crime enforcement organization",
+    "complaint": "Delete a police complaint record",
+    "crime":     "Delete a crime record",
+    "search":    "Delete a suspect search record",
+    "location":  "Delete a location",
+    "person":    "Delete a person",
+    "help":      "Show this message",
+}
+
+def help_delete(args):
+    log.info(f"{PROGRAM} delete code      <code> <organization> : {DELETE_HELP['code']}")
+    log.info(f"{PROGRAM} delete location  <location_id>         : {DELETE_HELP['location']}")
+    log.info(f"{PROGRAM} delete person    <person_id>           : {DELETE_HELP['person']}")
+    log.info(f"{PROGRAM} delete complaint <complaint_id>        : {DELETE_HELP['complaint']}")
+    log.info(f"{PROGRAM} delete crime     <crime_id>            : {DELETE_HELP['crime']}")
+    log.info(f"{PROGRAM} delete search    <search_id>           : {DELETE_HELP['search']}")
+    log.info(f"{PROGRAM} delete help                            : {DELETE_HELP['help']}")
+
+DELETE_COMMANDS = {
+    "code":      delete_code,
+    "location":  delete_location,
+    "person":    delete_person,
+    "complaint": delete_complaint,
+    "crime":     delete_crime,
+    "search":    delete_search,
+    "help":      help_delete,
+}
+
+DELETE_MIN_ARGC = 0
+DELETE_MAX_ARGC = 3
+
+def delete(args):
+    argc = len(args)
+    if argc < DELETE_MIN_ARGC or argc > DELETE_MAX_ARGC:
+        log.error("Incorrect number of arguments")
+        usage_delete()
+        return ERROR
+
+    # default
+    command = "help"
+    if argc > 0:
+        command = args[0]
+    args = args[1:]
+
+    if command not in DELETE_COMMANDS:
+        log.error(f"Unknown command '{command}'")
+        usage_delete()
+        return ERROR
+
+    return DELETE_COMMANDS[command](args)
+
+# ===================== UPDATE ===================== #
+
+def usage_update():
+    log.info(f"{PROGRAM} update <command> [arguments]")
+    log.info(f"Try '{PROGRAM} update help'")
+
+def prompt_table_update(table, ignore = []):
+    log.info(f"{table}:")
+    updates = {}   # new attribute values
+    for attribute in TABLES[table]:
+        if attribute in ignore:
+            continue
+        if yes(f"Update '{attribute}'?"):
+            print(attribute)
+            updates[attribute] = prompt_attribute(table, attribute)
+    return updates
+
+def update_code(args):
+    if len(args) != 2:
+        log.error("Incorrect number of arguments")
+        usage_update()
+        return ERROR
+    code = args[0]
+    organization = args[1]
+
+    if not code_exists(code, organization):
+        log.error(f"No such '{organization}' code '{code}'")
+        return ERROR
+
+    updates = prompt_table_update("Code", ignore = ["code", "organization"])
+
+    if len(updates) != 0:
+        query = db.update("Code", where = f"code = '{code}' and organization = '{organization}'", **updates)
+        if executeQuery(query) is None:
+            log.error(f"Failed to update '{organization}' code '{code}'")
+            return ERROR
+        log.success(f"Updated '{organization}' code '{code}'")
+
+    return SUCCESS
+
+def update_location(args):
+    if len(args) != 1:
+        log.error("Incorrect number of arguments")
+        usage_update()
+        return ERROR
+    location_id = args[0]
+
+    if not location_exists(location_id):
+        log.error(f"No such location with ID '{location_id}'")
+        return ERROR
+
+    updates = prompt_table_update("Location", ignore = ["location_id"])
+
+    if len(updates) != 0:
+        query = db.update("Location", where = f"location_id = '{location_id}'", **updates)
+        if executeQuery(query) is None:
+            log.error(f"Failed to update location '{location_id}'")
+            return ERROR
+        log.success(f"Updated location '{location_id}'")
+
+    return SUCCESS
+
+def update_person(args):
+    if len(args) != 1:
+        log.error("Incorrect number of arguments")
+        usage_update()
+        return ERROR
+    person_id = args[0]
+
+    if not person_exists(person_id):
+        log.error(f"No such person with ID '{person_id}'")
+        return ERROR
+
+    updates = prompt_table_update("Person", ignore = ["person_id"])
+
+    if len(updates) != 0:
+        query = db.update("Person", where = f"person_id = '{person_id}'", **updates)
+        if executeQuery(query) is None:
+            log.error(f"Failed to update person '{person_id}'")
+            return ERROR
+        log.success(f"Updated person '{person_id}'")
+
+    return SUCCESS
+
+def update_complaint(args):
+    if len(args) != 1:
+        log.error("Incorrect number of arguments")
+        usage_update()
+        return ERROR
+    complaint_id = args[0]
+
+    complaint = find_complaint(complaint_id)
+    if complaint is None:
+        return ERROR
+
+    if len(complaint) == 0:
+        log.error(f"No such complaint with ID '{complaint_id}'")
+        return ERROR
+
+    incident_id = complaint[0][1]
+    incident = find_incident(incident_id)
+    if incident is None:
+        return ERROR
+
+    if len(incident) == 0:
+        log.error(f"No such incident with ID '{incident_id}' corresponding to complaint '{complaint_id}'")
+        return ERROR
+
+    incident_updates = prompt_table_update("Incident", ignore = ["incident_id"])
+    complaint_updates = prompt_table_update("Complaint", ignore = ["incident_id", "complaint_id"])
+
+    # check if the updates break any foreign keys
+    if "location_id" in incident_updates:
+        location_id = incident_updates["location_id"]
+        if not location_exists(location_id):
+            log.error(f"No such location with ID '{location_id}'")
+            return ERROR
+
+    if "code" in complaint_updates or "organization" in complaint_updates:
+        code = complaint_updates["code"]
+        organization = complaint_updates["organization"]
+        if not code_exists(code, organization):
+            log.error(f"No such '{organization}' code '{code}'")
+            return ERROR
+
+    # apply updates if there are any
+    if len(incident_updates) != 0:
+        query = db.update("Incident", where = f"incident_id = '{incident_id}'", **incident_updates)
+        if executeQuery(query) is None:
+            log.error(f"Failed to update incident '{incident_id}'")
+            return ERROR
+        log.success(f"Updated incident '{incident_id}'")
+
+    if len(complaint_updates) != 0:
+        query = db.update("Complaint", where = f"complaint_id = '{complaint_id}'", **complaint_updates)
+        if executeQuery(query) is None:
+            log.error(f"Failed to update complaint '{complaint_id}'")
+            return ERROR
+        log.success(f"Updated complaint '{complaint_id}'")
+
+    return SUCCESS
+
+def update_crime(args):
+    if len(args) != 1:
+        log.error("Incorrect number of arguments")
+        usage_update()
+        return ERROR
+    crime_id = args[0]
+
+    crime = find_crime(crime_id)
+    if crime is None:
+        return ERROR
+
+    if len(crime) == 0:
+        log.error(f"No such crime with ID '{crime_id}'")
+        return ERROR
+
+    incident_id = crime[0][1]
+    incident = find_incident(incident_id)
+    if incident is None:
+        return ERROR
+
+    if len(incident) == 0:
+        log.error(f"No such incident with ID '{incident_id}' corresponding to crime '{crime_id}'")
+        return ERROR
+
+    incident_updates = prompt_table_update("Incident", ignore = ["incident_id"])
+    crime_updates = prompt_table_update("Crime", ignore = ["incident_id", "crime_id"])
+
+    # check if the updates break any foreign keys
+    if "location_id" in incident_updates:
+        location_id = incident_updates["location_id"]
+        if not location_exists(location_id):
+            log.error(f"No such location with ID '{location_id}'")
+            return ERROR
+
+    if "code" in crime_updates or "organization" in crime_updates:
+        code = crime_updates["code"]
+        organization = crime_updates["organization"]
+        if not code_exists(code, organization):
+            log.error(f"No such '{organization}' code '{code}'")
+            return ERROR
+
+    if "victim_id" in crime_updates:
+        victim_id = crime_updates["victim_id"]
+        if not person_exists(victim_id):
+            log.error(f"No such victim with ID '{victim_id}'")
+            return ERROR
+
+    # apply updates if there are any
+    if len(incident_updates) != 0:
+        query = db.update("Incident", where = f"incident_id = '{incident_id}'", **incident_updates)
+        if executeQuery(query) is None:
+            log.error(f"Failed to update incident '{incident_id}'")
+            return ERROR
+        log.success(f"Updated incident '{incident_id}'")
+
+    if len(crime_updates) != 0:
+        query = db.update("Complaint", where = f"crime_id = '{crime_id}'", **crime_updates)
+        if executeQuery(query) is None:
+            log.error(f"Failed to update complaint '{crime_id}'")
+            return ERROR
+        log.success(f"Updated crime '{crime_id}'")
+
+    return SUCCESS
+
+def update_search(args):
+    if len(args) != 1:
+        log.error("Incorrect number of arguments")
+        usage_update()
+        return ERROR
+    search_id = args[0]
+
+    search = find_search(search_id)
+    if search is None:
+        return ERROR
+
+    if len(search) == 0:
+        log.error(f"No such search with ID '{search_id}'")
+        return ERROR
+
+    incident_id = search[0][1]
+    incident = find_incident(incident_id)
+    if incident is None:
+        return ERROR
+
+    if len(incident) == 0:
+        log.error(f"No such incident with ID '{search_id}' corresponding to search '{search_id}'")
+        return ERROR
+
+    incident_updates = prompt_table_update("Incident", ignore = ["incident_id"])
+    search_updates = prompt_table_update("Search", ignore = ["search_id", "incident_id"])
+
+    # check if the updates break any foreign keys
+    if "location_id" in incident_updates:
+        location_id = incident_updates["location_id"]
+        if not location_exists(location_id):
+            log.error(f"No such location with ID '{location_id}'")
+            return ERROR
+
+    if "suspect_id" in search_updates:
+        suspect_id = search_updates["suspect_id"]
+        if not person_exists(suspect_id):
+            log.error(f"No such suspect with ID '{suspect_id}'")
+            return ERROR
+
+    # apply updates if there are any
+    if len(incident_updates) != 0:
+        query = db.update("Incident", where = f"incident_id = '{incident_id}'", **incident_updates)
+        if executeQuery(query) is None:
+            log.error(f"Failed to update incident '{incident_id}'")
+            return ERROR
+        log.success(f"Updated incident '{incident_id}'")
+
+    if len(search_updates) != 0:
+        query = db.update("Search", where = f"search_id = '{search_id}'", **search_updates)
+        if executeQuery(query) is None:
+            log.error(f"Failed to update search '{search_id}'")
+            return ERROR
+        log.success(f"Updated search '{search_id}'")
+
+    return SUCCESS
+
+UPDATE_HELP = {
+    "code":      "Update information about a crime code",
+    "complaint": "Update details of a police complaint",
+    "crime":     "Update details of a crime record",
+    "search":    "Update details of a suspect search",
+    "location":  "Update location details",
+    "person":    "Update information about a person",
+    "help":      "Show this message",
+}
+
+def help_update(args):
+    log.info(f"{PROGRAM} update code      <code> <organization> : {UPDATE_HELP['code']}")
+    log.info(f"{PROGRAM} update location  <location_id>         : {UPDATE_HELP['location']}")
+    log.info(f"{PROGRAM} update person    <person_id>           : {UPDATE_HELP['person']}")
+    log.info(f"{PROGRAM} update complaint <complaint_id>        : {UPDATE_HELP['complaint']}")
+    log.info(f"{PROGRAM} update crime     <crime_id>            : {UPDATE_HELP['crime']}")
+    log.info(f"{PROGRAM} update search    <search_id>           : {UPDATE_HELP['search']}")
+    log.info(f"{PROGRAM} update help                            : {UPDATE_HELP['help']}")
+
+UPDATE_COMMANDS = {
+    "code":      update_code,
+    "location":  update_location,
+    "person":    update_person,
+    "complaint": update_complaint,
+    "crime":     update_crime,
+    "search":    update_search,
+    "help":      help_update,
+}
+
+UPDATE_MIN_ARGC = 0
+UPDATE_MAX_ARGC = 3
+
+def update(args):
+    argc = len(args)
+    if argc < UPDATE_MIN_ARGC or argc > UPDATE_MAX_ARGC:
+        log.error("Incorrect number of arguments")
+        usage_update()
+        return ERROR
+
+    # default
+    command = "help"
+    if argc > 0:
+        command = args[0]
+    args = args[1:]
+
+    if command not in UPDATE_COMMANDS:
+        log.error(f"Unknown command '{command}'")
+        usage_update()
+        return ERROR
+
+    return UPDATE_COMMANDS[command](args)
+
+# ================== BACKGROUND ================== #
 
 def prompt_options(options, message=None):
     if message is not None:
@@ -538,7 +1200,7 @@ def background():
 
     return SUCCESS
 
-# --------------------- HELP --------------------- #
+# ===================== HELP ===================== #
 
 HELP = {
     "help":   "Show this message",
@@ -547,24 +1209,25 @@ HELP = {
     "clear":  "Delete all entries in tables",
     "clean":  "Drop all tables from database",
     "add":    "Add entries to the database",
+    "delete": "Delete entries from the database",
 }
 
-def help():
+def help(args):
     log.info("--------------------------------------------------------------")
-    log.info(f"Usage: {INTERPRETER} {PROGRAM} <command> [arguments]")
+    log.info(f"Usage: {PROGRAM} <command> [arguments]")
     log.info("--------------------------------------------------------------")
 
-    log.info(f"{INTERPRETER} {PROGRAM} help   : {HELP['help']}")
-    log.info(f"{INTERPRETER} {PROGRAM} create : {HELP['create']}")
-    log.info(f"{INTERPRETER} {PROGRAM} load   : {HELP['load']}")
-    log.info(f"{INTERPRETER} {PROGRAM} clear  : {HELP['clear']}")
-    log.info(f"{INTERPRETER} {PROGRAM} clean  : {HELP['clean']}")
-    log.info(f"{INTERPRETER} {PROGRAM} add    : {HELP['add']}")
+    log.info(f"{PROGRAM} help   : {HELP['help']}")
+    log.info(f"{PROGRAM} create : {HELP['create']}")
+    log.info(f"{PROGRAM} load   : {HELP['load']}")
+    log.info(f"{PROGRAM} clear  : {HELP['clear']}")
+    log.info(f"{PROGRAM} clean  : {HELP['clean']}")
+    log.info(f"{PROGRAM} add    : {HELP['add']}")
+    log.info(f"{PROGRAM} delete : {HELP['add']}")
 
     log.info("--------------------------------------------------------------")
 
     log.note("TODO:")
-    log.note("finish add location ")
     log.note("Remove nulls from database by adding default values ex last_updated")
     log.note("add in the modify query statements ")
     log.note("add in the show statements for querying ")
@@ -577,10 +1240,12 @@ def help():
 
     log.note("add in the extra attributes into the database to hit 50 (maybe) ")
     log.note("Do a datamine ")
+    log.note("add flags to allow for updates like -d for descripti ")
+
 
     return SUCCESS
 
-# ===================== MAIN ===================== #
+# ===================== CRIME ===================== #
 
 COMMANDS = {
     "help":   help,
@@ -590,35 +1255,43 @@ COMMANDS = {
     "clear":  clear,
     "add":    add,
     "background": background,
+    "delete": delete,
+    "update": update,
 }
 
-MIN_ARGC = 1
-MAX_ARGC = 3
+CRIME_MIN_ARGC = 1
 
-
-def usage():
-    log.info(f"Usage: {INTERPRETER} {PROGRAM} <command> [arguments]")
-    log.info(f"Try '{INTERPRETER} {PROGRAM} help'")
+def usage_crime():
+    log.info(f"Usage: {PROGRAM} <command> [arguments]")
+    log.info(f"Try '{PROGRAM} help'")
     return SUCCESS
 
-if argc < MIN_ARGC or argc > MAX_ARGC:
-    log.error("Incorrect number of arguments")
-    usage()
-    exit(ERROR)
+def crime():
+    argc = len(argv)
 
-if argc == MIN_ARGC:
+    if argc < CRIME_MIN_ARGC:
+        log.error("Incorrect number of arguments")
+        usage_crime()
+        return ERROR
+
+    # default
     command = "help"
-else:
-    command = argv[1]
+    if argc > 1:
+        command = argv[1]
 
-if command not in COMMANDS:
-    log.error(f"Unknown command '{command}'")
-    usage()
-    exit(ERROR)
+    if command not in COMMANDS:
+        log.error(f"Unknown command '{command}'")
+        usage_crime()
+        return ERROR
+
+    args = argv[2:]
+    return COMMANDS[command](args)
+
+# ===================== MAIN ===================== #
 
 connection, cursor = connectDB()
-result = COMMANDS[command]()
 
+result = crime()
 if result == SUCCESS:
     connection.commit()
 

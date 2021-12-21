@@ -45,7 +45,7 @@ def insert(table, **attributes):
 
     return query
 
-def select(table, where = "", attributes = None):
+def select(table, where, attributes = None):
     if not tableExists(table):
         log.error(f"No such table '{table}'")
         return
@@ -60,4 +60,33 @@ def select(table, where = "", attributes = None):
         project = ", ".join(attributes)
 
     query = f'SELECT {project} FROM {table} WHERE {where};'
+    return query
+
+def delete(table, where):
+    if not tableExists(table):
+        log.error(f"No such table '{table}'")
+        return
+
+    query = f'DELETE FROM {table} WHERE {where};'
+    return query
+
+def update(table, where, **attributes):
+    if not tableExists(table):
+        log.error(f"No such table '{table}'")
+        return
+
+    for a in attributes:
+        if not attributeExists(table, a):
+            log.error(f"No such attribute '{a}' in table '{table}'")
+            return
+
+    columns = list(attributes.keys())
+    values = enhancedCleanRow(attributes.values())
+
+    updates = []
+    for i in range(len(columns)):
+        updates.append(f"{columns[i]} = {values[i]}")
+    updates = ", ".join(updates)
+
+    query = f'UPDATE {table} SET {updates} WHERE {where};'
     return query
