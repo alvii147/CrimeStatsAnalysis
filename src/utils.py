@@ -1,9 +1,12 @@
 import csv
 import log
 import json
+import db
 
 from datetime import date
 from MySQLutils import connectDB, closeDB
+
+TABLES = db.TABLES
 
 def read_csv(filename, ignore=1):
     '''
@@ -51,11 +54,6 @@ def readJSON(path):
 
     with open(path, "r") as file:
         return json.loads(file.read())
-
-try:
-    TABLES = readJSON("tables.json")
-except:
-    log.warning('Unable to read local table meta data')
 
 def isNull(s):
     '''

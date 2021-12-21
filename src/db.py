@@ -1,9 +1,52 @@
 import log
-import utils
-
 from decimal import Decimal
 
-TABLES = utils.readJSON("tables.json")
+import utils
+from MySQLutils import connectDB, closeDB
+
+connection, cursor = connectDB()
+
+TABLES_LIST = [
+    'Crime',
+    'Complaint',
+    'Search',
+    'Incident',
+    'Location',
+    'Code',
+    'Person',
+    'CrimeView',
+    'ComplaintView',
+    'SearchView',
+]
+
+TABLES = {}
+for table in TABLES_LIST:
+    query = 'SELECT'
+    query += 'COLUMN_NAME, '
+    query += 'DATA_TYPE, '
+    query += 'CHARACTER_MAXIMUM_LENGTH, '
+    query += 'NUMERIC_PRECISION, '
+    query += 'NUMERIC_SCALE '
+    query += f'WHERE TABLE_NAME=\'{table}\' AND TABLE_SCHEMA=DATABASE() '
+    query += 'ORDER BY ORDINAL_POSITION ASC;'
+
+    cursor.execute(query)
+    output = cursor.fetchall()
+
+    md = {}
+    for row in output:
+        column_name = row[0]
+        data_type = row[1].decode("utf-8")
+        if data_type.upper() == 'VARCHAR':
+            md[column_name] = f'{data_type.upper()}({row[2]})'
+        elif data_type.upper() == 'INT' or data_type.upper() == 'TINYINT':
+            md[column_name] = f'{data_type.upper()}({row[3]})'
+        elif data_type.upper() == 'DECIMAL':
+            md[column_name] = f'{data_type.upper()}({row[3]}, {row[4]})'
+        else:
+            md[column_name] = data_type.upper()
+
+    TABLES[table] = md
 
 def tableStats():
     num_attributes = 0
@@ -86,3 +129,5 @@ def update(table, where, **attributes):
 
     query = f'UPDATE {table} SET {updates} WHERE {where};'
     return query
+
+closeDB(connection, cursor)
