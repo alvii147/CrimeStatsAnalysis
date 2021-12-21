@@ -1230,7 +1230,8 @@ def background(args):
     if selection_idx == len(options):
         return ERROR
 
-    person_id = output[selection_idx][0]
+    person = output[selection_idx]
+    person_id = person[0]
 
     crime_view_attributes = db.TABLES['CrimeView'].keys()
     query = db.select(
@@ -1250,13 +1251,25 @@ def background(args):
     executeQuery(query)
     person_searches = cursor.fetchall()
 
-    log.info('Crimes')
+    print('')
+    log.info('Person Information')
+    print(person)
+
+    print('')
+    log.info('Crimes:')
     for i, row in enumerate(person_crimes):
         log.info(crime_view_attributes[i] + ': ' + row)
 
-    log.info('Searches')
-    for row in person_searches:
+    if len(person_crimes) < 1:
+        log.info('No crime records found')
+
+    print('')
+    log.info('Stop & Searches:')
+    for i, row in enumerate(person_searches):
         log.info(search_view_attributes[i] + ': ' + row)
+
+    if len(person_searches) < 1:
+        log.info('No crime records found')
 
     return SUCCESS
 
