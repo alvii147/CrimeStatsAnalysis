@@ -49,11 +49,11 @@ def configDB(path=Path(__file__).parent / 'config.ini', sec='mysqlconfig'):
                 config[var_name] = input(f'{var_name}: ')
         else:
             # if password config variable found, throw warning
-            if var_name == 'password':
-                log.warning(
-                    'Storing plain text format password in config file ' \
-                    'is not recommended.'
-                )
+            #if var_name == 'password':
+            #    log.warning(
+            #        'Storing plain text format password in config file ' \
+            #        'is not recommended.'
+            #    )
 
             config[var_name] = var_value
 
