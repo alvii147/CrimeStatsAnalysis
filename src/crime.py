@@ -1232,21 +1232,31 @@ def background(args):
 
     person_id = output[selection_idx][0]
 
-    query = db.select('CrimeView', where=f'victim_id = {person_id}')
+    crime_view_attributes = db.TABLES['CrimeView'].keys()
+    query = db.select(
+        'CrimeView',
+        where=f'victim_id = {person_id}',
+        attributes=crime_view_attributes,
+    )
     executeQuery(query)
     person_crimes = cursor.fetchall()
 
-    query = db.select('Search', where=f'suspect_id = {person_id}')
+    search_view_attributes = db.TABLES['SearchView'].keys()
+    query = db.select(
+        'SearchView',
+        where=f'suspect_id = {person_id}',
+        attributes=search_view_attributes,
+    )
     executeQuery(query)
     person_searches = cursor.fetchall()
 
     log.info('Crimes')
-    for row in person_crimes:
-        log.info(row)
+    for i, row in enumerate(person_crimes):
+        log.info(crime_view_attributes[i] + ': ' + row)
 
     log.info('Searches')
     for row in person_searches:
-        log.info(row)
+        log.info(search_view_attributes[i] + ': ' + row)
 
     return SUCCESS
 
