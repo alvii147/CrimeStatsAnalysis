@@ -52,6 +52,8 @@ def readJSON(path):
     with open(path, "r") as file:
         return json.loads(file.read())
 
+TABLES = readJSON("tables.json")
+
 def isNull(s):
     '''
     Check if string is 'NULL'.
@@ -223,3 +225,37 @@ def yes(message):
 
 def no(message):
     return not yes(message)
+
+def prompt_attribute(table, attribute):
+    type = TABLES[table][attribute]
+    value = input(f"[{type}] {attribute}: ")
+
+    if isQuoted(value, quote = "\'"):
+        value = stripQuotes(value, quote = "\'")
+    elif isQuoted(value, quote = "\""):
+        value = stripQuotes(value, quote = "\"")
+
+    if value == "":
+        value = 'NULL'
+
+    return value
+
+def prompt_table(table, ignore = []):
+    log.info(f"{table}:")
+    record = {}
+    for attribute in TABLES[table]:
+        if attribute in ignore:
+            continue
+        record[attribute] = prompt_attribute(table, attribute)
+    return record
+
+def prompt_table_update(table, ignore = []):
+    log.info(f"{table}:")
+    updates = {}   # new attribute values
+    for attribute in TABLES[table]:
+        if attribute in ignore:
+            continue
+        if yes(f"Update '{attribute}'?"):
+            print(attribute)
+            updates[attribute] = prompt_attribute(table, attribute)
+    return updates

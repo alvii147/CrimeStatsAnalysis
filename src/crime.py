@@ -6,11 +6,10 @@ import db
 
 from sys import argv
 from MySQLutils import connectDB, closeDB
-from utils import consoleFriendly, isQuoted, stripQuotes, yes, no
+from utils import no, prompt_attribute, prompt_table, prompt_table_update
 
 INTERPRETER = "python3"
 PROGRAM = f"{INTERPRETER} {os.path.basename(argv[0])}"
-TABLES = utils.readJSON("tables.json")
 SUCCESS = 0
 ERROR = -1
 
@@ -308,29 +307,6 @@ def clear(args):
     utils.runQueries("SQL/clear.sql")
 
 # ===================== ADD ===================== #
-
-def prompt_attribute(table, attribute):
-    type = TABLES[table][attribute]
-    value = input(f"[{type}] {attribute}: ")
-
-    if isQuoted(value, quote = "\'"):
-        value = stripQuotes(value, quote = "\'")
-    elif isQuoted(value, quote = "\""):
-        value = stripQuotes(value, quote = "\"")
-
-    if value == "":
-        value = 'NULL'
-
-    return value
-
-def prompt_table(table, ignore = []):
-    log.info(f"{table}:")
-    record = {}
-    for attribute in TABLES[table]:
-        if attribute in ignore:
-            continue
-        record[attribute] = prompt_attribute(table, attribute)
-    return record
 
 def add_location_help_message():
     log.info(f"Please add a new location using '{PROGRAM} add location'")
@@ -832,17 +808,6 @@ def usage_update():
     log.info(f"{PROGRAM} update <command> [arguments]")
     log.info(f"Try '{PROGRAM} update help'")
 
-def prompt_table_update(table, ignore = []):
-    log.info(f"{table}:")
-    updates = {}   # new attribute values
-    for attribute in TABLES[table]:
-        if attribute in ignore:
-            continue
-        if yes(f"Update '{attribute}'?"):
-            print(attribute)
-            updates[attribute] = prompt_attribute(table, attribute)
-    return updates
-
 def update_code(args):
     if len(args) != 2:
         log.error("Incorrect number of arguments")
@@ -1175,8 +1140,7 @@ def background():
         )
 
         cursor.execute(query)
-        print(query)
-        print(cursor.fetchall())
+        output = cursor.fetchall()
     else:
         first_name = input('First Name: ')
         last_name = input('Last Name: ')
@@ -1195,8 +1159,13 @@ def background():
         )
 
         cursor.execute(query)
-        print(query)
-        print(cursor.fetchall())
+        output = cursor.fetchall()
+
+    message = 'Select person to run a background check on'
+    selection_idx = prompt_options(
+        [' '.join([o[1].strip(), o[2].strip()]) for o in output],
+        message=message
+    )
 
     return SUCCESS
 
