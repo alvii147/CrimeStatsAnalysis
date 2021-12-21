@@ -244,7 +244,7 @@ def prompt_table(table, TABLES, ignore = []):
     for attribute in TABLES[table]:
         if attribute in ignore:
             continue
-        record[attribute] = prompt_attribute(table, attribute)
+        record[attribute] = prompt_attribute(table, attribute, TABLES)
     return record
 
 def prompt_table_update(table, TABLES, ignore = []):
@@ -255,7 +255,7 @@ def prompt_table_update(table, TABLES, ignore = []):
             continue
         if yes(f"Update '{attribute}'?"):
             print(attribute)
-            updates[attribute] = prompt_attribute(table, attribute)
+            updates[attribute] = prompt_attribute(table, attribute, TABLES)
     return updates
 
 def prompt_options(options, message=None):
