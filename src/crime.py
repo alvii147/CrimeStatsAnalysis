@@ -1266,7 +1266,7 @@ def background(args):
     for row in person_crimes:
         log.info('---------------------------------------------')
         for i, val in enumerate(row):
-            log.info(crime_view_attributes[i] + ': ' + str(row))
+            log.info(crime_view_attributes[i] + ': ' + str(val))
 
     if len(person_crimes) < 1:
         log.info('No crime records found')
@@ -1276,7 +1276,7 @@ def background(args):
     for i, row in enumerate(person_searches):
         log.info('---------------------------------------------')
         for i, val in enumerate(row):
-            log.info(search_view_attributes[i] + ': ' + str(row))
+            log.info(search_view_attributes[i] + ': ' + str(val))
 
     if len(person_searches) < 1:
         log.info('No crime records found')
