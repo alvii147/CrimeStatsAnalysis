@@ -49,7 +49,7 @@ def storeTableMetaData(path='tables.json'):
     for table in TABLES:
         query = db.select(
             'INFORMATION_SCHEMA.COLUMNS',
-            where=f"WHERE TABLE_NAME='{table}' AND TABLE_SCHEMA=DATABASE()",
+            where=f"TABLE_NAME='{table}' AND TABLE_SCHEMA=DATABASE()",
             attributes=[
                 'COLUMN_NAME',
                 'DATA_TYPE',
