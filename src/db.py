@@ -27,6 +27,7 @@ for table in TABLES_LIST:
     query += 'CHARACTER_MAXIMUM_LENGTH, '
     query += 'NUMERIC_PRECISION, '
     query += 'NUMERIC_SCALE '
+    query += 'FROM INFORMATION_SCHEMA.COLUMNS '
     query += f'WHERE TABLE_NAME=\'{table}\' AND TABLE_SCHEMA=DATABASE() '
     query += 'ORDER BY ORDINAL_POSITION ASC;'
 
