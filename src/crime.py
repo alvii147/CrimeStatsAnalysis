@@ -6,7 +6,7 @@ import utils
 
 from sys import argv
 from MySQLutils import connectDB, closeDB
-from utils import no, prompt_attribute, prompt_table, prompt_table_update, prompt_options
+from utils import yes, no, prompt_attribute, prompt_table, prompt_table_update, prompt_options
 
 INTERPRETER = "python3"
 PROGRAM = f"{INTERPRETER} {os.path.basename(argv[0])}"
@@ -1171,13 +1171,13 @@ def background_get_search_method():
     return ERROR
 
 BACKGROUND_HELP = {
-    "id":       "Run background check based on ID",
+    "id":       "Run background check based on person ID",
     "name":     "Run background check based on first and last names",
 }
 
 def help_background():
-    log.info(f"{PROGRAM} background id      : {BACKGROUND_HELP['id']}")
-    log.info(f"{PROGRAM} background name    : {BACKGROUND_HELP['name']}")
+    log.info(f"{PROGRAM} background id   : {BACKGROUND_HELP['id']}")
+    log.info(f"{PROGRAM} background name : {BACKGROUND_HELP['name']}")
 
 def usage_background():
     log.info(f"{PROGRAM} background <command> [arguments]")
@@ -1203,12 +1203,15 @@ def background(args):
         command = args[0]
         if command not in BACKGROUND_COMMANDS:
             log.error(f"Unknown command '{command}'")
-            usage_update()
+            usage_background()
             return ERROR
     else:
         command = background_get_search_method()
         if isinstance(command, int) and command == ERROR:
             return ERROR
+
+    if command == "help":
+        return BACKGROUND_COMMANDS["help"]()
 
     query = BACKGROUND_COMMANDS[command]()
     if isinstance(query, int) and query == ERROR:
@@ -1261,15 +1264,16 @@ def background(args):
 
     print('')
     log.info('---------------------------------------------------------')
-    log.info(f'Person information for {person_name}')
+    log.info(f'Person information for {person_name}:')
     log.info('---------------------------------------------------------')
     for i, val in enumerate(person):
         log.info(person_attributes[i] + ': ' + str(val))
     log.info('---------------------------------------------------------')
 
     print('')
+    log.note("Aren't people victims in crimes, not the criminal?")
     log.info('---------------------------------------------------------')
-    log.info(f'Crimes committed by {person_name}')
+    log.info(f'{person_name} was a victim of the following crimes:')
     log.info('---------------------------------------------------------')
     for row in person_crimes:
         for i, val in enumerate(row):
@@ -1281,17 +1285,107 @@ def background(args):
 
     print('')
     log.info('---------------------------------------------------------')
-    log.info(f'Stop & searches conducted on {person_name}')
+    log.info(f'{person_name} was searched as a suspect of the following crimes:')
     log.info('---------------------------------------------------------')
     for i, row in enumerate(person_searches):
         for i, val in enumerate(row):
             log.info(search_view_attributes[i] + ': ' + str(val))
-            log.info('---------------------------------------------------------')
+        log.info('---------------------------------------------------------')
 
     if len(person_searches) < 1:
         log.info('No stop & search records found')
 
     return SUCCESS
+
+# ================== SHOW ================== #
+
+def print_table(records):
+    paddings = [0] * len(records[0])
+    for r in range(len(records)):
+        for c in range(len(records[r])):
+            value = records[r][c]
+            if value != None:
+                paddings[c] = max(paddings[c], len(value))
+
+    for r in range(len(records)):
+        print("|", end = "")
+        for c in range(len(records[r])):
+            print(" %-*s |" % (paddings[c], str(records[r][c])), end = "")
+        print("")
+
+def show_code(args):
+    department = None
+    code = None
+
+    if yes("Do you know the crime code?"):
+        code = input("Please enter the code name: ")
+    if yes("Do you know the name of the crime enforcement department?"):
+        department = input("Please enter the department name: ")
+
+    if code == None and department == None:
+        query = "SELECT * from Code;"
+    elif code == None and department != None:
+        query = db.select("Code", f"organization = '{department}'")
+    elif code != None and department == None:
+        query = db.select("Code", f"code = '{code}'")
+    else:
+        query = db.select("Code", f"code = '{code}' and organization = '{department}'")
+
+    if executeQuery(query) is None:
+        log.error(f"Failed to query for codes")
+        return ERROR
+
+    results = cursor.fetchall()
+    if len(results) == 0:
+        log.info("No codes found")
+
+    headers = [('=' * 20, '=' * 20, '=' * 30, '=' * 30)]
+    headers +=  [('Code','Organization','Category','Description')]
+    headers += [('-' * 20, '-' * 20, '-' * 30, '-' * 30)]
+    footer = [('=' * 20, '=' * 20, '=' * 30, '=' * 30)]
+    print_table(headers + results + footer)
+
+    return SUCCESS
+
+SHOW_HELP = {
+    "code": "Show information about an organization's crime code",
+    "help": "Show this message",
+}
+
+def help_show(args):
+    log.info(f"{PROGRAM} background code : {SHOW_HELP['code']}")
+
+def usage_show():
+    log.info(f"{PROGRAM} background <command> [arguments]")
+    log.info(f"Try '{PROGRAM} background help'")
+
+SHOW_COMMANDS = {
+    "code": show_code,
+    "help": help_show,
+}
+
+SHOW_MIN_ARGC = 0
+SHOW_MAX_ARGC = 1
+
+def show(args):
+    argc = len(args)
+    if argc < SHOW_MIN_ARGC or argc > SHOW_MAX_ARGC:
+        log.error("Incorrect number of arguments")
+        usage_show()
+        return ERROR
+
+    # default
+    command = "help"
+    if argc > 0:
+        command = args[0]
+    args = args[1:]
+
+    if command not in SHOW_COMMANDS:
+        log.error(f"Unknown command '{command}'")
+        usage_show()
+        return ERROR
+
+    return SHOW_COMMANDS[command](args)
 
 # ===================== HELP ===================== #
 
@@ -1303,7 +1397,9 @@ HELP = {
     "clean":        "Drop all tables from database",
     "add":          "Add entries to the database",
     "delete":       "Delete entries from the database",
+    "update":       "Update entries in the database",
     "background":   "Run background check on person",
+    "show":         "Show detailed record information",
 }
 
 def help(args):
@@ -1311,18 +1407,21 @@ def help(args):
     log.info(f"Usage: {PROGRAM} <command> [arguments]")
     log.info("--------------------------------------------------------------")
 
-    log.info(f"{PROGRAM} help   : {HELP['help']}")
-    log.info(f"{PROGRAM} create : {HELP['create']}")
-    log.info(f"{PROGRAM} load   : {HELP['load']}")
-    log.info(f"{PROGRAM} clear  : {HELP['clear']}")
-    log.info(f"{PROGRAM} clean  : {HELP['clean']}")
-    log.info(f"{PROGRAM} add    : {HELP['add']}")
-    log.info(f"{PROGRAM} delete : {HELP['delete']}")
-    log.info(f"{PROGRAM} delete : {HELP['background']}")
+    log.info(f"{PROGRAM} help       : {HELP['help']}")
+    log.info(f"{PROGRAM} create     : {HELP['create']}")
+    log.info(f"{PROGRAM} load       : {HELP['load']}")
+    log.info(f"{PROGRAM} clear      : {HELP['clear']}")
+    log.info(f"{PROGRAM} clean      : {HELP['clean']}")
+    log.info(f"{PROGRAM} add        : {HELP['add']}")
+    log.info(f"{PROGRAM} delete     : {HELP['delete']}")
+    log.info(f"{PROGRAM} update     : {HELP['update']}")
+    log.info(f"{PROGRAM} background : {HELP['background']}")
+    log.info(f"{PROGRAM} show       : {HELP['show']}")
 
     log.info("--------------------------------------------------------------")
 
     log.note("TODO:")
+    log.note("control c")
     log.note("Remove nulls from database by adding default values ex last_updated")
     log.note("add in the modify query statements ")
     log.note("add in the show statements for querying ")
@@ -1337,21 +1436,23 @@ def help(args):
     log.note("Do a datamine ")
     log.note("add flags to allow for updates like -d for description ")
 
+    log.note("control F for all log notes")
 
     return SUCCESS
 
 # ===================== CRIME ===================== #
 
 COMMANDS = {
-    "help":   help,
-    "create": create,
-    "load":   load,
-    "clean":  clean,
-    "clear":  clear,
-    "add":    add,
-    "delete": delete,
-    "update": update,
+    "help":       help,
+    "create":     create,
+    "load":       load,
+    "clean":      clean,
+    "clear":      clear,
+    "add":        add,
+    "delete":     delete,
+    "update":     update,
     "background": background,
+    "show":       show,
 }
 
 CRIME_MIN_ARGC = 1
@@ -1383,12 +1484,12 @@ def crime():
     return COMMANDS[command](args)
 
 # ===================== MAIN ===================== #
-
 connection, cursor = connectDB()
 
-result = crime()
-if result == SUCCESS:
-    connection.commit()
+if __name__ == '__main__':
+    result = crime()
+    if result == SUCCESS:
+        connection.commit()
 
-closeDB(connection, cursor)
-exit(result)
+        closeDB(connection, cursor)
+        exit(result)

@@ -94,7 +94,7 @@ def select(table, where, attributes = None, additional_clauses = ''):
         log.error(f"No such table '{table}'")
         return
 
-    if attributes is None:
+    if attributes is None or len(attributes) == 0:
         project = "*"
     else:
         for a in attributes:
@@ -107,7 +107,11 @@ def select(table, where, attributes = None, additional_clauses = ''):
     return query
 
 def delete(table, where):
-    query = f'DELETE IGNORE FROM {table} WHERE {where};'
+    if not tableExists(table):
+        log.error(f"No such table '{table}'")
+        return
+
+    query = f'DELETE FROM {table} WHERE {where};'
     return query
 
 def update(table, where, **attributes):

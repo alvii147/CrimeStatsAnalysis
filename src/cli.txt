@@ -58,6 +58,9 @@ UPDATE (modify)
 - info about people (based on person_id)
     - potentially the cases that they are involved in (low prio)
 
+BACKGROUND (select queries)
+- perform a background check on a person
+
 SHOW (select queries)
 - person info and which cases they are involved in
 - incidents and who was involved
@@ -66,4 +69,16 @@ SHOW (select queries)
 - look up type and nature of crimes by location (city, borough)
 - look up any incidents that occured based on location
     - flags for in depth info (crime, search, complaint) defaults to just incident info
+
+crime code -> shows crime codes
+
+crime filter code,location,date
+
+
+
+filter code
+filter date
+filter location
 - find all incidents based on a crime code
+- find all crimes within a specific date range
+- find all crimes within a location
