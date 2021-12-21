@@ -12,10 +12,10 @@ def tableStats():
     log.debug(f"{num_attributes} attributes over {len(TABLES)} tables")
 
 def tableExists(table):
-    return table in TABLES
+    return table.upper() == 'INFORMATION_SCHEMA' or table in TABLES
 
 def attributeExists(table, attribute):
-    return attribute in TABLES[table]
+    return table.upper() == 'INFORMATION_SCHEMA' or attribute in TABLES[table]
 
 def enhancedCleanRow(row):
     row = utils.cleanRow(row)

@@ -3,6 +3,7 @@ import os
 import utils
 import transfer
 import db
+import json
 
 from sys import argv
 from MySQLutils import connectDB, closeDB
@@ -12,6 +13,19 @@ INTERPRETER = "python3"
 PROGRAM = f"{INTERPRETER} {os.path.basename(argv[0])}"
 SUCCESS = 0
 ERROR = -1
+
+TABLES = [
+    'Crime',
+    'Complaint',
+    'Search',
+    'Incident',
+    'Location',
+    'Code',
+    'Person',
+    'CrimeView',
+    'ComplaintView',
+    'SearchView',
+]
 
 connection = None
 cursor = None
@@ -29,6 +43,42 @@ def executeQuery(query):
         log.error(e)
         return None
     return SUCCESS
+
+def storeTableMetaData(path='tables.json'):
+    metadata = {}
+    for table in TABLES:
+        query = db.select(
+            'INFORMATION_SCHEMA',
+            where=f"WHERE TABLE_NAME='{table}' AND TABLE_SCHEMA=DATABASE()",
+            attributes=[
+                'COLUMN_NAME',
+                'DATA_TYPE',
+                'CHARACTER_MAXIMUM_LENGTH',
+                'NUMERIC_PRECISION',
+                'NUMERIC_SCALE',
+            ]
+        )
+
+        executeQuery(query)
+        output = cursor.fetchall()
+
+        md = {}
+        for row in output:
+            column_name = row[0]
+            data_type = row[1]
+            if data_type.upper() == 'VARCHAR':
+                md[column_name] = f'{data_type.upper()}({row[2]})'
+            elif data_type.upper() == 'INT' or data_type.upper() == 'TINYINT':
+                md[column_name] = f'{data_type.upper()}({row[3]})'
+            elif data_type.upper() == 'DECIMAL':
+                md[column_name] = f'{data_type.upper()}({row[3]}, {row[4]})'
+            else:
+                md[column_name] = data_type.upper()
+
+        metadata[table] = md
+
+    with open(path, 'w') as metadatafile:
+        json.dump(metadata, metadatafile)
 
 # ===================== SELECT ===================== #
 
@@ -292,6 +342,7 @@ def create(args):
     utils.runQueries("SQL/create.sql")
     utils.runQueries("SQL/keys.sql")
     utils.runQueries("SQL/views.sql")
+    storeTableMetaData()
 
 def load(args):
     log.note("Add arg for number of lines to load from each CSV")
@@ -1182,6 +1233,7 @@ def usage_background():
 BACKGROUND_COMMANDS = {
     "id":   background_id,
     "name": background_name,
+    "help": help_background,
 }
 
 BACKGROUND_MIN_ARGC = 0
