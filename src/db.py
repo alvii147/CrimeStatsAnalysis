@@ -21,7 +21,7 @@ TABLES_LIST = [
 
 TABLES = {}
 for table in TABLES_LIST:
-    query = 'SELECT'
+    query = 'SELECT '
     query += 'COLUMN_NAME, '
     query += 'DATA_TYPE, '
     query += 'CHARACTER_MAXIMUM_LENGTH, '
