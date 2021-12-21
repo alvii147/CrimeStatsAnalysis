@@ -1289,7 +1289,7 @@ def background(args):
             log.info('---------------------------------------------------------')
 
     if len(person_searches) < 1:
-        log.info('No crime records found')
+        log.info('No stop & search records found')
 
     return SUCCESS
 
