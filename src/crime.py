@@ -1237,6 +1237,9 @@ def background(args):
     person = output[selection_idx]
     person_attributes = list(db.TABLES['Person'].keys())
     person_id = person[person_attributes.index('person_id')]
+    person_first_name = person[person_attributes.index('first_name')]
+    person_last_name = person[person_attributes.index('last_name')]
+    person_name = ' '.join([person_first_name.strip(), person_last_name.strip()])
 
     crime_view_attributes = list(db.TABLES['CrimeView'].keys())
     query = db.select(
@@ -1257,26 +1260,33 @@ def background(args):
     person_searches = cursor.fetchall()
 
     print('')
-    log.info('Person Information')
+    log.info('---------------------------------------------------------')
+    log.info(f'Person information for {person_name}')
+    log.info('---------------------------------------------------------')
     for i, val in enumerate(person):
         log.info(person_attributes[i] + ': ' + str(val))
+    log.info('---------------------------------------------------------')
 
     print('')
-    log.info('Crimes:')
+    log.info('---------------------------------------------------------')
+    log.info(f'Crimes committed by {person_name}')
+    log.info('---------------------------------------------------------')
     for row in person_crimes:
-        log.info('---------------------------------------------')
         for i, val in enumerate(row):
             log.info(crime_view_attributes[i] + ': ' + str(val))
+        log.info('---------------------------------------------------------')
 
     if len(person_crimes) < 1:
         log.info('No crime records found')
 
     print('')
-    log.info('Stop & Searches:')
+    log.info('---------------------------------------------------------')
+    log.info(f'Stop & searches conducted on {person_name}')
+    log.info('---------------------------------------------------------')
     for i, row in enumerate(person_searches):
-        log.info('---------------------------------------------')
         for i, val in enumerate(row):
             log.info(search_view_attributes[i] + ': ' + str(val))
+            log.info('---------------------------------------------------------')
 
     if len(person_searches) < 1:
         log.info('No crime records found')
