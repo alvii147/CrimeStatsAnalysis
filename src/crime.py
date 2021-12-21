@@ -6,7 +6,7 @@ import db
 
 from sys import argv
 from MySQLutils import connectDB, closeDB
-from utils import no, prompt_attribute, prompt_table, prompt_table_update
+from utils import no, prompt_attribute, prompt_table, prompt_table_update, prompt_options
 
 INTERPRETER = "python3"
 PROGRAM = f"{INTERPRETER} {os.path.basename(argv[0])}"
@@ -1108,77 +1108,142 @@ def update(args):
 
 # ================== BACKGROUND ================== #
 
-def prompt_options(options, message=None):
-    if message is not None:
-        log.info(message)
+def background_id():
+    person_id = input('Enter ID: ')
+    try:
+        person_id = int(person_id)
+    except ValueError:
+        log.error('Please enter numeric value for ID')
+        return ERROR
 
-    for i, opt in enumerate(options):
-        log.info(f'[{i + 1}] {opt}')
+    query = db.select(
+        'Person',
+        where=f'person_id = {person_id}',
+    )
 
-    selection_idx = int(input('Enter selection: ')) - 1
+    return query
 
-    return selection_idx
+def background_name():
+    first_name = input('First Name: ')
+    last_name = input('Last Name: ')
+    empty_first_name = len(first_name.strip()) > 0
+    empty_last_name = len(last_name.strip()) > 0
 
-def background():
+    where = ''
+    if empty_first_name:
+        where += f'first_name LIKE \'%{first_name}%\''
+
+    if empty_last_name:
+        if empty_first_name:
+            where += ' AND '
+
+        where += f'last_name LIKE \'%{last_name}%\''
+
+    query = db.select(
+        'Person',
+        where=where,
+    )
+
+    return query
+
+def background_get_search_method():
     message = 'Search for person by:'
     options = [
         'ID',
         'First & Last Names',
     ]
 
-    selection_idx = prompt_options(options, message=message)
-
-    if selection_idx < 0 or selection_idx >= len(options):
-        log.error(f'Invalid selection')
-        log.info('Please try again')
+    try:
+        selection_idx = prompt_options(options, message=message)
+    except:
+        log.error('Invalid selection')
         return ERROR
-    elif selection_idx == 0:
-        person_id = int(input('Enter ID: '))
-        query = db.select(
-            'Person',
-            where=f'person_id = {person_id}'
-        )
 
-        cursor.execute(query)
-        output = cursor.fetchall()
+    if selection_idx == 0:
+        return 'id'
+    elif selection_idx == 1:
+        return 'name'
     else:
-        first_name = input('First Name: ')
-        last_name = input('Last Name: ')
+        return ERROR
 
-        where = ''
-        if len(first_name.strip()) > 0:
-            where += f'first_name LIKE \'%{first_name}%\''
-        if len(last_name.strip()) > 0:
-            if len(first_name.strip()) > 0:
-                where += ' AND '
-            where += f'last_name LIKE \'%{last_name}%\''
+    log.error(f'Invalid selection')
+    log.info('Please try again')
 
-        query = db.select(
-            'Person',
-            where=where,
-        )
+    return ERROR
 
-        cursor.execute(query)
-        output = cursor.fetchall()
+BACKGROUND_HELP = {
+    "id":       "Run background check based on ID",
+    "name":     "Run background check based on first and last names",
+}
 
+def help_background():
+    log.info(f"{PROGRAM} background id      : {BACKGROUND_HELP['id']}")
+    log.info(f"{PROGRAM} background name    : {BACKGROUND_HELP['name']}")
+
+def usage_background():
+    log.info(f"{PROGRAM} background <command> [arguments]")
+    log.info(f"Try '{PROGRAM} background help'")
+
+BACKGROUND_COMMANDS = {
+    "id":   background_id,
+    "name": background_name,
+}
+
+BACKGROUND_MIN_ARGC = 0
+BACKGROUND_MAX_ARGC = 1
+
+def background(args):
+    argc = len(args)
+    if argc < BACKGROUND_MIN_ARGC or argc > BACKGROUND_MAX_ARGC:
+        log.error("Incorrect number of arguments")
+        usage_background()
+        return ERROR
+
+    if argc == 1:
+        command = args[0]
+        if command not in BACKGROUND_COMMANDS:
+            log.error(f"Unknown command '{command}'")
+            usage_update()
+            return ERROR
+    else:
+        command = background_get_search_method()
+        if isinstance(command, int) and command == ERROR:
+            return ERROR
+
+    query = BACKGROUND_COMMANDS[command]()
+    if isinstance(query, int) and query == ERROR:
+        return ERROR
+
+    cursor.execute(query)
+    output = cursor.fetchall()
+
+    options = [' '.join([o[1].strip(), o[2].strip()]) for o in output]
     message = 'Select person to run a background check on'
-    selection_idx = prompt_options(
-        [' '.join([o[1].strip(), o[2].strip()]) for o in output],
-        message=message
-    )
+
+    try:
+        selection_idx = prompt_options(options, message=message)
+    except:
+        log.error('Invalid selection')
+        return ERROR
+
+    if selection_idx == len(options):
+        return ERROR
+
+    print(output[selection_idx])
 
     return SUCCESS
 
 # ===================== HELP ===================== #
 
 HELP = {
-    "help":   "Show this message",
-    "create": "Create all tables",
-    "load":   "Load data from CSVs into tables",
-    "clear":  "Delete all entries in tables",
-    "clean":  "Drop all tables from database",
-    "add":    "Add entries to the database",
-    "delete": "Delete entries from the database",
+    "help":         "Show this message",
+    "create":       "Create all tables",
+    "load":         "Load data from CSVs into tables",
+    "clear":        "Delete all entries in tables",
+    "clean":        "Drop all tables from database",
+    "add":          "Add entries to the database",
+    "delete":       "Delete entries from the database",
+    "background":   "Run background check on person",
 }
 
 def help(args):
@@ -1192,7 +1257,8 @@ def help(args):
     log.info(f"{PROGRAM} clear  : {HELP['clear']}")
     log.info(f"{PROGRAM} clean  : {HELP['clean']}")
     log.info(f"{PROGRAM} add    : {HELP['add']}")
-    log.info(f"{PROGRAM} delete : {HELP['add']}")
+    log.info(f"{PROGRAM} delete : {HELP['delete']}")
+    log.info(f"{PROGRAM} delete : {HELP['background']}")
 
     log.info("--------------------------------------------------------------")
 
@@ -1223,9 +1289,9 @@ COMMANDS = {
     "clean":  clean,
     "clear":  clear,
     "add":    add,
-    "background": background,
     "delete": delete,
     "update": update,
+    "background": background,
 }
 
 CRIME_MIN_ARGC = 1

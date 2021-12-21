@@ -259,3 +259,18 @@ def prompt_table_update(table, ignore = []):
             print(attribute)
             updates[attribute] = prompt_attribute(table, attribute)
     return updates
+
+def prompt_options(options, message=None):
+    if message is not None:
+        log.info(message)
+
+    for i, opt in enumerate(options):
+        log.info(f'[{i + 1}] {opt}')
+
+    log.info(f'[{len(options)}] Quit')
+
+    selection_idx = int(input('Enter selection: ')) - 1
+    if selection_idx > len(options):
+        raise ValueError('Invalid selection')
+
+    return selection_idx
