@@ -30,7 +30,7 @@ LINES
 IGNORE 1946951 LINES
 (@_dummy, @_occurrence_date, @_police_department, @_dummy, @_longitude, @_latitude, @_area, @_dummy, @_borough, @_description)
 SET
-    area = NULLIF(@_area, ''),
+    area = NULLIF(REGEXP_REPLACE(@_area, '[[:space:]]+', ' '), ''),
     police_department = NULLIF(@_police_department, ''),
     description = NULLIF(@_description, ''),
     occurrence_date = CAST(CONCAT(@_occurrence_date, '-01') AS DATE),
@@ -48,7 +48,7 @@ LINES
 IGNORE 2946380 LINES
 (@_dummy, @_occurrence_date, @_police_department, @_dummy, @_longitude, @_latitude, @_area, @_dummy, @_borough, @_type, @_description, @_dummy)
 SET
-    area = NULLIF(@_area, ''),
+    area = NULLIF(REGEXP_REPLACE(@_area, '[[:space:]]+', ' '), ''),
     police_department = NULLIF(@_police_department, ''),
     type = NULLIF(@_type, ''),
     description = NULLIF(@_description, ''),
@@ -70,8 +70,8 @@ SET
     code = NULLIF(@_code, ''),
     description = NULLIF(@_description, ''),
     type = NULLIF(@_type, ''),
-    premises = area = NULLIF(@_premises, ' '),
-    area = NULLIF(@_area, ' '),
+    premises = NULLIF(@_premises, ''),
+    area = NULLIF(REGEXP_REPLACE(@_area, '[[:space:]]+', ' '), ''),
     precinct = NULLIF(@_precinct, ''),
     borough = NULLIF(@_borough, ''),
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date,'%d/%m/%Y') AS DATE),
@@ -90,7 +90,7 @@ IGNORE 1923423 LINES
 (@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_area, @_dummy, @_domestic, @_dummy, @_borough, @_ward, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
 SET
     domestic = CAST(@_domestic = 'True' AS UNSIGNED),
-    area = NULLIF(@_area, ''),
+    area = NULLIF(REGEXP_REPLACE(@_area, '[[:space:]]+', ' '), ''),
     borough = NULLIF(@_borough, ''),
     ward = NULLIF(FLOOR(@_ward), ''),
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
@@ -110,7 +110,7 @@ IGNORE 1872245 LINES
 SET
     domestic = CAST(@_domestic = 'True' AS UNSIGNED),
     last_updated = CAST(STR_TO_DATE(@_last_updated, '%m/%d/%Y %h:%i:%s %p') AS DATE),
-    area = NULLIF(@_area, ''),
+    area = NULLIF(REGEXP_REPLACE(@_area, '[[:space:]]+', ' '), ''),
     borough = NULLIF(@_borough, ''),
     ward = NULLIF(FLOOR(@_ward), ''),
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
@@ -129,7 +129,7 @@ IGNORE 2688611 LINES
 (@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_area, @_dummy, @_domestic, @_dummy, @_borough, @_ward, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
 SET
     domestic = CAST(@_domestic = 'True' AS UNSIGNED),
-    area = NULLIF(@_area, ''),
+    area = NULLIF(REGEXP_REPLACE(@_area, '[[:space:]]+', ' '), ''),
     borough = NULLIF(@_borough, ''),
     ward = NULLIF(FLOOR(@_ward), ''),
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
@@ -148,7 +148,7 @@ IGNORE 1456615 LINES
 (@_dummy, @_dummy, @_dummy, @_occurrence_date, @_dummy, @_code, @_dummy, @_dummy, @_area, @_dummy, @_domestic, @_dummy, @_borough, @_ward, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_dummy, @_latitude, @_longitude, @_dummy)
 SET
     domestic = CAST(@_domestic = 'True' AS UNSIGNED),
-    area = NULLIF(@_area, ''),
+    area = NULLIF(REGEXP_REPLACE(@_area, '[[:space:]]+', ' '), ''),
     borough = NULLIF(@_borough, ''),
     ward = NULLIF(FLOOR(@_ward), ''),
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
@@ -168,7 +168,7 @@ IGNORE 2116140 LINES
 SET
     status = NULLIF(@_status, ''),
     precinct = NULLIF(@_precinct, ''),
-    area = NULLIF(@_area, ''),
+    area = NULLIF(REGEXP_REPLACE(@_area, '[[:space:]]+', ' '), ''),
     code = NULLIF(@_code, ''),
     age_range = NULLIF(@_age_range, ''),
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
@@ -210,7 +210,7 @@ IGNORE 182536 LINES
 SET
     status = NULLIF(@_status, ''),
     precinct = NULLIF(@_precinct, ''),
-    area = NULLIF(@_area, ''),
+    area = NULLIF(REGEXP_REPLACE(@_area, '[[:space:]]+', ' '), ''),
     code = NULLIF(@_code, ''),
     age_range = NULLIF(@_age_range, ''),
     occurrence_date = CAST(STR_TO_DATE(@_occurrence_date, '%m/%d/%Y %h:%i:%s %p') AS DATE),
