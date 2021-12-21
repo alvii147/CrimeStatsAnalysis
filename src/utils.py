@@ -52,7 +52,10 @@ def readJSON(path):
     with open(path, "r") as file:
         return json.loads(file.read())
 
-TABLES = readJSON("tables.json")
+try:
+    TABLES = readJSON("tables.json")
+except:
+    log.warning('Unable to read local table meta data')
 
 def isNull(s):
     '''

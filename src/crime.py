@@ -66,7 +66,7 @@ def storeTableMetaData(path='tables.json'):
         md = {}
         for row in output:
             column_name = row[0]
-            data_type = row[1]
+            data_type = row[1].decode("utf-8")
             if data_type.upper() == 'VARCHAR':
                 md[column_name] = f'{data_type.upper()}({row[2]})'
             elif data_type.upper() == 'INT' or data_type.upper() == 'TINYINT':

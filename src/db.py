@@ -63,11 +63,7 @@ def select(table, where, attributes = None, additional_clauses = ''):
     return query
 
 def delete(table, where):
-    if not tableExists(table):
-        log.error(f"No such table '{table}'")
-        return
-
-    query = f'DELETE FROM {table} WHERE {where};'
+    query = f'DELETE IGNORE FROM {table} WHERE {where};'
     return query
 
 def update(table, where, **attributes):
