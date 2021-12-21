@@ -1116,9 +1116,11 @@ def background_id():
         log.error('Please enter numeric value for ID')
         return ERROR
 
+    person_attributes = list(db.TABLES['Person'].keys())
     query = db.select(
         'Person',
         where=f'person_id = {person_id}',
+        attributes=person_attributes,
     )
 
     return query
@@ -1139,9 +1141,11 @@ def background_name():
 
         where += f'last_name LIKE \'%{last_name}%\''
 
+    person_attributes = list(db.TABLES['Person'].keys())
     query = db.select(
         'Person',
         where=where,
+        attributes=person_attributes,
     )
 
     return query
@@ -1231,9 +1235,10 @@ def background(args):
         return ERROR
 
     person = output[selection_idx]
-    person_id = person[0]
+    person_attributes = list(db.TABLES['Person'].keys())
+    person_id = person[person_attributes.index('person_id')]
 
-    crime_view_attributes = db.TABLES['CrimeView'].keys()
+    crime_view_attributes = list(db.TABLES['CrimeView'].keys())
     query = db.select(
         'CrimeView',
         where=f'victim_id = {person_id}',
@@ -1242,7 +1247,7 @@ def background(args):
     executeQuery(query)
     person_crimes = cursor.fetchall()
 
-    search_view_attributes = db.TABLES['SearchView'].keys()
+    search_view_attributes = list(db.TABLES['SearchView'].keys())
     query = db.select(
         'SearchView',
         where=f'suspect_id = {person_id}',
@@ -1253,7 +1258,8 @@ def background(args):
 
     print('')
     log.info('Person Information')
-    print(person)
+    for i, row in enumerate(person):
+        log.info(person_attributes[i], + ': ' + row)
 
     print('')
     log.info('Crimes:')
