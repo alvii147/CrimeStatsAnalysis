@@ -33,9 +33,11 @@ PERSON_TEST_INPUT = [
     'no',
 ]
 
-crime_test_data = [
-    'yes',
-]
+SAMPLE_CRIME = {
+    'code': '110',
+    'organization': 'IUCR',
+    '',
+}
 
 def disable_stdout():
     sys.stdout = open(os.devnull, 'w')
