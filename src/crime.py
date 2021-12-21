@@ -1259,7 +1259,7 @@ def background(args):
     print('')
     log.info('Person Information')
     for i, row in enumerate(person):
-        log.info(person_attributes[i], + ': ' + row)
+        log.info(person_attributes[i] + ': ' + row)
 
     print('')
     log.info('Crimes:')
