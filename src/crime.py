@@ -78,7 +78,7 @@ def storeTableMetaData(path='tables.json'):
         metadata[table] = md
 
     with open(path, 'w') as metadatafile:
-        json.dump(metadata, metadatafile)
+        json.dump(metadata, metadatafile, indent=4)
 
 # ===================== SELECT ===================== #
 
