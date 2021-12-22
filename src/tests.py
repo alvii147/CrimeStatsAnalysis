@@ -177,7 +177,7 @@ class TestUtils(unittest.TestCase):
 
     def test_isQuoted(self):
         self.assertTrue(utils.isQuoted('\'Is today tomorrow New Zealand?\''))
-        self.assertTrue(utils.isQuoted('"Is baby powder made out of babies?"'))
+        self.assertTrue(utils.isQuoted('"Is baby powder made out of babies?"', quote='"'))
         self.assertFalse(utils.isQuoted('Electric outlets look surprised why?'))
 
     def test_stripQuotes(self):
@@ -187,7 +187,7 @@ class TestUtils(unittest.TestCase):
         self.assertFalse(utils.stripQuotes(f'\'{s}\'', quote='"') == s)
         self.assertFalse(utils.stripQuotes(f'"{s}"', quote='\'') == s)
         self.assertTrue(utils.stripQuotes(f'\'{s}') != s)
-        self.assertTrue(utils.stripQuotes(s) != s)
+        self.assertTrue(utils.stripQuotes(s) == s)
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
