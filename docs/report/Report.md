@@ -1101,4 +1101,6 @@ Another improvement to our system would be to add more rigorous error checking a
 
 Additionally, it would be worthwhile to investigate the functionality of our database with additional datasets.  The current datasets are only limited to certain areas and are not a comprehensive representation of all the types of crime records that exists around the world.  Testing with additional datasets may reveal necessary design changes that can improve the performance, reliability, and functionality of the crime database design and implementation.
 
-# Commands implemented in the Client
+## Commands to be implemented in the future
+
+Due to the time restrictions we had to make a call on the features that we implemented for the command line interface. While we were able to implement the major features of add, update, delete and show in the database there were a few features that we simply didn't have the time to implement. A lot of these commands are more centered towards the statistics of the crime. For example being able to see run a command to see what fraction of crimes where the suspect is found guilty vs not guility. Commands like this can paint a better picture of the criminal activity in an area over a specific period which could be crucial to law enforcement.
