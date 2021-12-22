@@ -1,4 +1,4 @@
-LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/UKCrime/london-stop-and-search.csv'
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/UKCrime/london-stop-and-search.csv' IGNORE
 INTO TABLE LondonStopAndSearch
 FIELDS
     TERMINATED BY ','
@@ -20,7 +20,7 @@ SET
     object_caused_outcome = CAST(@_object_caused_outcome = 'True' AS UNSIGNED),
     clothing_removal = CAST(@_clothing_removal = 'True' AS UNSIGNED);
 
-LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/UKCrime/london-outcomes.csv'
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/UKCrime/london-outcomes.csv' IGNORE
 INTO TABLE LondonOutcomes
 FIELDS
     TERMINATED BY ','
@@ -38,7 +38,7 @@ SET
     longitude = NULLIF(@_longitude, ''),
     borough = NULLIF(@_borough, '');
 
-LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/UKCrime/london-street.csv'
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/UKCrime/london-street.csv' IGNORE
 INTO TABLE LondonStreet
 FIELDS
     TERMINATED BY ','
@@ -57,7 +57,7 @@ SET
     longitude = NULLIF(@_longitude, ''),
     borough = NULLIF(@_borough, '');
 
-LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/NYPD_Complaint_Data_Historic.csv'
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/NYPD_Complaint_Data_Historic.csv' IGNORE
 INTO TABLE NYPDComplaints
 FIELDS
     TERMINATED BY ','
@@ -79,7 +79,7 @@ SET
     latitude = NULLIF(@_latitude, ''),
     longitude = NULLIF(@_longitude, '');
 
-LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2001_to_2004.csv'
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2001_to_2004.csv' IGNORE
 INTO TABLE ChicagoCrimes
 FIELDS
     TERMINATED BY ','
@@ -98,7 +98,7 @@ SET
     latitude = NULLIF(@_latitude, ''),
     longitude = NULLIF(@_longitude, '');
 
-LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2005_to_2007.csv'
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2005_to_2007.csv' IGNORE
 INTO TABLE ChicagoCrimes
 FIELDS
     TERMINATED BY ','
@@ -118,7 +118,7 @@ SET
     latitude = NULLIF(@_latitude, ''),
     longitude = NULLIF(@_longitude, '');
 
-LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2008_to_2011.csv'
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2008_to_2011.csv' IGNORE
 INTO TABLE ChicagoCrimes
 FIELDS
     TERMINATED BY ','
@@ -137,7 +137,7 @@ SET
     latitude = NULLIF(@_latitude, ''),
     longitude = NULLIF(@_longitude, '');
 
-LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2012_to_2017.csv'
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2012_to_2017.csv' IGNORE
 INTO TABLE ChicagoCrimes
 FIELDS
     TERMINATED BY ','
@@ -156,7 +156,7 @@ SET
     latitude = NULLIF(@_latitude, ''),
     longitude = NULLIF(@_longitude, '');
 
-LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Crime_Data_from_2010_to_2019.csv'
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Crime_Data_from_2010_to_2019.csv' IGNORE
 INTO TABLE LACrimes
 FIELDS
     TERMINATED BY ','
@@ -198,7 +198,7 @@ SET
     borough = NULLIF(@_borough, ''),
     weapon = NULLIF(@_weapon, '');
 
-LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Crime_Data_from_2020_to_Present.csv'
+LOAD DATA INFILE '/var/lib/mysql-files/10-Crime/USCrime/Crime_Data_from_2020_to_Present.csv' IGNORE
 INTO TABLE LACrimes
 FIELDS
     TERMINATED BY ','
