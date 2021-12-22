@@ -211,12 +211,9 @@ def runQueries(queries):
         console_query = consoleFriendly(query)
         log.info(f'Executing query "{console_query}" ...')
         cursor.execute(query)
-        output.append(cursor.fetchall())
 
     connection.commit()
     closeDB(connection, cursor)
-
-    return output
 
 def yes(message):
     log.info(message)
