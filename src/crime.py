@@ -311,7 +311,7 @@ def load(args):
     utils.runQueries(queries)
 
     queries = utils.loadQueries("SQL/load.sql")
-    queries = [db.loadReplaceIgnoreLines(query, 500) for query in queries]
+    queries = [db.loadReplaceIgnoreLines(query, n) for query in queries]
     utils.runQueries(queries)
 
     transfer.transfer_all()
