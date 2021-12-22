@@ -89,7 +89,7 @@ def insert(table, **attributes):
 
     return query
 
-def select(table, where, attributes = None, additional_clauses = ''):
+def select(table, where=None, attributes = None, additional_clauses = ''):
     if not tableExists(table):
         log.error(f"No such table '{table}'")
         return
@@ -103,7 +103,11 @@ def select(table, where, attributes = None, additional_clauses = ''):
                 return
         project = ", ".join(attributes)
 
-    query = f'SELECT {project} FROM {table} WHERE {where} {additional_clauses};'
+    if where is None:
+        query = f'SELECT {project} FROM {table} {additional_clauses};'
+    else:
+        query = f'SELECT {project} FROM {table} WHERE {where} {additional_clauses};'
+
     return query
 
 def delete(table, where):
