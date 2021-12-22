@@ -100,6 +100,7 @@ class TestCLI(unittest.TestCase):
         self.assertTrue(len(show_output) > 1)
 
         attr = show_output[-1]
+        print(attr)
         self.assertTrue(attr[2] == SAMPLE_CRIME['code'])
         self.assertTrue(attr[3] == SAMPLE_CRIME['organization'])
         self.assertTrue(attr[4] == SAMPLE_CRIME['weapon'])
