@@ -171,7 +171,8 @@ class TestCLI(unittest.TestCase):
         self.assertTrue(exit_status == crime.SUCCESS)
 
         show_output = parseShowOutput(show_output)
-        print(show_output[-1])
+        self.assertTrue(len(show_output) > 1)
+        self.assertTrue(show_output[-1][3] == SAMPLE_COMPLAINT['code'])
 
     @patch('builtins.input', side_effect=PERSON_TEST_INPUT)
     def test_add_delete_person(self, magic_mock_obj):
