@@ -180,10 +180,12 @@ class TestUtils(unittest.TestCase):
         self.assertTrue(utils.isQuoted('"Is baby powder made out of babies?"'))
         self.assertFalse(utils.isQuoted('Electric outlets look surprised why?'))
 
-    def test_isQuoted(self):
+    def test_stripQuotes(self):
         s = 'Foot same length Europe?'
-        self.assertTrue(utils.stripQuotes(f'\'{s}\'') == s)
-        self.assertTrue(utils.stripQuotes(f'"{s}"') == s)
+        self.assertTrue(utils.stripQuotes(f'\'{s}\'', quote='\'') == s)
+        self.assertTrue(utils.stripQuotes(f'"{s}"', quote='"') == s)
+        self.assertFalse(utils.stripQuotes(f'\'{s}\'', quote='"') == s)
+        self.assertFalse(utils.stripQuotes(f'"{s}"', quote='\'') == s)
         self.assertTrue(utils.stripQuotes(f'\'{s}') != s)
         self.assertTrue(utils.stripQuotes(s) != s)
 
