@@ -1,5 +1,3 @@
-import os
-import sys
 import unittest
 import warnings
 from unittest.mock import patch
@@ -7,6 +5,7 @@ from io import StringIO
 
 import crime
 import db
+import utils
 
 SAMPLE_PERSON = {
     'first_name': 'Paul',
@@ -168,6 +167,25 @@ class TestCLI(unittest.TestCase):
     def test_background_check(self, magic_mock_obj):
         exit_status = crime.background(['id'])
         self.assertTrue(exit_status == crime.SUCCESS)
+
+class TestUtils(unittest.TestCase):
+    def test_isNull(self):
+        self.assertTrue(utils.isNull('\'NULL\''))
+        self.assertTrue(utils.isNull('"NULL"'))
+        self.assertFalse(utils.isNull('NULL'))
+        self.assertFalse(utils.isNull('porcupine'))
+
+    def test_isQuoted(self):
+        self.assertTrue(utils.isQuoted('\'Is today tomorrow New Zealand?\''))
+        self.assertTrue(utils.isQuoted('"Is baby powder made out of babies?"'))
+        self.assertFalse(utils.isQuoted('Electric outlets look surprised why?'))
+
+    def test_isQuoted(self):
+        s = 'Foot same length Europe?'
+        self.assertTrue(utils.stripQuotes(f'\'{s}\'') == s)
+        self.assertTrue(utils.stripQuotes(f'"{}"') == s)
+        self.assertTrue(utils.stripQuotes('\'{s}') != s)
+        self.assertTrue(utils.stripQuotes(s) != s)
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
