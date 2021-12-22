@@ -34,7 +34,7 @@ def filterAttributes(data, attr, one_dim=False):
 if __name__ == '__main__':
     connection, cursor = connectDB()
 
-    query = db.select(VIEW_NAME, ATTRIBUTES)
+    query = db.select(VIEW_NAME, attributes=ATTRIBUTES)
     cursor.execute(query)
     search_data = cursor.fetchall()
 
