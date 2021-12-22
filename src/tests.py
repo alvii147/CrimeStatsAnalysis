@@ -80,12 +80,13 @@ class TestCLI(unittest.TestCase):
         warnings.filterwarnings("ignore", category=DeprecationWarning)
 
     @patch('builtins.input', side_effect=CRIME_TEST_INPUT)
-    def test_add_delete_crime(self, magic_mock_obj):
+    def test_add_show_delete_crime(self, magic_mock_obj):
         # add crime
         exit_status = crime.add(['crime'])
         self.assertTrue(exit_status == crime.SUCCESS)
         crime.connection.commit()
 
+        # show crime
         crime_id = crime.cursor.lastrowid
         with patch('sys.stdout', new=StringIO()) as fake_out:
             exit_status = crime.show(['crime', str(crime_id)])
@@ -107,6 +108,17 @@ class TestCLI(unittest.TestCase):
         self.assertTrue(attr[6] == SAMPLE_CRIME['domestic'])
         self.assertTrue(attr[7] == SAMPLE_CRIME['description'])
 
+        # delete crime
+        exit_status = crime.delete(['crime', str(crime_id)])
+        self.assertTrue(exit_status == crime.SUCCESS)
+        crime.connection.commit()
+
+        where = f'crime_id={crime_id}'
+        query = db.select('Crime', where=where)
+        crime.cursor.execute(query)
+        output = crime.cursor.fetchall()
+        self.assertTrue(len(output) == 0)
+
     @patch('builtins.input', side_effect=PERSON_TEST_INPUT)
     def test_add_delete_person(self, magic_mock_obj):
         # add person
@@ -120,6 +132,7 @@ class TestCLI(unittest.TestCase):
         crime.cursor.execute(query)
         output = crime.cursor.fetchall()
         self.assertTrue(len(output) > 0)
+
         self.assertTrue(output[0][1] == SAMPLE_PERSON['first_name'])
         self.assertTrue(output[0][2] == SAMPLE_PERSON['last_name'])
         self.assertTrue(output[0][3] == SAMPLE_PERSON['age_range'])
@@ -134,6 +147,7 @@ class TestCLI(unittest.TestCase):
         crime.cursor.execute(query)
         output = crime.cursor.fetchall()
         self.assertTrue(len(output) > 0)
+
         self.assertTrue(output[0][1] == SAMPLE_PERSON['first_name'])
         self.assertTrue(output[0][2] == SAMPLE_PERSON['last_name'])
         self.assertTrue(output[0][3] == SAMPLE_PERSON['age_range'])
@@ -144,7 +158,6 @@ class TestCLI(unittest.TestCase):
         # delete person
         exit_status = crime.delete(['person', str(person_id)])
         self.assertTrue(exit_status == crime.SUCCESS)
-
         crime.connection.commit()
 
         crime.cursor.execute(query)
