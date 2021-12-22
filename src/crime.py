@@ -294,7 +294,6 @@ def create(args):
     utils.runQueries("SQL/views.sql")
 
 def load(args):
-    log.note("Add arg for number of lines to load from each CSV")
     utils.runQueries("SQL/create_temp.sql")
     utils.runQueries("SQL/load.sql")
     transfer.transfer_all()
@@ -552,7 +551,7 @@ def delete_code(args):
         log.info(f"Delete these complaints before attempting to delete '{organization}' code '{code}'")
         return ERROR
 
-    query = db.select("Crimes", where = f"code = '{code}' and organization = '{organization}'")
+    query = db.select("Crime", where = f"code = '{code}' and organization = '{organization}'")
     if executeQuery(query) is None:
         log.error(f"Failed to query for crimes with '{organization}' code '{code}'")
         return ERROR
@@ -1271,7 +1270,6 @@ def background(args):
     log.info('---------------------------------------------------------')
 
     print('')
-    log.note("Aren't people victims in crimes, not the criminal?")
     log.info('---------------------------------------------------------')
     log.info(f'{person_name} was a victim of the following crimes:')
     log.info('---------------------------------------------------------')
@@ -1454,13 +1452,13 @@ SHOW_HELP = {
 }
 
 def help_show(args):
-    log.info(f"{PROGRAM} background code                     : {SHOW_HELP['code']}")
-    log.info(f"{PROGRAM} background person    <person_id>    : {SHOW_HELP['person']}")
-    log.info(f"{PROGRAM} background location  <location_id>  : {SHOW_HELP['location']}")
-    log.info(f"{PROGRAM} background complaint <complaint_id> : {SHOW_HELP['complaint']}")
-    log.info(f"{PROGRAM} background search    <search_id>    : {SHOW_HELP['search']}")
-    log.info(f"{PROGRAM} background crime     <crime_id>     : {SHOW_HELP['crime']}")
-    log.info(f"{PROGRAM} background help                     : {SHOW_HELP['help']}")
+    log.info(f"{PROGRAM} show code                     : {SHOW_HELP['code']}")
+    log.info(f"{PROGRAM} show person    <person_id>    : {SHOW_HELP['person']}")
+    log.info(f"{PROGRAM} show location  <location_id>  : {SHOW_HELP['location']}")
+    log.info(f"{PROGRAM} show complaint <complaint_id> : {SHOW_HELP['complaint']}")
+    log.info(f"{PROGRAM} show search    <search_id>    : {SHOW_HELP['search']}")
+    log.info(f"{PROGRAM} show crime     <crime_id>     : {SHOW_HELP['crime']}")
+    log.info(f"{PROGRAM} show help                     : {SHOW_HELP['help']}")
 
 def usage_show():
     log.info(f"{PROGRAM} show <command> [arguments]")
@@ -1764,13 +1762,13 @@ HELP = {
     "update":       "Update entries in the database",
     "background":   "Run background check on person",
     "show":         "Show detailed record information",
-    "filter":       "Filter records based on location, date, and code",
+    "filter":       "Filter records by location, date, and code",
 }
 
 def help(args):
-    log.info("--------------------------------------------------------------")
+    log.info("=============================================")
     log.info(f"Usage: {PROGRAM} <command> [arguments]")
-    log.info("--------------------------------------------------------------")
+    log.info("=============================================")
 
     log.info(f"{PROGRAM} help       : {HELP['help']}")
     log.info(f"{PROGRAM} create     : {HELP['create']}")
@@ -1783,26 +1781,6 @@ def help(args):
     log.info(f"{PROGRAM} background : {HELP['background']}")
     log.info(f"{PROGRAM} show       : {HELP['show']}")
     log.info(f"{PROGRAM} filter     : {HELP['filter']}")
-
-    log.info("--------------------------------------------------------------")
-
-    log.note("TODO:")
-    log.note("control c")
-    log.note("Remove nulls from database by adding default values ex last_updated")
-    log.note("add in the modify query statements ")
-    log.note("add in the show statements for querying ")
-    log.note("add in delete ")
-    log.note("add in indexes into the database ")
-    log.note("finish the report ")
-    log.note("create presentation ")
-    log.note("create the video ")
-    log.note("update ER model ")
-
-    log.note("add in the extra attributes into the database to hit 50 (maybe) ")
-    log.note("Do a datamine ")
-    log.note("add flags to allow for updates like -d for description ")
-
-    log.note("control F for all log notes")
 
     return SUCCESS
 
