@@ -213,7 +213,7 @@ The *Complaint* entity is a specialization of the *Incident* entity and provides
 
 The `code` and `organization` attributes of the *Complaint* entity are related to the *Code* entity that describes the specific crime code referenced by the complaint, through the relation *complaintOfCode*.
 
-> **Note**
+> :scroll: **Note**
 > This is defined as a weak entity set because a complaint about a crime cannot be valid if there exists no criminal law (i.e. crime code) that prohibits that action.
 
 The primary key for this entity is an artificial primary key, `complaint_id`.
@@ -265,6 +265,8 @@ Attribute | Description
 `clothing_removal` | Indicates whether clothing of suspect was removed for search
 
 ## Relational Schema
+
+### Tables
 
 Now we can convert our entity-relationship model to relational schema. We can start by constructing the `CREATE TABLE` commands for our required tables.
 
@@ -366,6 +368,8 @@ CREATE TABLE Code (
 
 Our relational schema is almost nearly similar to our entity-relationship model. We set the `AUTO_INCREMENT` option for all our artificial primary keys so that they are sequentially incremented automatically on insertion.
 
+### Foreign Key Constraints
+
 Now we can define our foreign key constraints.
 
 ```mysql
@@ -407,6 +411,8 @@ ALTER TABLE Crime ADD CONSTRAINT victimOf
 ALTER TABLE Search ADD CONSTRAINT suspectOf
     FOREIGN KEY (suspect_id) REFERENCES Person(person_id);
 ```
+
+### Indexes
 
 Based on our primary and foreign keys, we can also set up appropriate indexes in order to improve the performance of our database.
 
@@ -490,6 +496,16 @@ ON Code (
 );
 ```
 
+### Views
+
+Finally, we can also create database views based on joins that can provide information that go together. This is to help make it easier to query for information from the client application. We create the following views (the SQL code for creation of views is omitted here due to length):
+
+View Name | View Description
+--- | ---
+`CrimeView` | Atributes from a join between `Crime`, `Incident`, `Location`, `Code` and `Person` (`victim_id`)
+`ComplaintView` | Atributes from a join between `Complaint`, `Incident`, `Location` and `Code`
+`SearchView` | Atributes from a join between `Search`, `Incident`, `Location`, and `Person` (`suspect_id`)
+
 # Client Application
 
 ## Overview
@@ -530,7 +546,8 @@ pip3 install -r requirements.txt
 
 In order to run the program, you will need access to a database on Marmoset.  For best results, use a emtpy database.  You can store the database credentials in a configuration data file under `src/MySQLutils/config.ini`.
 
-**NOTE:** Using `config.ini` is not required but is recommended.  If you choose to not use the configuration file, then the client application will prompt you for your credentials each time it connects to the database.
+> :scroll: **Note**
+> Using `config.ini` is not required but is recommended.  If you choose to not use the configuration file, then the client application will prompt you for your credentials each time it connects to the database.
 
 To store your credentials in a `config.ini` file:
 
@@ -563,7 +580,7 @@ The client supports a variety of commands which can be broken down into multiple
 Once the environment is configured, you can run the client application `crime.py`.  First navigate to the source directory:
 
 ```bash
-cd src
+cd src/
 ```
 
 Once inside `src`, you can run the client application as follows:
@@ -578,35 +595,39 @@ This should display a list of the top-level commands.  Please refer to the follo
 
 The client can be categorized as two sets of commands. The first are the high levels commands that allow you to do the following:
 
-1. adding information
-2. updating information
-3. deleting information
-4. showing / querying the database
+- adding information
+- updating information
+- deleting information
+- showing / querying the database
 
->To see the high level commands in the client type in the following :
+To see the high level commands in the client type in the following :
 
-    >$ python3 crime.py help
+```bash
+python3 crime.py help
+```
 
 The following are some of the high level commands availble in the client application. This can be seen from the command above.
 
 |Command    | Description                                       |
 |-----------|---------------------------------------------------|
-|help       | Show this message									|
-|create     | Create all tables									|
-|load       | Load data from CSVs into tables					|
-|clear      | Delete all entries in tables						|
-|clean      | Drop all tables from database						|
-|add        | Add entries to the database						|
-|delete     | Delete entries from the database					|
-|update     | Update entries in the database					|
-|background | Run background check on person					|
-|show       | Show detailed record information					|
-|filter     | Filter records based on location, date, and code	|
+|`help`       | Show this message									|
+|`create`     | Create all tables									|
+|`load`       | Load data from CSVs into tables					|
+|`clear`      | Delete all entries in tables						|
+|`clean`      | Drop all tables from database						|
+|`add`        | Add entries to the database						|
+|`delete`     | Delete entries from the database					|
+|`update`     | Update entries in the database					|
+|`background` | Run background check on person					|
+|`show`       | Show detailed record information					|
+|`filter`     | Filter records based on location, date, and code	|
 
 
->Example of running one of these commands in the terminal :
+Example of running one of these commands in the terminal :
 
-    >$ python3 crime.py add
+```bash
+python3 crime.py add
+```
 
 ### Database Creation
 
@@ -638,93 +659,96 @@ python3 crime.py clean
 
 `create`, `load`, `clear`, and `clean` are used for database creation and deletion only and do not have subcommands.  The commands for the client can be further broken down to allow the user greater control over the database. For example the `add` command allows you to specify which tables you want to add the data to.
 
-**NOTE**: In the even that the client encounters an error, any modifications to the database will not be commited.  The database will only be updated in the event of a successful command run.
+> :scroll: **Note**:
+In the event that the client encounters an error, any modifications to the database will not be commited.  The database will only be updated in the event of a successful command run.
 
-> To see all the specific commands type the command followed by `help` :
+To see all the specific commands type the command followed by `help` :
 
-    >$ python3 crime.py add help
+```bash
+python3 crime.py add help
+```
+
+The following commands allow you to modify or query the information in the database. When the specific command is run the user will be prompted for a set of attributes through questions. The user can choose to set these attributes or leave them blank.
 
 
->The following commands allow you to modify or query the information in the database. When the specific command is run the user will be prompted for a set of attributes through questions. The user can choose to set these attributes or leave them blank.
+- `python3 crime.py add help`
 
+Command | Description
+---|---
+`add code`  | Add a crime code from a crime enforcement organization
+`add location` | Add a location of a complaint, crime, or search
+`add person` | Add a suspect or victim
+`add complaint` | Add a complaint that was made to the police
+`add crime` | Add a crimes that has taken place
+`add search` | Add a suspect search record
+`add help` | Show this message
 
-1. `>$python3 crime.py add help`
+- `python3 crime.py delete help`
 
-    |Command       | Description                                                |
-    |--------------|------------------------------------------------------------|
-    |add code      | Add a crime code from a crime enforcement organization     |
-    |add location  | Add a location of a complaint, crime, or search            |
-    |add person    | Add a suspect or victim                                    |
-    |add complaint | Add a complaint that was made to the police                |
-    |add crime     | Add a crimes that has taken place                          |
-    |add search    | Add a suspect search record                                |
-    |add help      | Show this message                                          |
+Command | Description
+---|---
+`delete code <code> <organization>` | Delete a code from a crime enforcement organization
+`delete location <location_id>` | Delete a location
+`delete person <person_id>` | Delete a person
+`delete complaint <complaint_id>` | Delete a police complaint record
+`delete crime <crime_id>` | Delete a crime record
+`delete search <search_id>` | Delete a suspect search record
+`delete help` | Show this message
 
-2. `>$python3 crime.py delete help`
+- `python3 crime.py update help`
 
-    |Command                                | Description                                           |
-    |---------------------------------------|-------------------------------------------------------|
-    |delete code      <code> <organization> | Delete a code from a crime enforcement organization   |
-    |delete location  <location_id>         | Delete a location                                     |
-    |delete person    <person_id>           | Delete a person                                       |
-    |delete complaint <complaint_id>        | Delete a police complaint record                      |
-    |delete crime     <crime_id>            | Delete a crime record                                 |
-    |delete search    <search_id>           | Delete a suspect search record                        |
-    |delete help                            | Show this message                                     |
+Command | Description
+---|---
+`update code <code> <organization>` | Update information about a crime code
+`update location <location_id>` | Update location details
+`update person <person_id>` | Update information about a person
+`update complaint <complaint_id>` | Update details of a police complaint
+`update crime <crime_id>` | Update details of a crime record
+`update search <search_id>` | Update details of a suspect search
+`update help` | Show this message
 
-3. `>$python3 crime.py update help`
+- `python3 crime.py background help`
 
-    |Command                                | Description                           |
-    |---------------------------------------|---------------------------------------|
-    |update code      <code> <organization> | Update information about a crime code |
-    |update location  <location_id>         | Update location details               |
-    |update person    <person_id>           | Update information about a person     |
-    |update complaint <complaint_id>        | Update details of a police complaint  |
-    |update crime     <crime_id>            | Update details of a crime record      |
-    |update search    <search_id>           | Update details of a suspect search    |
-    |update help                            | Show this message                     |
+Command | Description
+---|---
+`background id` | Run background check based on person ID
+`background name` | Run background check based on first and last names
 
-4. `>$python3 crime.py background help`
+- `python3 crime.py show help`
 
-    |Command         | Description                                        |
-    |----------------|----------------------------------------------------|
-    |background id   | Run background check based on person ID            |
-    |background name | Run background check based on first and last names |
+Command | Description
+---|---
+`show code` | Show information about an organization's crime code
+`show person <person_id>` | Show information about a person
+`show location <location_id>` | Show information about a location
+`show complaint <complaint_id>` | Show information about a complaint
+`show search <search_id>` | Show information about a search
+`show crime <crime_id>` | Show information about a crime
+`show help` | Show this message
 
-5. `>$python3 crime.py show help`
+- `python3 crime.py filter help`
 
-    |Command                       | Description                                         |
-    |------------------------------|-----------------------------------------------------|
-    |show code                     | Show information about an organization's crime code |
-    |show person    <person_id>    | Show information about a person                     |
-    |show location  <location_id>  | Show information about a location                   |
-    |show complaint <complaint_id> | Show information about a complaint                  |
-    |show search    <search_id>    | Show information about a search                     |
-    |show crime     <crime_id>     | Show information about a crime                      |
-    |show help                     | Show this message                                   |
-
-6. `>$python3 crime.py filter help`
-
-    |Command          | Description                                     |
-    |-----------------|-------------------------------------------------|
-    |filter complaint | Filter complaint by location, date, and code    |
-    |filter crime     | Filter crimes by location, date, and code       |
-    |filter search    | Filter search by location, date, and code       |
-    |filter help      | Show this message                               |
+Command | Description
+---|---
+`filter complaint` | Filter complaint by location, date, and code
+`filter crime` | Filter crimes by location, date, and code
+`filter search` | Filter search by location, date, and code
+`filter help` | Show this message
 
 ## Walkthrough
 
-Lets run through a few commands to get a better idea of how the command line tool works
+Lets run through a few commands to get a better idea of how the command line tool works.
 
-- Back ground check
+### Background check
 
-> For the back ground check you can specify by which factors you want to lookup the person by:
+For the background check you can specify by which factors you want to lookup the person by:
 
-
-    > python3 crime.py background
-
+```bash
+python3 crime.py background
 ```
-(ecetesla2)-[krpinto]:~/ECE356/project/src(master)$ python3 crime.py background
+
+```bash
+$ python3 crime.py background
 > Search for person by:
 > [1] ID
 > [2] First & Last Names
@@ -889,18 +913,16 @@ Enter selection: 1
 > No stop & search records found
 ```
 
->The background check can also be run with the `id` or `name` flags that allow you to search for a person based on id or name
+The background check can also be run with the `id` or `name` flags that allow you to search for a person based on id or name:
 
-    >python3 crime.py background id
-
-    >python3 crime.py background name
-
-
-- Adding a crime to the database
-
-> When adding a crime, the client with prompt you for the necessary information.  If you don't know the information for a particular attribute, type **[Enter]** to skip it.  This will insert a `NULL` for that field.
-
+```bash
+python3 crime.py background id
+python3 crime.py background name
 ```
+
+### Adding a crime to the database
+
+```bash
 $ python3 crime.py add crime
 > Do you know the ID of the victim?
 [yes/no]: yes
@@ -925,20 +947,24 @@ $ python3 crime.py add crime
 ~ Added crime '1901' to database
 ```
 
-> Using an SQL select, we can confirm that the crime record was successfully added to the database:
-```
-mysql> select * from Crime where crime_id = '1901';
-+----------+-------------+------+--------------+-----------+---------+----------+--------------------------------------------+
-| crime_id | incident_id | code | organization | victim_id | weapon  | domestic | description                                |
-+----------+-------------+------+--------------+-----------+---------+----------+--------------------------------------------+
-|     1901 |        2101 | 101  | NYPD         |         1 | Handgun |        0 | Victim was shot by suspect using a handgun |
-+----------+-------------+------+--------------+-----------+---------+----------+--------------------------------------------+
+> :scroll: **Note**
+When adding a crime, the client with prompt you for the necessary information.  If you don't know the information for a particular attribute, type **[Enter]** to skip it.  This will insert a `NULL` for that field.
+
+Using the SQL `SELECT` command, we can confirm that the crime record was successfully added to the database:
+
+```mysql
+mysql> SELECT crime_id, weapon, description FROM Crime WHERE crime_id = 1901;
++----------+---------+--------------------------------------------+
+| crime_id | weapon  | description                                |
++----------+---------+--------------------------------------------+
+|     1901 | Handgun | Victim was shot by suspect using a handgun |
++----------+---------+--------------------------------------------+
 1 row in set (0.00 sec)
 ```
 
-> If you do not know some information that is mandatory, the command will abort, and you will be asked to separately add the corresponding records.  For example, you cannot add a crime with a crime code and organization that does not yet exist in the database.  In this case you will need to add a new crime code using the `python3 crime.py add code` command:
+If you do not know some information that is mandatory, the command will abort, and you will be asked to separately add the corresponding records.  For example, you cannot add a crime with a crime code and organization that does not yet exist in the database.  In this case you will need to add a new crime code using the `python3 crime.py add code` command:
 
-```
+```bash
 $ python3 crime.py add crime
 > Do you know the ID of the victim?
 [yes/no]: yes
@@ -948,9 +974,9 @@ $ python3 crime.py add crime
 > Please add a new code using 'python3 crime.py add code'
 ```
 
-> In other cases, the client will verify that your data is valid.  For example, it will reject crime codes that do not exist in the database:
+In other cases, the client will verify that your data is valid.  For example, it will reject crime codes that do not exist in the database:
 
-```
+```bash
 > Do you know the ID of the victim?
 [yes/no]: yes
 [INT(10)] victim_id: 3
@@ -962,35 +988,20 @@ X 'LAPD' code '1000' not found!
 > Please add a new code using 'python3 crime.py add code'
 ```
 
-- Filter for crimes at a specific location
+### Filter for crimes at a specific location
 
-> The filter prompts for mutiple sections that you can narrow your search by which include the following:
+The `filter` command prompts for mutiple sections that you can narrow your search by which include the following:
 
-    1. location
-    2. crime codes
-    3. date
+- Location
+- Crime codes
+- Date
 
-> You can specify one or mutiple of these in the same filter query.  The client will show you the most important imformation from the results.  You can use the resulting codes and the `python3 crime.py show` command to learn more about these records based on their IDs.
+You can specify one or mutiple of these in the same filter query.  The client will show you the most important imformation from the results.  You can use the resulting codes and the `python3 crime.py show` command to learn more about these records based on their IDs.
 
 Let's say that you wanted to know the crimes that took place in `Los Angeles` after `2020` and reported by the `LAPD` in the `Vehicle stolen` category.
 
-> TIP: If you want to look up a particular code use the `show code` command
-
-```
-> Do you know the crime code?
-[yes/no]: yes
-[VARCHAR(4)] code: 510
-> Do you know the name of the crime enforcement organization?
-[yes/no]: yes
-[VARCHAR(16)] organization: LAPD
-```
-
-| Code | Organization | Category | Description      |
-| ---- | ------------ | -------- | ---------------- |
-| 510  | LAPD         | NULL     | VEHICLE - STOLEN |
-
-
-```
+```bash
+python3 crime.py filter
 > Do you want to filter by location?
 [yes/no]: yes
 > Do have a country you want to filter by?
@@ -1021,47 +1032,45 @@ Enter selection: 2
 [yes/no]: yes
 [DATE] occurrence_date: 01/09/20
 ```
-A few rows of the command output:
+
+A few rows of the command output (some columns have been truncated for readability):
+
+```bash
+| --------------- | ---- | ----------- | ----------------- | ---------------- |
+| occurrence_date | code | city        | victim_first_name | victim_last_name |
+| --------------- | ---- | ----------- | ----------------- | ---------------- |
+| 2019-11-15      | 510  | Los Angeles | Mary              | Anzalone         |
+| 2019-12-11      | 510  | Los Angeles | Carl              | Townsend         |
+| 2019-10-15      | 510  | Los Angeles | Virgil            | Thissen          |
+| --------------- | ---- | ----------- | ----------------- | ---------------- |
 ```
-| -------- | ----------- | --------------- | ---- | ------------ | ----------- | ----------- | ----------- | ------------- | --------- | ----------------- | ---------------- |
-| crime_id | incident_id | occurrence_date | code | organization | description | location_id | city        | country       | victim_id | victim_first_name | victim_last_name |
-| -------- | ----------- | --------------- | ---- | ------------ | ----------- | ----------- | ----------- | ------------- | --------- | ----------------- | ---------------- |
-| 600      | 800         | 2019-11-15      | 510  | LAPD         | NULL        | 800         | Los Angeles | United States | 104       | Mary              | Anzalone         |
-| 601      | 801         | 2019-12-11      | 510  | LAPD         | NULL        | 801         | Los Angeles | United States | 105       | Carl              | Townsend         |
-| 660      | 860         | 2019-10-15      | 510  | LAPD         | NULL        | 860         | Los Angeles | United States | 164       | Virgil            | Thissen          |
-| -------- | ----------- | --------------- | ---- | ------------ | ----------- | ----------- | ----------- | ------------- | --------- | ----------------- | ---------------- |
+
+> :bulb: **Tip**
+If you want to look up a particular code to verify its entries before filtering by code, use the `show code` command as shown below.
+
+```bash
+$ python3 crime.py show code
+> Do you know the crime code?
+[yes/no]: yes
+[VARCHAR(4)] code: 510
+> Do you know the name of the crime enforcement organization?
+[yes/no]: yes
+[VARCHAR(16)] organization: LAPD
+
+| Code | Organization | Category | Description      |
+| ---- | ------------ | -------- | ---------------- |
+| 510  | LAPD         | NULL     | VEHICLE - STOLEN |
 ```
+## Testing Plan
 
-# Challanges
-
-There were quite few challanges that we encountered while building this project both from a command line interface and database design aspect.
-
-Starting off with the database design, one of the really tricky aspects revolved around the two subsets of the US and UK database. One of our primary objectives was to develop a database that was generic. In other words it is a database that could be used in any crime system around the world. While there were many similarities between the two datasets, there are also a certain level of differences which makes it quite difficult to generalize.
-
-We also faced challenges when developing our client command line tool.  It was difficult to find a balance between usablility and flexibility when designing the client commands, especially those which required prompting the user to enter values for attributes.  By nature, the client program does not provide the full flexibiliy of SQL querying, so we needed to decide what the user should and should not be able to do with respect to modifying and querying the database.
-
-# Tradeoffs
-
-Throughout this project we were forced to make tradeoffs both from a database design and command Line interface prespective.
-
-One of the big tradeoffs we made was in regards to the gneralization of the databse. We made it a goal to ensure that our crime database and system could be implemented in any crime system. Due to this you lose a certain level of granularity that exists within different regions throughout the world. While these region specific details could be important when it comes to crime, our goal was to ensure that we built a solid foundation for a crime database. Our understanding was that this database and system could later be adapted to a particular region at which point certain nuances could be added in.
-
-Another tradeoff in our database design came from the relationship of linking people to multiple crimes. With the datasets given to us, each crime record corresponded to a single inividual. Now in reality this certinly will not be the case as a single person can commit multiple crimes. That is why in reality it would be better to have a mapping between the `crime_id` and the `person_id` in a seperate table. This would allow multiple people to correspond to a single crime and reduce the number of duplicates in the database.
-
-In terms of the client too development, we had to make a tradeoff between the flexibility and usability of the UI.  We decided to using a combination of interactive prompting and command line arguments in order to implement various functionality.  For example, prompting was used when adding or searching for attribute values, which would be very confusing for the user (and difficult to implement) if it were done via command line arguments, especially since some of the tables have many attributes, each with different formats.  Having interactive prompts avoids confusing the user and allowed us to provide them with real-time feedback.  To aviod too many levels of propmpting, we separated core functions such as `add`, `delete`, `filter`, etc. into their own commands and subcommands, which preserves some granularity without becoming overwhelming for the user.
-
-We also made the decision to restrict the user from attempting to micromanage sensitive attributes, such as primary keys.  These attributes were abstracted away behind the user interface to make the database system easier to use.  Therefore the user does not need to have an in depth knowlege of how the ER model works in order to use it.  It also prevents the user from accidentally breaking contraints in the database, which would be impossibile to fix if they did not have accesses to anything but the client tool.  The overall goal was to provide the same core functionality of SQL via the client without the user having to actually write or think about the actual SQL code.
-
-# Testing and Verification
-
-In order to test our client and database functionality, we made use of both manaul and automatic testing methods.  We individually tested each client command and verified the corresponding functionality using MySQL commands on the database.  For example, the `add` and `deletes` commands were manually verified by crosschecking for deletions and addtions vias SQL `SELECT` queries from the same tables, both before and after running the commands.  Similar testing was conducted for `update`.  These three commands make up the DDL and DML.
+In order to test our client and database functionality, we made use of both manaul and automatic testing methods.  We individually tested each client command and verified the corresponding functionality using MySQL commands on the database.  For example, the `add` and `delete` commands were manually verified by crosschecking for deletions and addtions vias SQL `SELECT` queries from the same tables, both before and after running the commands.  Similar testing was conducted for `update`.  These three commands make up the DDL and DML.
 
 The remaining commands deal with querying only and not the SQL DDL/DML language such as `INSERT`, `DELETE`, and `UPDATE`.  These include the `update`, `show`, `filter`, and `background` commands.  These commands actually generate SQL `SELECT` queries in order to obtain the data, so it was easy to verify their output by constructing equivalent queries in the MySQL terminal.
 
 In additional to manually testing our database functionality, we also developed automated test cases that accomplish the same goal.  This test code runs various combinations of commands and subcommands and verifies the output by cross-referencing against the results that are directly queried from the database.  The coverage for these unit tests are shown below:
 
-```
-$ coverage run tests.py -b && coverage report; coverage erase
+```bash
+$ coverage run tests.py -b
 test_add_filter_complaint (__main__.TestCLI) ... ok
 test_add_show_delete_crime (__main__.TestCLI) ... ok
 test_add_show_delete_person (__main__.TestCLI) ... ok
@@ -1074,6 +1083,8 @@ test_stripQuotes (__main__.TestUtils) ... ok
 Ran 7 tests in 1614.001s
 
 OK
+
+$ coverage report
 Name                       Stmts   Miss  Cover
 ----------------------------------------------
 MySQLutils/MySQLutils.py      27      3    89%
@@ -1091,14 +1102,34 @@ TOTAL                       2095   1045    50%
 
 # Data Mining
 
+TO-DO
 
+# Conclusion
 
-# Things to Improve in the future
+## Challenges
+
+There were quite few challanges that we encountered while building this project both from a command line interface and database design aspect.
+
+Starting off with the database design, one of the really tricky aspects revolved around the two subsets of the US and UK database. One of our primary objectives was to develop a database that was generic. In other words it is a database that could be used in any crime system around the world. While there were many similarities between the two datasets, there are also a certain level of differences which makes it quite difficult to generalize.
+
+We also faced challenges when developing our client command line tool.  It was difficult to find a balance between usablility and flexibility when designing the client commands, especially those which required prompting the user to enter values for attributes.  By nature, the client program does not provide the full flexibiliy of SQL querying, so we needed to decide what the user should and should not be able to do with respect to modifying and querying the database.
+
+## Tradeoffs
+
+Throughout this project we were forced to make tradeoffs both from a database design and command Line interface prespective.
+
+One of the big tradeoffs we made was in regards to the gneralization of the databse. We made it a goal to ensure that our crime database and system could be implemented in any crime system. Due to this you lose a certain level of granularity that exists within different regions throughout the world. While these region specific details could be important when it comes to crime, our goal was to ensure that we built a solid foundation for a crime database. Our understanding was that this database and system could later be adapted to a particular region at which point certain nuances could be added in.
+
+Another tradeoff in our database design came from the relationship of linking people to multiple crimes. With the datasets given to us, each crime record corresponded to a single inividual. Now in reality this certinly will not be the case as a single person can commit multiple crimes. That is why in reality it would be better to have a mapping between the `crime_id` and the `person_id` in a seperate table. This would allow multiple people to correspond to a single crime and reduce the number of duplicates in the database.
+
+In terms of the client too development, we had to make a tradeoff between the flexibility and usability of the UI.  We decided to using a combination of interactive prompting and command line arguments in order to implement various functionality.  For example, prompting was used when adding or searching for attribute values, which would be very confusing for the user (and difficult to implement) if it were done via command line arguments, especially since some of the tables have many attributes, each with different formats.  Having interactive prompts avoids confusing the user and allowed us to provide them with real-time feedback.  To aviod too many levels of propmpting, we separated core functions such as `add`, `delete`, `filter`, etc. into their own commands and subcommands, which preserves some granularity without becoming overwhelming for the user.
+
+We also made the decision to restrict the user from attempting to micromanage sensitive attributes, such as primary keys.  These attributes were abstracted away behind the user interface to make the database system easier to use.  Therefore the user does not need to have an in depth knowlege of how the ER model works in order to use it.  It also prevents the user from accidentally breaking contraints in the database, which would be impossibile to fix if they did not have accesses to anything but the client tool.  The overall goal was to provide the same core functionality of SQL via the client without the user having to actually write or think about the actual SQL code.
+
+## Future Improvements
 
 When it comes to developing the client application one of the biggest challanges is preventing SQL injection. SQL injection is when the user can find valnerable inputs and create malicious SQL commands to execute in th database. While this may not be a massive issue now considering we allow a certin subset of instructions in the CLI, it could be a massive issue as this application grows. One of the ways to prevent SQL injection is to do extensive input validation. While we do have a level of input validation based on the types of the attributes, we could certinly do more when it comes to adding content to the database. This is certinly something to improve on in the future as it would ensure greater security for this application. Furthermore aside from implementing more input validation in the future, testing for SQL injection should also be a priority. This would ensure that development efforts in the future don't introduce any new sequrity leaks.
 
 Another improvement to our system would be to add more rigorous error checking and unit tests for the client.  Given the time constraints, there was only so much of the client that we could verify with regards to stability and robustness.  In the future, it would be wise to more thoroughly test the various client commands using invalid data.
 
 Additionally, it would be worthwhile to investigate the functionality of our database with additional datasets.  The current datasets are only limited to certain areas and are not a comprehensive representation of all the types of crime records that exists around the world.  Testing with additional datasets may reveal necessary design changes that can improve the performance, reliability, and functionality of the crime database design and implementation.
-
-# Commands implemented in the Client
