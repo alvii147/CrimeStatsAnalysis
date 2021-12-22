@@ -1355,6 +1355,7 @@ def show_code(args):
 
     headers =  [('Code','Organization','Category','Description')]
     print_table(headers + results)
+
     return SUCCESS
 
 def show_person(args):
@@ -1373,6 +1374,8 @@ def show_person(args):
     header = [('Person ID', 'First Name', 'Last Name', 'Age', 'Gender', 'Ethnicity', 'Primary Phone Number')]
     print_table(header + results)
 
+    return SUCCESS
+
 def show_location(args):
     if len(args) != 1:
         log.error("Incorrect number of arguments")
@@ -1388,6 +1391,7 @@ def show_location(args):
     results = cursor.fetchall()
     header = [('Location ID','Latitude', 'Longitude', 'Premises', 'Area', 'Precinct', 'Ward', 'Borough', 'City', 'State', 'Country')]
     print_table(header + results)
+
     return SUCCESS
 
 def show_complaint(args):
@@ -1405,6 +1409,7 @@ def show_complaint(args):
     results = cursor.fetchall()
     header = [('Complaint ID', 'Incident ID', 'Code', 'Organization', 'Reported Date', 'Description')]
     print_table(header + results)
+
     return SUCCESS
 
 def show_crime(args):
@@ -1422,6 +1427,7 @@ def show_crime(args):
     results = cursor.fetchall()
     header = [('Crime ID', 'Incident ID', 'Code', 'Organization', 'VictimID', 'Weapon', 'Domestic', 'Description')]
     print_table(header + results)
+
     return SUCCESS
 
 def show_search(args):
@@ -1439,6 +1445,7 @@ def show_search(args):
     results = cursor.fetchall()
     header = [('Search ID', 'Incident ID', 'Suspect ID', 'Legislation', 'Object', 'Outcome', 'Object_caused_outcome', 'Clothing_removal')]
     print_table(header + results)
+
     return SUCCESS
 
 SHOW_HELP = {
