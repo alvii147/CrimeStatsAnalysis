@@ -302,7 +302,7 @@ def load(args):
     n = 1000
     if len(args) > 0:
         try:
-            n = len(args[0])
+            n = int(args[0])
         except:
             log.error('\'num_of_entries must be an integer\'')
 
