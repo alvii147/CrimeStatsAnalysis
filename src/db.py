@@ -1,3 +1,4 @@
+import re
 import log
 from decimal import Decimal
 
@@ -48,6 +49,19 @@ for table in TABLES_LIST:
             md[column_name] = data_type.upper()
 
     TABLES[table] = md
+
+CSV_ENTRIES = {
+    '/var/lib/mysql-files/10-Crime/UKCrime/london-stop-and-search.csv': 302624,
+    '/var/lib/mysql-files/10-Crime/UKCrime/london-outcomes.csv': 1947051,
+    '/var/lib/mysql-files/10-Crime/UKCrime/london-street.csv': 2946480,
+    '/var/lib/mysql-files/10-Crime/USCrime/NYPD_Complaint_Data_Historic.csv': 1048576,
+    '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2001_to_2004.csv': 1923517,
+    '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2005_to_2007.csv': 1872346,
+    '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2008_to_2011.csv': 2688712,
+    '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2012_to_2017.csv': 1456715,
+    '/var/lib/mysql-files/10-Crime/USCrime/Crime_Data_from_2010_to_2019.csv': 2118204,
+    '/var/lib/mysql-files/10-Crime/USCrime/Crime_Data_from_2020_to_Present.csv' : 326214,
+}
 
 def tableStats():
     num_attributes = 0
@@ -138,5 +152,27 @@ def update(table, where, **attributes):
 
     query = f'UPDATE {table} SET {updates} WHERE {where};'
     return query
+
+def getIgnoreLines(n, path, safety_net=10):
+    entries = CSV_ENTRIES.get(path, 100)
+    ignore_lines = entries - n
+
+    if ignore_lines < safety_net:
+        ignore_lines = safety_net
+    elif ignore_lines > entries - safety_net:
+        ignore_lines = entries - safety_net
+
+    return ignore_lines
+
+def loadReplaceIgnoreLines(query, n):
+    rgx = r'LOAD\s+DATA\s+INFILE\s+(\S+)'
+    path = re.search(rgx, query).group(1).strip('\'""')
+
+    ignore_lines = getIgnoreLines(n, path)
+    rgx = r'IGNORE\s+\d+\s+LINES'
+    replace_str = f'IGNORE {ignore_lines} LINES'
+    new_query = re.subn(rgx, replace_str, query, count=1, flags=re.IGNORECASE)
+
+    return new_query
 
 closeDB(connection, cursor)

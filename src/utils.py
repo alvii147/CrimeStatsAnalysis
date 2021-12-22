@@ -186,28 +186,37 @@ def loadQueries(path):
         queries[i] = queries[i].strip('\n')
 
     log.success(f"Loaded {len(queries)} queries from '{path}'")
+
     return queries
 
-def runQueries(path):
+def runQueries(queries):
     '''
-    Run SQL queries from file path.
+    Run given SQL queries.
 
     Parameters
     ----------
-    filename : str or ``pathlib.Path`` object
-        Path to SQL file as string or ``pathlib.Path`` object.
+    queries : list
+        List of loaded queries.
+
+    Returns
+    -------
+    output : list
+        List of raw output resulting from running queries.
     '''
 
     connection, cursor = connectDB()
-    queries = loadQueries(path)
+    output = []
 
     for query in queries:
         console_query = consoleFriendly(query)
         log.info(f'Executing query "{console_query}" ...')
         cursor.execute(query)
+        output.append(cursor.fetchall())
 
     connection.commit()
     closeDB(connection, cursor)
+
+    return output
 
 def yes(message):
     log.info(message)
