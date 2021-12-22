@@ -17,6 +17,7 @@ SAMPLE_PERSON = {
     'phone_number': '(519) 888-4567',
     'updated_gender': 'Lord of ECE',
 }
+
 PERSON_TEST_INPUT = [
     SAMPLE_PERSON['first_name'],
     SAMPLE_PERSON['last_name'],
@@ -47,6 +48,7 @@ SAMPLE_CRIME = {
     'domestic': '0',
     'description': 'Perpetrator robbed Thors hammer',
 }
+
 CRIME_TEST_INPUT = [
     'yes',
     SAMPLE_CRIME['victim_id'],
@@ -66,6 +68,9 @@ CRIME_TEST_INPUT = [
 ]
 
 class TestCLI(unittest.TestCase):
+    def setUp(self):
+        warnings.filterwarnings("ignore", category=DeprecationWarning) 
+
     @patch('builtins.input', side_effect=CRIME_TEST_INPUT)
     def test_add_delete_crime(self, magic_mock_obj):
         # add crime
@@ -83,6 +88,8 @@ class TestCLI(unittest.TestCase):
         show_output = [o.replace('|', '') for o in show_output]
         show_output = [o.strip() for o in show_output]
         show_output = [o for o in show_output if len(o) > 0]
+
+        print(show_output)
 
     @patch('builtins.input', side_effect=PERSON_TEST_INPUT)
     def test_add_delete_person(self, magic_mock_obj):
