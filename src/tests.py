@@ -187,7 +187,7 @@ class TestCLI(unittest.TestCase):
 
         self.assertTrue(exit_status == crime.SUCCESS)
         show_output = parseShowOutput(show_output)
-        self.assertTrue(len(show_output) > 1)
+        self.assertTrue(len(show_output) > 0)
 
         self.assertTrue(show_output[-1][1] == SAMPLE_PERSON['first_name'])
         self.assertTrue(show_output[-1][2] == SAMPLE_PERSON['last_name'])
