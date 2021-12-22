@@ -66,6 +66,40 @@ CRIME_TEST_INPUT = [
     SAMPLE_CRIME['description'],
 ]
 
+SAMPLE_COMPLAINT = {
+    'code': '110',
+    'organization': 'IUCR',
+    'location_id': '1',
+    'occurrence_date': '2015-09-06',
+    'last_updated': '2015-09-06',
+    'status': 'Filed',
+    'police_department': 'Chicago Police Department',
+    'type': 'Robbery',
+    'reported_date': '2015-09-06',
+    'description': 'My house got robbed',
+}
+
+COMPLAINT_TEST_INPUT = [
+    'yes',
+    SAMPLE_COMPLAINT['code'],
+    SAMPLE_COMPLAINT['organization'],
+    'yes',
+    SAMPLE_COMPLAINT['location_id'],
+    SAMPLE_COMPLAINT['occurrence_date'],
+    SAMPLE_COMPLAINT['last_updated'],
+    SAMPLE_COMPLAINT['status'],
+    SAMPLE_COMPLAINT['police_department'],
+    SAMPLE_COMPLAINT['type'],
+    SAMPLE_COMPLAINT['reported_date'],
+    SAMPLE_COMPLAINT['description'],
+    'no',
+    'yes',
+    'yes',
+    '110',
+    'no',
+    'no',
+]
+
 def isAttributeLine(l):
     for w in l:
         for c in w:
@@ -73,6 +107,14 @@ def isAttributeLine(l):
                 return True
 
     return False
+
+def parseShowOutput(output):
+    output = [o.strip() for o in output.split('\n') if len(o.strip()) > 1]
+    output = [[p.strip() for p in o.split('|')] for o in output]
+    output = [[p for p in o if len(p) > 0] for o in output]
+    output = list(filter(isAttributeLine, output))
+
+    return output
 
 class TestCLI(unittest.TestCase):
     def setUp(self):
@@ -93,10 +135,7 @@ class TestCLI(unittest.TestCase):
 
         self.assertTrue(exit_status == crime.SUCCESS)
 
-        show_output = [o.strip() for o in show_output.split('\n') if len(o.strip()) > 1]
-        show_output = [[p.strip() for p in o.split('|')] for o in show_output]
-        show_output = [[p for p in o if len(p) > 0] for o in show_output]
-        show_output = list(filter(isAttributeLine, show_output))
+        show_output = parseShowOutput(show_output)
         self.assertTrue(len(show_output) > 1)
 
         attr = show_output[-1]
@@ -117,6 +156,22 @@ class TestCLI(unittest.TestCase):
         crime.cursor.execute(query)
         output = crime.cursor.fetchall()
         self.assertTrue(len(output) == 0)
+
+    @patch('builtins.input', side_effect=COMPLAINT_TEST_INPUT)
+    def test_add_filter_complaint(self, magic_mock_obj):
+        # add complaint
+        exit_status = crime.add(['complaint'])
+        self.assertTrue(exit_status == crime.SUCCESS)
+        crime.connection.commit()
+
+        with patch('sys.stdout', new=StringIO()) as fake_out:
+            exit_status = crime.filter(['complaint'])
+            show_output = fake_out.getvalue()
+
+        self.assertTrue(exit_status == crime.SUCCESS)
+
+        show_output = parseShowOutput(show_output)
+        print(show_output[-1])
 
     @patch('builtins.input', side_effect=PERSON_TEST_INPUT)
     def test_add_delete_person(self, magic_mock_obj):
