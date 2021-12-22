@@ -103,9 +103,9 @@ class TestCLI(unittest.TestCase):
         print(attr)
         self.assertTrue(attr[2] == SAMPLE_CRIME['code'])
         self.assertTrue(attr[3] == SAMPLE_CRIME['organization'])
-        self.assertTrue(attr[4] == SAMPLE_CRIME['weapon'])
-        self.assertTrue(attr[5] == SAMPLE_CRIME['domestic'])
-        self.assertTrue(attr[6] == SAMPLE_CRIME['description'])
+        self.assertTrue(attr[5] == SAMPLE_CRIME['weapon'])
+        self.assertTrue(attr[6] == SAMPLE_CRIME['domestic'])
+        self.assertTrue(attr[7] == SAMPLE_CRIME['description'])
 
     @patch('builtins.input', side_effect=PERSON_TEST_INPUT)
     def test_add_delete_person(self, magic_mock_obj):
