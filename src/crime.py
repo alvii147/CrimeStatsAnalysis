@@ -289,21 +289,43 @@ def insert_location(location):
 # ===================== CREATION ===================== #
 
 def create(args):
-    utils.runQueries("SQL/create.sql")
-    utils.runQueries("SQL/keys.sql")
-    utils.runQueries("SQL/views.sql")
+    queries = utils.loadQueries("SQL/create.sql")
+    utils.runQueries(queries)
+
+    queries = utils.loadQueries("SQL/keys.sql")
+    utils.runQueries(queries)
+
+    queries = utils.loadQueries("SQL/views.sql")
+    utils.runQueries(queries)
 
 def load(args):
-    utils.runQueries("SQL/create_temp.sql")
-    utils.runQueries("SQL/load.sql")
+    n = 1000
+    if len(args) > 0:
+        try:
+            n = int(args[0])
+        except:
+            log.error('\'num_of_entries must be an integer\'')
+
+    log.info(f'Loading {n} entries from each csv')
+    queries = utils.loadQueries("SQL/create_temp.sql")
+    utils.runQueries(queries)
+
+    queries = utils.loadQueries("SQL/load.sql")
+    queries = [db.loadReplaceIgnoreLines(query, n) for query in queries]
+    utils.runQueries(queries)
+
     transfer.transfer_all()
-    utils.runQueries("SQL/drop.sql")
+
+    queries = utils.loadQueries("SQL/drop.sql")
+    utils.runQueries(queries)
 
 def clean(args):
-    utils.runQueries("SQL/clean.sql")
+    queries = utils.loadQueries("SQL/clean.sql")
+    utils.runQueries(queries)
 
 def clear(args):
-    utils.runQueries("SQL/clear.sql")
+    queries = utils.loadQueries("SQL/clear.sql")
+    utils.runQueries(queries)
 
 # ===================== ADD ===================== #
 
@@ -1777,17 +1799,18 @@ def help(args):
     log.info(f"Usage: {PROGRAM} <command> [arguments]")
     log.info("=============================================")
 
-    log.info(f"{PROGRAM} help       : {HELP['help']}")
-    log.info(f"{PROGRAM} create     : {HELP['create']}")
-    log.info(f"{PROGRAM} load       : {HELP['load']}")
-    log.info(f"{PROGRAM} clear      : {HELP['clear']}")
-    log.info(f"{PROGRAM} clean      : {HELP['clean']}")
-    log.info(f"{PROGRAM} add        : {HELP['add']}")
-    log.info(f"{PROGRAM} delete     : {HELP['delete']}")
-    log.info(f"{PROGRAM} update     : {HELP['update']}")
-    log.info(f"{PROGRAM} background : {HELP['background']}")
-    log.info(f"{PROGRAM} show       : {HELP['show']}")
-    log.info(f"{PROGRAM} filter     : {HELP['filter']}")
+    log.info(f"{PROGRAM} help                       : {HELP['help']}")
+    log.info(f"{PROGRAM} create                     : {HELP['create']}")
+    log.info(f"{PROGRAM} load                       : {HELP['load']}")
+    log.info(f"{PROGRAM} load <number_of_entries>   : {HELP['load']}")
+    log.info(f"{PROGRAM} clear                      : {HELP['clear']}")
+    log.info(f"{PROGRAM} clean                      : {HELP['clean']}")
+    log.info(f"{PROGRAM} add                        : {HELP['add']}")
+    log.info(f"{PROGRAM} delete                     : {HELP['delete']}")
+    log.info(f"{PROGRAM} update                     : {HELP['update']}")
+    log.info(f"{PROGRAM} background                 : {HELP['background']}")
+    log.info(f"{PROGRAM} show                       : {HELP['show']}")
+    log.info(f"{PROGRAM} filter                     : {HELP['filter']}")
 
     return SUCCESS
 

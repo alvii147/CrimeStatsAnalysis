@@ -74,8 +74,8 @@ SET
     area = NULLIF(REGEXP_REPLACE(@_area, '[[:space:]]+', ' '), ''),
     precinct = NULLIF(@_precinct, ''),
     borough = NULLIF(@_borough, ''),
-    occurrence_date = CAST(STR_TO_DATE(@_occurrence_date,'%d/%m/%Y') AS DATE),
-    reported_date = CAST(STR_TO_DATE(@_reported_date,'%d/%m/%Y') AS DATE),
+    occurrence_date = CAST(STR_TO_DATE(@_occurrence_date,'%m/%d/%Y') AS DATE),
+    reported_date = CAST(STR_TO_DATE(@_reported_date,'%m/%d/%Y') AS DATE),
     latitude = NULLIF(@_latitude, ''),
     longitude = NULLIF(@_longitude, '');
 
