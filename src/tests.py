@@ -78,7 +78,11 @@ class TestCLI(unittest.TestCase):
             exit_status = crime.show(['crime', str(crime_id)])
             show_output = fake_out.getvalue()
 
-        print([o.strip() for o in show_output.split()])
+        show_output = [o for o in show_output.split()]
+        show_output = [o.replace('-', '') for o in show_output]
+        show_output = [o.replace('|', '') for o in show_output]
+        show_output = [o.strip() for o in show_output]
+        show_output = [o for o in show_output if len(o) > 0]
 
     @patch('builtins.input', side_effect=PERSON_TEST_INPUT)
     def test_add_delete_person(self, magic_mock_obj):
