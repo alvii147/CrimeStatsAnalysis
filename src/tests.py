@@ -67,9 +67,17 @@ CRIME_TEST_INPUT = [
     SAMPLE_CRIME['description'],
 ]
 
+def isAttributeLine(l):
+    for w in l:
+        for c in w:
+            if c != '-':
+                return True
+
+    return False
+
 class TestCLI(unittest.TestCase):
     def setUp(self):
-        warnings.filterwarnings("ignore", category=DeprecationWarning) 
+        warnings.filterwarnings("ignore", category=DeprecationWarning)
 
     @patch('builtins.input', side_effect=CRIME_TEST_INPUT)
     def test_add_delete_crime(self, magic_mock_obj):
@@ -83,13 +91,20 @@ class TestCLI(unittest.TestCase):
             exit_status = crime.show(['crime', str(crime_id)])
             show_output = fake_out.getvalue()
 
-        show_output = [o for o in show_output.split()]
-        show_output = [o.replace('-', '') for o in show_output]
-        show_output = [o.replace('|', '') for o in show_output]
-        show_output = [o.strip() for o in show_output]
-        show_output = [o for o in show_output if len(o) > 0]
+        self.assertTrue(exit_status == crime.SUCCESS)
 
-        print(show_output)
+        show_output = [o.strip() for o in show_output.split('\n') if len(o.strip()) > 1]
+        show_output = [[p.strip() for p in o.split('|')] for o in show_output]
+        show_output = [[p for p in o if len(p) > 0] for o in show_output]
+        show_output = list(filter(isAttributeLine, show_output))
+        self.assertTrue(len(show_output) > 1)
+
+        attr = show_output[-1]
+        self.assertTrue(attr[2] == SAMPLE_CRIME['code'])
+        self.assertTrue(attr[3] == SAMPLE_CRIME['organization'])
+        self.assertTrue(attr[4] == SAMPLE_CRIME['weapon'])
+        self.assertTrue(attr[5] == SAMPLE_CRIME['domestic'])
+        self.assertTrue(attr[6] == SAMPLE_CRIME['description'])
 
     @patch('builtins.input', side_effect=PERSON_TEST_INPUT)
     def test_add_delete_person(self, magic_mock_obj):
