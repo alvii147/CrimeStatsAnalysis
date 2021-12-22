@@ -117,6 +117,15 @@ def parseShowOutput(output):
     return output
 
 class TestCLI(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # clean db
+        crime.clean('DUMMY')
+        # create tables
+        crime.create('DUMMY')
+        # load tables
+        crime.load('DUMMY')
+
     def setUp(self):
         warnings.filterwarnings("ignore", category=DeprecationWarning)
 
