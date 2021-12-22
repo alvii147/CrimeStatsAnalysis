@@ -29,6 +29,8 @@ def filterAttributes(data, attr, one_dim=False):
         if len(attr) > 1:
             raise ValueError('attr must have only one value if one_dim is True')
 
+        filtered_data = [row[0] for row in filtered_data]
+
     return filtered_data
 
 if __name__ == '__main__':

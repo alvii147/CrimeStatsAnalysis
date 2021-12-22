@@ -51,16 +51,16 @@ for table in TABLES_LIST:
     TABLES[table] = md
 
 CSV_ENTRIES = {
-    '/var/lib/mysql-files/10-Crime/UKCrime/london-stop-and-search.csv': 302624,
-    '/var/lib/mysql-files/10-Crime/UKCrime/london-outcomes.csv': 1947051,
-    '/var/lib/mysql-files/10-Crime/UKCrime/london-street.csv': 2946480,
-    '/var/lib/mysql-files/10-Crime/USCrime/NYPD_Complaint_Data_Historic.csv': 1048576,
-    '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2001_to_2004.csv': 1923517,
-    '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2005_to_2007.csv': 1872346,
-    '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2008_to_2011.csv': 2688712,
-    '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2012_to_2017.csv': 1456715,
-    '/var/lib/mysql-files/10-Crime/USCrime/Crime_Data_from_2010_to_2019.csv': 2118204,
-    '/var/lib/mysql-files/10-Crime/USCrime/Crime_Data_from_2020_to_Present.csv' : 326214,
+    '/var/lib/mysql-files/10-Crime/UKCrime/london-stop-and-search.csv':           302624,
+    '/var/lib/mysql-files/10-Crime/UKCrime/london-outcomes.csv':                  1947051,
+    '/var/lib/mysql-files/10-Crime/UKCrime/london-street.csv':                    2946480,
+    '/var/lib/mysql-files/10-Crime/USCrime/NYPD_Complaint_Data_Historic.csv':     1048576,
+    '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2001_to_2004.csv':      1923517,
+    '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2005_to_2007.csv':      1872346,
+    '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2008_to_2011.csv':      2688712,
+    '/var/lib/mysql-files/10-Crime/USCrime/Chicago_Crimes_2012_to_2017.csv':      1456715,
+    '/var/lib/mysql-files/10-Crime/USCrime/Crime_Data_from_2010_to_2019.csv':     2116240,
+    '/var/lib/mysql-files/10-Crime/USCrime/Crime_Data_from_2020_to_Present.csv' : 183737,
 }
 
 def tableStats():
