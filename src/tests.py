@@ -74,7 +74,7 @@ class TestCLI(unittest.TestCase):
         crime.connection.commit()
 
         crime_id = crime.cursor.lastrowid
-        with patch('sys.stdout', new=StringIO) as fake_out:
+        with patch('sys.stdout', new=StringIO()) as fake_out:
             exit_status = crime.show(['crime', str(crime_id)])
             std_out = fake_out.getvalue()
 
