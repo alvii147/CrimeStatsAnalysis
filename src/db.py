@@ -171,7 +171,7 @@ def loadReplaceIgnoreLines(query, n):
     ignore_lines = getIgnoreLines(n, path)
     rgx = r'IGNORE\s+\d+\s+LINES'
     replace_str = f'IGNORE {ignore_lines} LINES'
-    new_query = re.subn(rgx, replace_str, query, count=1, flags=re.IGNORECASE)
+    new_query = str(re.subn(rgx, replace_str, query, count=1, flags=re.IGNORECASE)[0])
 
     return new_query
 
