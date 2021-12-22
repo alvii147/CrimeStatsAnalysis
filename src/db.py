@@ -162,6 +162,8 @@ def getIgnoreLines(n, path, safety_net=10):
     elif ignore_lines > entries - safety_net:
         ignore_lines = entries - safety_net
 
+    log.debug(f'IGNORE {ignore_lines} LINES ... {path}')
+
     return ignore_lines
 
 def loadReplaceIgnoreLines(query, n):
