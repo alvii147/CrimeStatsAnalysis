@@ -134,7 +134,6 @@ class TestCLI(unittest.TestCase):
             show_output = fake_out.getvalue()
 
         self.assertTrue(exit_status == crime.SUCCESS)
-
         show_output = parseShowOutput(show_output)
         self.assertTrue(len(show_output) > 1)
 
@@ -164,24 +163,39 @@ class TestCLI(unittest.TestCase):
         self.assertTrue(exit_status == crime.SUCCESS)
         crime.connection.commit()
 
+        # filter complaint by code
         with patch('sys.stdout', new=StringIO()) as fake_out:
             exit_status = crime.filter(['complaint'])
             show_output = fake_out.getvalue()
 
         self.assertTrue(exit_status == crime.SUCCESS)
-
         show_output = parseShowOutput(show_output)
         self.assertTrue(len(show_output) > 1)
         self.assertTrue(show_output[-1][3] == SAMPLE_COMPLAINT['code'])
 
     @patch('builtins.input', side_effect=PERSON_TEST_INPUT)
-    def test_add_delete_person(self, magic_mock_obj):
+    def test_add_show_delete_person(self, magic_mock_obj):
         # add person
         exit_status = crime.add(['person'])
         self.assertTrue(exit_status == crime.SUCCESS)
         crime.connection.commit()
 
         person_id = crime.cursor.lastrowid
+        with patch('sys.stdout', new=StringIO()) as fake_out:
+            exit_status = crime.show(['person', str(person_id)])
+            show_output = fake_out.getvalue()
+
+        self.assertTrue(exit_status == crime.SUCCESS)
+        show_output = parseShowOutput(show_output)
+        self.assertTrue(len(show_output) > 1)
+
+        self.assertTrue(show_output[-1][1] == SAMPLE_PERSON['first_name'])
+        self.assertTrue(show_output[-1][2] == SAMPLE_PERSON['last_name'])
+        self.assertTrue(show_output[-1][3] == SAMPLE_PERSON['age_range'])
+        self.assertTrue(show_output[-1][4] == SAMPLE_PERSON['gender'])
+        self.assertTrue(show_output[-1][5] == SAMPLE_PERSON['ethnicity'])
+        self.assertTrue(show_output[-1][6] == SAMPLE_PERSON['phone_number'])
+
         where = f'person_id={person_id}'
         query = db.select('Person', where=where)
         crime.cursor.execute(query)
