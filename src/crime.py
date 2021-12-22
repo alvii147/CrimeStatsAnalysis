@@ -1454,13 +1454,13 @@ SHOW_HELP = {
 }
 
 def help_show(args):
-    log.info(f"{PROGRAM} background code                     : {SHOW_HELP['code']}")
-    log.info(f"{PROGRAM} background person    <person_id>    : {SHOW_HELP['person']}")
-    log.info(f"{PROGRAM} background location  <location_id>  : {SHOW_HELP['location']}")
-    log.info(f"{PROGRAM} background complaint <complaint_id> : {SHOW_HELP['complaint']}")
-    log.info(f"{PROGRAM} background search    <search_id>    : {SHOW_HELP['search']}")
-    log.info(f"{PROGRAM} background crime     <crime_id>     : {SHOW_HELP['crime']}")
-    log.info(f"{PROGRAM} background help                     : {SHOW_HELP['help']}")
+    log.info(f"{PROGRAM} show code                      : {SHOW_HELP['code']}")
+    log.info(f"{PROGRAM} show person    <person_id>     : {SHOW_HELP['person']}")
+    log.info(f"{PROGRAM} show location  <location_id>   : {SHOW_HELP['location']}")
+    log.info(f"{PROGRAM} show complaint <complaint_id>  : {SHOW_HELP['complaint']}")
+    log.info(f"{PROGRAM} show search    <search_id>     : {SHOW_HELP['search']}")
+    log.info(f"{PROGRAM} show crime     <crime_id>      : {SHOW_HELP['crime']}")
+    log.info(f"{PROGRAM} show help                      : {SHOW_HELP['help']}")
 
 def usage_show():
     log.info(f"{PROGRAM} show <command> [arguments]")
