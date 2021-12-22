@@ -205,7 +205,6 @@ def runQueries(queries):
     '''
 
     connection, cursor = connectDB()
-    output = []
 
     for query in queries:
         console_query = consoleFriendly(query)
