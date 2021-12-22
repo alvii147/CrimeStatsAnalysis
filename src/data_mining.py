@@ -42,7 +42,7 @@ if __name__ == '__main__':
     print(set(outcomes))
     print('')
 
-    ethnicities = filterAttributes(search_data, ['ethnicity'], one_dim=True)
+    ethnicities = filterAttributes(search_data, ['suspect_ethnicity'], one_dim=True)
     print(set(ethnicities))
     print('')
 
