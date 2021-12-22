@@ -76,9 +76,9 @@ class TestCLI(unittest.TestCase):
         crime_id = crime.cursor.lastrowid
         with patch('sys.stdout', new=StringIO()) as fake_out:
             exit_status = crime.show(['crime', str(crime_id)])
-            std_out = fake_out.getvalue()
+            show_output = fake_out.getvalue()
 
-        print(std_out)
+        print([o.strip() for o in show_output.split()])
 
     @patch('builtins.input', side_effect=PERSON_TEST_INPUT)
     def test_add_delete_person(self, magic_mock_obj):
