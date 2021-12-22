@@ -183,8 +183,8 @@ class TestUtils(unittest.TestCase):
     def test_isQuoted(self):
         s = 'Foot same length Europe?'
         self.assertTrue(utils.stripQuotes(f'\'{s}\'') == s)
-        self.assertTrue(utils.stripQuotes(f'"{}"') == s)
-        self.assertTrue(utils.stripQuotes('\'{s}') != s)
+        self.assertTrue(utils.stripQuotes(f'"{s}"') == s)
+        self.assertTrue(utils.stripQuotes(f'\'{s}') != s)
         self.assertTrue(utils.stripQuotes(s) != s)
 
 if __name__ == '__main__':
