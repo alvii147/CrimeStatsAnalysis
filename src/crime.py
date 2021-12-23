@@ -1734,7 +1734,7 @@ def filter_search(args):
 FILTER_HELP = {
     "complaint": "Filter complaint by location, date, and code",
     "crime":     "Filter crimes by location, date, and code",
-    "search":    "Filter search by location, date, and code",
+    "search":    "Filter search by location and date",
     "help":      "Show this message",
 }
 
@@ -1801,8 +1801,7 @@ def help(args):
 
     log.info(f"{PROGRAM} help                       : {HELP['help']}")
     log.info(f"{PROGRAM} create                     : {HELP['create']}")
-    log.info(f"{PROGRAM} load                       : {HELP['load']}")
-    log.info(f"{PROGRAM} load <number_of_entries>   : {HELP['load']}")
+    log.info(f"{PROGRAM} load [number_of_entries]   : {HELP['load']}")
     log.info(f"{PROGRAM} clear                      : {HELP['clear']}")
     log.info(f"{PROGRAM} clean                      : {HELP['clean']}")
     log.info(f"{PROGRAM} add                        : {HELP['add']}")
