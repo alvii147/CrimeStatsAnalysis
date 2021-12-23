@@ -1,20 +1,34 @@
 # Crime Stats Analysis
 
+This project involves the collection of crime records datasets from law enforcement departments in UK and US, and the process of developing an optimally designed database and a client interface for the definition, manipulation and storage of this data. Please see the [report](https://alvii147.github.io/CrimeStatsAnalysis/report/Report) or the [video presentation](https://youtu.be/aTREWcHJalw) for more information.
+
 ## Installation
 
+Clone the repository:
+
 ```bash
-# clone repository
 git clone https://github.com/alvii147/CrimeStatsAnalysis.git
-# navigate into cloned repository
+```
+
+Navigate into repository directory:
+
+```bash
 cd CrimeStatsAnalysis/
 ```
 
+Create and activate Python virtual environment (optional):
+
 ```bash
-# create python virtual environment
 python3 -m venv env
-# activate virtual environment
+# Linux & MacOS
 source env/bin/activate
-# install dependencies
+# Windows
+source env/Scripts/activate
+```
+
+Install dependencies:
+
+```bash
 pip3 install -r requirements.txt
 ```
 
@@ -48,7 +62,7 @@ database = db356_waterlooid
 
 Storing configuration in file is optional, and if not done, the program will continuously prompt for user input every time a database connection is attempted for every missing configuration variable.
 
-> **WARNING**
+> :warning: **Warning**
 >
 > Storing the password in the configuration file is NOT recommended. Currently, the `.gitignore` is written to ignore the configuration file when committing to version control system. However, this is not completely fool-proof as the configuration file may be committed accidentally if the `.gitignore` is missing or renamed.
 
