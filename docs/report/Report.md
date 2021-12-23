@@ -26,11 +26,11 @@ Zahin Zaman | ECE 356 - Database Systems | Fall 2021 | University of Waterloo
 
 ## Overview
 
-This project involves the collection of crime records datasets from law enforcement departments in UK and US, and the process of developing an optimally designed database and a client interface for the definition, manipulation and storage of this data.
+This project involves the collection of crime records datasets from law enforcement departments in UK and US, and the process of developing an optimally designed database and a client interface for the definition, manipulation and storage of this data. The links to the source code and the video presentation for this project are listed below:
 
-See [this Github repository](https://github.com/alvii147/CrimeStatsAnalysis.git) for source code.
+[![](https://img.shields.io/badge/Source%20Code-000000?style=flat&logo=github)](https://github.com/alvii147/CrimeStatsAnalysis.git)
 
-See [this YouTube video](https://youtu.be/aTREWcHJalw) for presentation video.
+[![](https://img.shields.io/badge/Video%20Presentation-ff0000?style=flat&logo=youtube)](https://youtu.be/aTREWcHJalw)
 
 ## Datasets
 
@@ -775,7 +775,7 @@ For the background check you can specify by which factors you want to lookup the
 python3 crime.py background
 ```
 
-```
+```bash
 $ python3 crime.py background
 > Search for person by:
 > [1] ID
@@ -1231,9 +1231,9 @@ The investigation produced results against suspect ethnicities and genders. The 
 
 ### Age Range
 
-![Legend](../img/Legend.png)
-
 ![Outcomes by Age Range](../img/data_mining_age_range.png)
+
+<img alt="Legend" src="../img/Legend.png" width="250" />
 
 The age range results are grouped under the following five categories:
 
@@ -1243,17 +1243,17 @@ The age range results are grouped under the following five categories:
 4. 25-34
 5. Over 34
 
-The major outcomes for this set of results are arrest, drug warnings, and no action taken.  In general, suspects in the under 10 and 10-17 age group are more likely to be discharged without a warning compared to those over 18.  This makes sense, as people in these age groups are classified as juveniles, and are therefore not evaluated in the same way as suspects who are legally adults, i.e., over 18.  To complement this, the general trend is that younger suspects are less likely to be arrested, while more older offenders end up being arrested, which also makes sense.
+The major outcomes for this set of results are arrest, drug warnings, and no action taken. In general, suspects in the under 10 and 10-17 age group are more likely to be discharged without a warning compared to those over 18. This makes sense, as people in these age groups are classified as juveniles, and are therefore not evaluated in the same way as suspects who are legally adults, i.e., over 18. To complement this, the general trend is that younger suspects are less likely to be arrested, while more older offenders end up being arrested, which also makes sense.
 
-Interestingly, a greater number of suspects aged 18 and above received drug warnings, whereas fewer suspects in the under 18 groups were given warnings.  This makes sense, considering that those 18 and above were more likely to be arrested, implying that they actually were guilty of drugs possession.  Statistically, we would expect more of the older suspects to either be arrested or given a warning.  Most of the juvenile suspects were discharged without further action, meaning that it was unlikely that they where guilty and were therefore less likely to receive a warning in the first place.
+Interestingly, a greater number of suspects aged 18 and above received drug warnings, whereas fewer suspects in the under 18 groups were given warnings. This makes sense, considering that those 18 and above were more likely to be arrested, implying that they actually were guilty of drugs possession. Statistically, we would expect more of the older suspects to either be arrested or given a warning. Most of the juvenile suspects were discharged without further action, meaning that it was unlikely that they where guilty and were therefore less likely to receive a warning in the first place.
 
-An interesting point is that very few of the juveniles who were guilty actually ended up recieving a warning, with most of them being arrested right away.  Albeit being a lesser percentage than older age groups, we would expect that the crime enforcement officers would be more likely to give juvenile offenders a warning instead of arresting them right away.
+An interesting point is that very few of the juveniles who were guilty actually ended up recieving a warning, with most of them being arrested right away. Albeit being a lesser percentage than older age groups, we would expect that the crime enforcement officers would be more likely to give juvenile offenders a warning instead of arresting them right away.
 
 ### Legislation
 
-![Legend](../img/Legend.png)
-
 ![Outcomes by Legislation](../img/data_mining_legislation.png)
+
+<img alt="Legend" src="../img/Legend.png" width="250" />
 
 The legislation of a stop and search is the legislation that grants an officer the power to perform a stop and search. Details of the legislations under examination are described below:
 
@@ -1269,9 +1269,9 @@ The bar graphs reveal that the outcome of a stop and search do vary slightly wit
 
 ### Object
 
-![Legend](../img/Legend.png)
-
 ![Outcomes by Object](../img/data_mining_object.png)
+
+<img alt="Legend" src="../img/Legend.png" width="250" />
 
 When looking at the objects the suspects are serached for the results are quite interesting. One of the first things that we can see is that the most suspects are arrested for possesing fireworks when searched. This is quite interesting as we expected either drugs or firearms to result in a higher arrest rate. A likely reason for this is due to the volitile nature of fireworks. However it is important to note that the possession of fireworks results in minor offence compared to the harsher sentences that result from possessing firearms or drugs. Another surprise is the level of drug offences given off as warnings. That aspect is a bit hard to interpolate from the data as we dont know the quantity of the substance found. It is also important to note that these are the objects that are simply being searched by law enforcement. It doesn't necessarily mean that they will be found in the search. However we can see that when an object is found during a search it often does result in an arrest. This is further supported by the minimal level of warning that are given. We can see that during the search for an object the two outcomes of arrest or not finding the object seem to be the most likely.
 
@@ -1281,9 +1281,9 @@ It is also interesting to note the percentage of stop and search that dont resul
 
 ### Gender
 
-![Legend](../img/Legend.png)
-
 ![Outcomes by Gender](../img/data_mining_gender.png)
+
+<img alt="Legend" src="../img/Legend.png" width="250" />
 
 We first analyze the difference between male and female suspects, due to the more or less similar results in both those categories.  Among males and females, both are equally likely to be discharged without any further action, as well as given penalties and drug warnings.  However, it appears that male suspects are slightly more likely to be arrested than female suspects.  Comparing across all three categories makes it quite apparent that those under the "other" category are more likey to get discharged without further action, and nobody under the other category was given a pentaly.  Note that the "other" catergory may also contain data for males and females whose gender was not recorded, so these findings might be slightly skewed with respect to the "other" category.
 
@@ -1304,9 +1304,9 @@ Ethnicity Code | Description
 `A3` | Asian Bangladeshi
 `A9` | Any other Asian ethnic background
 
-![Legend](../img/Legend.png)
-
 ![Outcomes by Ethnicity](../img/data_mining_detailed_ethnicity.png)
+
+<img alt="Legend" src="../img/Legend.png" width="250" />
 
 The first observation is that the majority of suspects are discharged without any further action being taken.  This is more or less evenly distributed across the ethnicities, which suggests that in general, stop and searches tend to result in no futher action.  A more interesting point of comparison is the percentage of suspects that were arrested after being searched.  While not overly dramatic, it is apparent that a larger percentage of people from the `B1`, `B2`, `B9`, ethnic groups were arrested compared to those in the `A1`, `A2`, `A3`, and `A9` groups.  The `W1`, `W2`, and `W9` ethinic groups have inconsistent results which span from as low as `A` groups to as high as `B` groups.  In simple terms, the results imply that black suspects are the most likely to be arrested, whereas south asian suspects are the least likely to be arrested.  On the other hand, white suspects may or may not have a higher chance of being arrested, but the data does not provide a strong enough case to claim one or the other.
 
