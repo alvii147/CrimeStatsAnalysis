@@ -28,11 +28,9 @@ Zahin Zaman | ECE 356 - Database Systems | Fall 2021 | University of Waterloo
 
 This project involves the collection of crime records datasets from law enforcement departments in UK and US, and the process of developing an optimally designed database and a client interface for the definition, manipulation and storage of this data.
 
-## Source Code
+See [this Github repository](https://github.com/alvii147/CrimeStatsAnalysis.git) for source code.
 
-The source code for the project can be found under the following repository:
-
->[https://github.com/alvii147/CrimeStatsAnalysis.git](https://github.com/alvii147/CrimeStatsAnalysis.git)
+See [this YouTube video](https://youtu.be/aTREWcHJalw) for presentation video.
 
 ## Datasets
 
@@ -458,7 +456,9 @@ ON Crime (
 ```mysql
 CREATE INDEX Crime_Person_FK_IDX
 ON Crime (victim_id);
+```
 
+```mysql
 CREATE INDEX Complaint_PK_IDX
 ON Complaint (complaint_id);
 ```
@@ -479,7 +479,9 @@ ON Complaint (
 ```mysql
 CREATE INDEX Search_PK_IDX
 ON Search (search_id);
+```
 
+```mysql
 CREATE INDEX Search_Incident_FK_IDX
 ON Search (incident_id);
 ```
@@ -948,7 +950,7 @@ python3 crime.py background name
 
 ### Adding a crime to the database
 
-```
+```bash
 $ python3 crime.py add crime
 > Do you know the ID of the victim?
 [yes/no]: yes
@@ -990,7 +992,7 @@ mysql> SELECT crime_id, weapon, description FROM Crime WHERE crime_id = 1901;
 
 If you do not know some information that is mandatory, the command will abort, and you will be asked to separately add the corresponding records.  For example, you cannot add a crime with a crime code and organization that does not yet exist in the database.  In this case you will need to add a new crime code using the `python3 crime.py add code` command:
 
-```
+```bash
 $ python3 crime.py add crime
 > Do you know the ID of the victim?
 [yes/no]: yes
@@ -1002,7 +1004,7 @@ $ python3 crime.py add crime
 
 In other cases, the client will verify that your data is valid.  For example, it will reject crime codes that do not exist in the database:
 
-```
+```bash
 > Do you know the ID of the victim?
 [yes/no]: yes
 [INT(10)] victim_id: 3
@@ -1130,12 +1132,14 @@ TOTAL                       2095   1045    50%
 
 The following sections detail the data mining investigation that we conducted on the crime dataset.
 
-> The code for the data mining is in the `src/data_mining.py`
+> :scroll: **Note**
+The code for the data mining is in the `src/data_mining.py`
+
 ## Goal
 
 The goal of our data mining exercise was to answer to following question:
 
-> What factors influence the outcomes of stop-and-searches in the London area?
+**What factors influence the outcomes of stop-and-searches in the London area?**
 
 To evaluate this question, we made use of the data records found in `london-stop-and-search.csv`.
 
@@ -1143,26 +1147,23 @@ To evaluate this question, we made use of the data records found in `london-stop
 
 As part of the data mining investigation, we decided to compare the results of London stop-and-searches based on two metrics:
 
-1. Suspect Ethnicity
-1. Suspect Gender
+- Suspect Ethnicity
+- Suspect Gender
 
-These metrics work well for this purpose, as `london-stop-and-search.csv` has detailed information for both of these attributes.  This allows us to draw stronger conclusions from the data when comparing outcomes with respect to ethnicity and gender.  For references, these are the possible values for ethnicity and gender that are found under the London stop-and-search records:
+These metrics work well for this purpose, as `london-stop-and-search.csv` has detailed information for both of these attributes.  This allows us to draw stronger conclusions from the data when comparing outcomes with respect to ethnicity and gender.  For references, these are the possible values for ethnicity that are found under the London Stop & Search records:
 
-**WHITE**
-- `W1` White British
-- `W2` White Irish
-- `W9` Any other White ethnic background
-
-**BLACK**
-- `B1` Black Caribbean
-- `B2` Black African
-- `B9` Any other Black ethnic background
-
-**ASIAN**
-- `A1` Asian Indian
-- `A2` Asian Pakistani
-- `A3` Asian Bangladeshi
-- `A9` Any other Asian ethnic background
+Ethnicity Code | Description
+--- | ---
+`W1` | White British
+`W2` | White Irish
+`W9` | Any other White ethnic background
+`B1` | Black Caribbean
+`B2` | Black African
+`B9` | Any other Black ethnic background
+`A1` | Asian Indian
+`A2` | Asian Pakistani
+`A3` | Asian Bangladeshi
+`A9` | Any other Asian ethnic background
 
 ## Results
 
