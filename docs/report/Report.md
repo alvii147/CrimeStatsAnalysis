@@ -370,7 +370,7 @@ Our relational schema is almost nearly similar to our entity-relationship model.
 
 ### Foreign Key Constraints
 
-Now we can define our foreign key constraints.
+Now we can define our foreign key constraints based on the entity-relationship model relations.
 
 ```mysql
 ALTER TABLE Complaint ADD CONSTRAINT Complaint_Incident
@@ -473,7 +473,9 @@ ON Complaint (
 ```mysql
 CREATE INDEX Search_PK_IDX
 ON Search (search_id);
+```
 
+```mysql
 CREATE INDEX Search_Incident_FK_IDX
 ON Search (incident_id);
 ```
@@ -612,7 +614,7 @@ The following are some of the high level commands availble in the client applica
 |-----------|---------------------------------------------------|
 |`help`       | Show this message									|
 |`create`     | Create all tables									|
-|`load`       | Load data from CSVs into tables					|
+|`load [num_of_entries]`       | Load data from CSVs into tables (defaults to 1000 entries)	|
 |`clear`      | Delete all entries in tables						|
 |`clean`      | Drop all tables from database						|
 |`add`        | Add entries to the database						|
@@ -640,7 +642,7 @@ python3 crime.py create
 
 Once the tables are created, load the data from the CSVs.  This may take some time depending on the server load and how many records are being loaded:
 ```bash
-python3 crime.py load
+python3 crime.py load <num_of_entries>
 ```
 
 At this point, the database should be fully created and loaded with preliminary data from the CSVs.  Note that some supplementary data is obtained from additional CSVs which are located under `src/codes`.  These contain the crime codes for various crimes that are found in the database.
@@ -854,7 +856,7 @@ Enter selection: 1
 > police_department: New York Police Department
 > weapon: Flamethrower
 > domestic: 0
-> description: Suspect torched victim's car with a flamethrower
+> description: Suspect torched victim\'s car with a flamethrower
 > location_id: 5
 > latitude: 51.47168500
 > longitude: -0.13594000
@@ -948,7 +950,7 @@ $ python3 crime.py add crime
 ```
 
 > :scroll: **Note**
-When adding a crime, the client with prompt you for the necessary information.  If you don't know the information for a particular attribute, type **[Enter]** to skip it.  This will insert a `NULL` for that field.
+When adding a crime, the client with prompt you for the necessary information.  If you don't know the information for a particular attribute, type `[Enter]` to skip it.  This will insert a `NULL` for that field.
 
 Using the SQL `SELECT` command, we can confirm that the crime record was successfully added to the database:
 
@@ -1134,6 +1136,6 @@ Another improvement to our system would be to add more rigorous error checking a
 
 Additionally, it would be worthwhile to investigate the functionality of our database with additional datasets.  The current datasets are only limited to certain areas and are not a comprehensive representation of all the types of crime records that exists around the world.  Testing with additional datasets may reveal necessary design changes that can improve the performance, reliability, and functionality of the crime database design and implementation.
 
-## Commands to be implemented in the future
+### Commands to be implemented in the future
 
 Due to the time restrictions we had to make a call on the features that we implemented for the command line interface. While we were able to implement the major features of add, update, delete and show in the database there were a few features that we simply didn't have the time to implement. A lot of these commands are more centered towards the statistics of the crime. For example being able to see run a command to see what fraction of crimes where the suspect is found guilty vs not guility. Commands like this can paint a better picture of the criminal activity in an area over a specific period which could be crucial to law enforcement.
