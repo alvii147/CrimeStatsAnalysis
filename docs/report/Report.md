@@ -1133,7 +1133,7 @@ TOTAL                       2095   1045    50%
 The following sections detail the data mining investigation that we conducted on the crime dataset.
 
 > :scroll: **Note**
-The code for the data mining along with all defined helper functions can be found in `src/data_mining/`
+The code for the data mining along with all defined helper functions can be found in `src/data_mining/`. Note that `matplotlib` and `scipy` will need to be installed for running them
 
 ## Goal
 
@@ -1215,7 +1215,7 @@ This gives us the correlation between our attributes and the outcome:
 
 ```
 Attribute            Correlation
-age_range            0.09296395655124153 
+age_range            0.09296395655124153
 legislation          -0.016374289472876096
 object               0.01227489539072439
 gender               0.011708471018349945
@@ -1225,14 +1225,71 @@ ethnicity            0.0013679657488576144
 
 This shows us that the outcome depends the mostly on the `age_range` and the `legislation`, with `object`, `gender` and `detailed_ethnicity` following (we can ignore the `ethnicity` column since it is derived from `detailed_ethnicity`)
 
-## Feature Selection
+## Results
 
-As part of the data mining investigation, we decided to compare the results of London stop-and-searches based on two metrics:
+The investigation produced results against suspect ethnicities and genders. The graphs show what percentage of people had each outcome, and the data is separated by gender and ethnicity.
 
-- Suspect Ethnicity
-- Suspect Gender
+### Age Range
 
-These metrics work well for this purpose, as `london-stop-and-search.csv` has detailed information for both of these attributes.  This allows us to draw stronger conclusions from the data when comparing outcomes with respect to ethnicity and gender.  For references, these are the possible values for ethnicity that are found under the London Stop & Search records:
+![Legend](../img/Legend.png)
+
+![Outcomes by Age Range](../img/data_mining_age_range.png)
+
+The age range results are grouped under the following five categories:
+
+1. Under 10
+2. 10-17
+3. 18-24
+4. 25-34
+5. Over 34
+
+The major outcomes for this set of results are arrest, drug warnings, and no action taken.  In general, suspects in the under 10 and 10-17 age group are more likely to be discharged without a warning compared to those over 18.  This makes sense, as people in these age groups are classified as juveniles, and are therefore not evaluated in the same way as suspects who are legally adults, i.e., over 18.  To complement this, the general trend is that younger suspects are less likely to be arrested, while more older offenders end up being arrested, which also makes sense.
+
+Interestingly, a greater number of suspects aged 18 and above received drug warnings, whereas fewer suspects in the under 18 groups were given warnings.  This makes sense, considering that those 18 and above were more likely to be arrested, implying that they actually were guilty of drugs possession.  Statistically, we would expect more of the older suspects to either be arrested or given a warning.  Most of the juvenile suspects were discharged without further action, meaning that it was unlikely that they where guilty and were therefore less likely to receive a warning in the first place.
+
+An interesting point is that very few of the juveniles who were guilty actually ended up recieving a warning, with most of them being arrested right away.  Albeit being a lesser percentage than older age groups, we would expect that the crime enforcement officers would be more likely to give juvenile offenders a warning instead of arresting them right away.
+
+### Legislation
+
+![Legend](../img/Legend.png)
+
+![Outcomes by Legislation](../img/data_mining_legislation.png)
+
+The legislation of a stop and search is the legislation that grants an officer the power to perform a stop and search. Details of the legislations under examination are described below:
+
+Legislation | Description
+--- | ---
+Criminal Justice and Public Order Act 1994 (section 60) | A police officer of or above the rank of inspector may stop and search a person if they reasonably believe either that incidents involving serious violence may take place in any locality in his police area, and that it is expedient to give an authorisation under this section to prevent their occurrence, or that persons are carrying dangerous instruments or offensive weapons in any locality in his police area without good reason.
+Misuse of Drugs Act 1971 (section 23) | Provides that a constable may search a person suspected of being in possession of a controlled drug and detain them for the purpose of the search.
+Police and Criminal Evidence Act 1984 (section 1) | Provides police officers with the power to stop and search any person, vehicle, or anything which is in or on a vehicle, for stolen or prohibited articles, points and blades, or fireworks.
+Criminal Justice Act 1988 (section 139B) | A constable may enter school premises and search those premises and any person on those premises for knives (specific details in the legislation) or any offensive weapon within the meaning of section 1 of the Prevention of Crime Act 1953.
+Firearms Act 1968 (section 47) | If a constable has reasonable cause to suspect a person of having a firearm with him in a public place, or to be committing or about to commit, elsewhere than in a public place, an offence relevant for the purposes of this section, the constable may search that person and may detain him for the purpose of doing so.
+
+The bar graphs reveal that the outcome of a stop and search do vary slightly with legislation. First thing we notice is that there is a larger percentage of stop and search suspects that were given a drugs possession warning under the Misuse of Drugs Act 1971 than any other legislation. This makes sense because most of the stop and searches under this legislation will likely be related to drugs possession. We can also observe that the percentage of cases where the suspect was arrested after a stop and search under the Criminal Justice and Public Order Act 1994 is much lower than that of other legislations, likely due to this legislation being a general category and not being related to any specific type of crime. Thus, law enforcers are more likely to make incorrect judgement. Finally, we see that stop-and-searches under the Police and Criminal Evidence Act 1984 has a relatively large percentage of instances where a local resolution was reached. This is likely because these incidents involve victims, and hence there is a greater likelihood of them not pressing charges.
+
+### Object
+
+![Legend](../img/Legend.png)
+
+![Outcomes by Object](../img/data_mining_object.png)
+
+When looking at the objects the suspects are serached for the results are quite interesting. One of the first things that we can see is that the most suspects are arrested for possesing fireworks when searched. This is quite interesting as we expected either drugs or firearms to result in a higher arrest rate. A likely reason for this is due to the volitile nature of fireworks. However it is important to note that the possession of fireworks results in minor offence compared to the harsher sentences that result from possessing firearms or drugs. Another surprise is the level of drug offences given off as warnings. That aspect is a bit hard to interpolate from the data as we dont know the quantity of the substance found. It is also important to note that these are the objects that are simply being searched by law enforcement. It doesn't necessarily mean that they will be found in the search. However we can see that when an object is found during a search it often does result in an arrest. This is further supported by the minimal level of warning that are given. We can see that during the search for an object the two outcomes of arrest or not finding the object seem to be the most likely.
+
+Another interesting aspect is the varying levels of warnings given out based on the object being searched. It seems that drug possession are more likely to get a warning compared to many of the other objects. A big reason for this is due to the controlled nature or the drugs, meaning that it is often prescribed to patients.
+
+It is also interesting to note the percentage of stop and search that dont result in an object being found. This is surprising considering we expected that a search often occurs if law enforcement has a good reason to believe that you are in possession of something illegal. However this does not seem to be the case and may bring into question the method used to determine when to conduct a stop and search.
+
+### Gender
+
+![Legend](../img/Legend.png)
+
+![Outcomes by Gender](../img/data_mining_gender.png)
+
+We first analyze the difference between male and female suspects, due to the more or less similar results in both those categories.  Among males and females, both are equally likely to be discharged without any further action, as well as given penalties and drug warnings.  However, it appears that male suspects are slightly more likely to be arrested than female suspects.  Comparing across all three categories makes it quite apparent that those under the "other" category are more likey to get discharged without further action, and nobody under the other category was given a pentaly.  Note that the "other" catergory may also contain data for males and females whose gender was not recorded, so these findings might be slightly skewed with respect to the "other" category.
+
+### Ethnicity
+
+For references, these are the possible values for ethnicity that are found under the London Stop & Search records:
 
 Ethnicity Code | Description
 --- | ---
@@ -1247,37 +1304,7 @@ Ethnicity Code | Description
 `A3` | Asian Bangladeshi
 `A9` | Any other Asian ethnic background
 
-## Results
-
-The investigation produced results against suspect ethnicities and genders.  The graphs show what percentage of people had each outcome, and the data is separated by gender and ethnicity.
-
-### Age Range
-
 ![Legend](../img/Legend.png)
-
-![Outcomes by Age Range](../img/data_mining_age_range.png)
-
-### Legislation
-
-![Legend](../img/Legend.png)
-
-![Outcomes by Legislation](../img/data_mining_legislation.png)
-
-### Object
-
-![Legend](../img/Legend.png)
-
-![Outcomes by Object](../img/data_mining_object.png)
-
-### Gender
-
-![Legend](../img/Legend.png)
-
-![Outcomes by Gender](../img/data_mining_gender.png)
-
-We first analyze the difference between male and female suspects, due to the more or less similar results in both those categories.  Among males and females, both are equally likely to be discharged without any further action, as well as given penalties and drug warnings.  However, it appears that male suspects are slightly more likely to be arrested than female suspects.  Comparing across all three categories makes it quite apparent that those under the "other" category are more likey to get discharged without further action, and nobody under the other category was given a pentaly.  Note that the "other" catergory may also contain data for males and females whose gender was not recorded, so these findings might be slightly skewed with respect to the "other" category.
-
-### Ethnicity
 
 ![Outcomes by Ethnicity](../img/data_mining_detailed_ethnicity.png)
 
