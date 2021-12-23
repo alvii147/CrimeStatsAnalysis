@@ -28,6 +28,12 @@ Zahin Zaman | ECE 356 - Database Systems | Fall 2021 | University of Waterloo
 
 This project involves the collection of crime records datasets from law enforcement departments in UK and US, and the process of developing an optimally designed database and a client interface for the definition, manipulation and storage of this data.
 
+## Source Code
+
+The source code for the project can be found under the following repository:
+
+>[https://github.com/alvii147/CrimeStatsAnalysis.git](https://github.com/alvii147/CrimeStatsAnalysis.git)
+
 ## Datasets
 
 Datasets used in this project have been collected from [Kaggle](https://www.kaggle.com). Each dataset provides crime data from a different city and state in UK or US.
@@ -591,6 +597,26 @@ python3 crime.py
 
 This should display a list of the top-level commands.  Please refer to the following sections for more information about how to use to client.
 
+## Ideal command line tool
+
+Ideal list of features we want implemented:
+
+1)	Add information to the database
+2)	Update information from the database
+3)	Delete information from the database
+4)	Run a background check on someone
+5)	Able to query data based on location, code, and time
+6)	Allow the ability for the user to specify certain flags for information rather than prompting question
+7)	Allow functionality to sort data in ascending or descending order
+8)	Incorporate flags that allow user to use the “group by” feature in SQL
+9)  Command that allow you to gather statistics on the data ex(what fraction of suspects are found guility in a given region for a particular type of crime)
+
+ The features we did **not** get to implement are: 6, 7, 8 and 9
+
+For us the focus was really on ensuring that the core functionalities of a command line tool were available in the database. This included being able to add, update, delete and query data from the database. As we implemented the client, we had to decide regarding the ease of use of the application. While we do see that the ideal client application would have both flags (ex. Put -d to modify the date) and prompt the user for questions, we ended up implementing the prompting of information. This is because when it comes to our use cases a variety of different people would use the client such as law enforcement and government officials. So, ease of use was more important than the flexibility.
+
+The additional features of being able to implement commands that allow you to group and sort data would be very beneficial. Especially from the standpoint of understanding the criminal activity better in a particular region. This can help bring to light many of the crimes taking place in the community and can maybe help you see what attributes or factors contribute to such crimes.
+
 ### High level Commands
 
 The client can be categorized as two sets of commands. The first are the high levels commands that allow you to do the following:
@@ -747,7 +773,7 @@ For the background check you can specify by which factors you want to lookup the
 python3 crime.py background
 ```
 
-```bash
+```
 $ python3 crime.py background
 > Search for person by:
 > [1] ID
@@ -922,7 +948,7 @@ python3 crime.py background name
 
 ### Adding a crime to the database
 
-```bash
+```
 $ python3 crime.py add crime
 > Do you know the ID of the victim?
 [yes/no]: yes
@@ -964,7 +990,7 @@ mysql> SELECT crime_id, weapon, description FROM Crime WHERE crime_id = 1901;
 
 If you do not know some information that is mandatory, the command will abort, and you will be asked to separately add the corresponding records.  For example, you cannot add a crime with a crime code and organization that does not yet exist in the database.  In this case you will need to add a new crime code using the `python3 crime.py add code` command:
 
-```bash
+```
 $ python3 crime.py add crime
 > Do you know the ID of the victim?
 [yes/no]: yes
@@ -976,7 +1002,7 @@ $ python3 crime.py add crime
 
 In other cases, the client will verify that your data is valid.  For example, it will reject crime codes that do not exist in the database:
 
-```bash
+```
 > Do you know the ID of the victim?
 [yes/no]: yes
 [INT(10)] victim_id: 3
@@ -1102,7 +1128,60 @@ TOTAL                       2095   1045    50%
 
 # Data Mining
 
-TO-DO
+The following sections detail the data mining investigation that we conducted on the crime dataset.
+
+## Goal
+
+The goal of our data mining exercise was to answer to following question:
+
+> What factors influence the outcomes of stop-and-searches in the London area?
+
+To evaluate this question, we made use of the data records found in `london-stop-and-search.csv`.
+
+## Feature Selection
+
+As part of the data mining investigation, we decided to compare the results of London stop-and-searches based on two metrics:
+
+1. Suspect Ethnicity
+1. Suspect Gender
+
+These metrics work well for this purpose, as `london-stop-and-search.csv` has detailed information for both of these attributes.  This allows us to draw stronger conclusions from the data when comparing outcomes with respect to ethnicity and gender.  For references, these are the possible values for ethnicity and gender that are found under the London stop-and-search records:
+
+**WHITE**
+- `W1` White British
+- `W2` White Irish
+- `W9` Any other White ethnic background
+
+**BLACK**
+- `B1` Black Caribbean
+- `B2` Black African
+- `B9` Any other Black ethnic background
+
+**ASIAN**
+- `A1` Asian Indian
+- `A2` Asian Pakistani
+- `A3` Asian Bangladeshi
+- `A9` Any other Asian ethnic background
+
+## Techniques Used
+
+## Technique Validation
+
+## Results
+
+The investigation produced results against suspect ethnicities and genders.  The graphs show what percentage of people had each outcome, and the data is separated by gender and ethnicity.
+
+### Ethnicity
+
+![Outcomes by Ethnicity](../img/DataMiningOutcomesByEthnicity.png)
+
+The first observation is that the majority of suspects are discharged without any further action being taken.  This is more or less evenly distributed across the ethnicities, which suggests that in general, stop and searches tend to result in no futher action.  A more interesting point of comparison is the percentage of suspects that were arrested after being searched.  While not overly dramatic, it is apparent that a larger percentage of people from the `B1`, `B2`, `B9`, ethnic groups were arrested compared to those in the `A1`, `A2`, `A3`, and `A9` groups.  The `W1`, `W2`, and `W9` ethinic groups have inconsistent results which span from as low as `A` groups to as high as `B` groups.  In simple terms, the results imply that black suspects are the most likely to be arrested, whereas south asian suspects are the least likely to be arrested.  On the other hand, white suspects may or may not have a higher chance of being arrested, but the data does not provide a strong enough case to claim one or the other.
+
+### Gender
+
+![Outcomes by Gender](../img/DataMiningOutcomesByGender.png)
+
+We first analyze the difference between male and female suspects, due to the more or less similar results in both those categories.  Among males and females, both are equally likely to be discharged without any further action, as well as given penalties and drug warnings.  However, it appears that male suspects are slightly more likely to be arrested than female suspects.  Comparing across all three categories makes it quite apparent that those under the "other" category are more likey to get discharged without further action, and nobody under the other category was given a pentaly.  Note that the "other" catergory may also contain data for males and females whose gender was not recorded, so these findings might be slightly skewed with respect to the "other" category.
 
 # Conclusion
 
@@ -1133,7 +1212,3 @@ When it comes to developing the client application one of the biggest challanges
 Another improvement to our system would be to add more rigorous error checking and unit tests for the client.  Given the time constraints, there was only so much of the client that we could verify with regards to stability and robustness.  In the future, it would be wise to more thoroughly test the various client commands using invalid data.
 
 Additionally, it would be worthwhile to investigate the functionality of our database with additional datasets.  The current datasets are only limited to certain areas and are not a comprehensive representation of all the types of crime records that exists around the world.  Testing with additional datasets may reveal necessary design changes that can improve the performance, reliability, and functionality of the crime database design and implementation.
-
-## Commands to be implemented in the future
-
-Due to the time restrictions we had to make a call on the features that we implemented for the command line interface. While we were able to implement the major features of add, update, delete and show in the database there were a few features that we simply didn't have the time to implement. A lot of these commands are more centered towards the statistics of the crime. For example being able to see run a command to see what fraction of crimes where the suspect is found guilty vs not guility. Commands like this can paint a better picture of the criminal activity in an area over a specific period which could be crucial to law enforcement.
