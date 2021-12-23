@@ -376,7 +376,7 @@ Our relational schema is almost nearly similar to our entity-relationship model.
 
 ### Foreign Key Constraints
 
-Now we can define our foreign key constraints based on the entity-relationship model relations.
+Now we can define our foreign key constraints.
 
 ```mysql
 ALTER TABLE Complaint ADD CONSTRAINT Complaint_Incident
@@ -479,9 +479,7 @@ ON Complaint (
 ```mysql
 CREATE INDEX Search_PK_IDX
 ON Search (search_id);
-```
 
-```mysql
 CREATE INDEX Search_Incident_FK_IDX
 ON Search (incident_id);
 ```
@@ -636,19 +634,19 @@ python3 crime.py help
 
 The following are some of the high level commands availble in the client application. This can be seen from the command above.
 
-|Command    | Description                                       |
-|-----------|---------------------------------------------------|
-|`help`       | Show this message									|
-|`create`     | Create all tables									|
-|`load [num_of_entries]`       | Load data from CSVs into tables (defaults to 1000 entries)	|
-|`clear`      | Delete all entries in tables						|
-|`clean`      | Drop all tables from database						|
-|`add`        | Add entries to the database						|
-|`delete`     | Delete entries from the database					|
-|`update`     | Update entries in the database					|
-|`background` | Run background check on person					|
-|`show`       | Show detailed record information					|
-|`filter`     | Filter records based on location, date, and code	|
+|Command      | Description                                       |
+|-------------|---------------------------------------------------|
+|`help`       | Show this message								  |
+|`create`     | Create all tables								  |
+|`load`       | Load data from CSVs into tables					  |
+|`clear`      | Delete all entries in tables					  |
+|`clean`      | Drop all tables from database					  |
+|`add`        | Add entries to the database						  |
+|`delete`     | Delete entries from the database				  |
+|`update`     | Update entries in the database					  |
+|`background` | Run background check on person					  |
+|`show`       | Show detailed record information				  |
+|`filter`     | Filter records based on location, date, and code  |
 
 
 Example of running one of these commands in the terminal :
@@ -668,7 +666,7 @@ python3 crime.py create
 
 Once the tables are created, load the data from the CSVs.  This may take some time depending on the server load and how many records are being loaded:
 ```bash
-python3 crime.py load <num_of_entries>
+python3 crime.py load
 ```
 
 At this point, the database should be fully created and loaded with preliminary data from the CSVs.  Note that some supplementary data is obtained from additional CSVs which are located under `src/codes`.  These contain the crime codes for various crimes that are found in the database.
@@ -882,7 +880,7 @@ Enter selection: 1
 > police_department: New York Police Department
 > weapon: Flamethrower
 > domestic: 0
-> description: Suspect torched victim\'s car with a flamethrower
+> description: Suspect torched victim's car with a flamethrower
 > location_id: 5
 > latitude: 51.47168500
 > longitude: -0.13594000
@@ -976,7 +974,7 @@ $ python3 crime.py add crime
 ```
 
 > :scroll: **Note**
-When adding a crime, the client with prompt you for the necessary information.  If you don't know the information for a particular attribute, type `[Enter]` to skip it.  This will insert a `NULL` for that field.
+When adding a crime, the client with prompt you for the necessary information.  If you don't know the information for a particular attribute, type **[Enter]** to skip it.  This will insert a `NULL` for that field.
 
 Using the SQL `SELECT` command, we can confirm that the crime record was successfully added to the database:
 
@@ -1132,11 +1130,12 @@ TOTAL                       2095   1045    50%
 
 The following sections detail the data mining investigation that we conducted on the crime dataset.
 
+> The code for the data mining is in the `src/data_mining.py`
 ## Goal
 
 The goal of our data mining exercise was to answer to following question:
 
-**What factors influence the outcomes of stop-and-searches in the London area?**
+> What factors influence the outcomes of stop-and-searches in the London area?
 
 To evaluate this question, we made use of the data records found in `london-stop-and-search.csv`.
 
@@ -1144,23 +1143,26 @@ To evaluate this question, we made use of the data records found in `london-stop
 
 As part of the data mining investigation, we decided to compare the results of London stop-and-searches based on two metrics:
 
-- Suspect Ethnicity
-- Suspect Gender
+1. Suspect Ethnicity
+1. Suspect Gender
 
-These metrics work well for this purpose as `london-stop-and-search.csv` has detailed information for both of these attributes.  This allows us to draw stronger conclusions from the data when comparing outcomes with respect to ethnicity and gender.  For references, these are the possible values for ethnicity that are found under the London Stop & Search records:
+These metrics work well for this purpose, as `london-stop-and-search.csv` has detailed information for both of these attributes.  This allows us to draw stronger conclusions from the data when comparing outcomes with respect to ethnicity and gender.  For references, these are the possible values for ethnicity and gender that are found under the London stop-and-search records:
 
-Ethnicity Code | Description
---- | ---
-`W1` | White British
-`W2` | White Irish
-`W9` | Any other White ethnic background
-`B1` | Black Caribbean
-`B2` | Black African
-`B9` | Any other Black ethnic background
-`A1` | Asian Indian
-`A2` | Asian Pakistani
-`A3` | Asian Bangladeshi
-`A9` | Any other Asian ethnic background
+**WHITE**
+- `W1` White British
+- `W2` White Irish
+- `W9` Any other White ethnic background
+
+**BLACK**
+- `B1` Black Caribbean
+- `B2` Black African
+- `B9` Any other Black ethnic background
+
+**ASIAN**
+- `A1` Asian Indian
+- `A2` Asian Pakistani
+- `A3` Asian Bangladeshi
+- `A9` Any other Asian ethnic background
 
 ## Results
 
@@ -1207,7 +1209,3 @@ When it comes to developing the client application one of the biggest challanges
 Another improvement to our system would be to add more rigorous error checking and unit tests for the client.  Given the time constraints, there was only so much of the client that we could verify with regards to stability and robustness.  In the future, it would be wise to more thoroughly test the various client commands using invalid data.
 
 Additionally, it would be worthwhile to investigate the functionality of our database with additional datasets.  The current datasets are only limited to certain areas and are not a comprehensive representation of all the types of crime records that exists around the world.  Testing with additional datasets may reveal necessary design changes that can improve the performance, reliability, and functionality of the crime database design and implementation.
-
-### Commands to be implemented in the future
-
-Due to the time restrictions we had to make a call on the features that we implemented for the command line interface. While we were able to implement the major features of add, update, delete and show in the database there were a few features that we simply didn't have the time to implement. A lot of these commands are more centered towards the statistics of the crime. For example being able to see run a command to see what fraction of crimes where the suspect is found guilty vs not guility. Commands like this can paint a better picture of the criminal activity in an area over a specific period which could be crucial to law enforcement.
