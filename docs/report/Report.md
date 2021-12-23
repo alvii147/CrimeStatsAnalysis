@@ -1133,7 +1133,7 @@ TOTAL                       2095   1045    50%
 The following sections detail the data mining investigation that we conducted on the crime dataset.
 
 > :scroll: **Note**
-The code for the data mining is in the `src/data_mining.py`
+The code for the data mining along with all defined helper functions can be found in `src/data_mining/`
 
 ## Goal
 
@@ -1142,6 +1142,88 @@ The goal of our data mining exercise was to answer to following question:
 **What factors influence the outcomes of stop-and-searches in the London area?**
 
 To evaluate this question, we made use of the data records found in `london-stop-and-search.csv`.
+
+## Feature Selection
+
+In order to determine the factors that influence the outcome of a stop-and-seach, we start by computing a correlation metric between each of our features (i.e. attributes) and the outcome of each search. Because most of our attributes are non-numeric, a suitable correlation metric for this context would be the **Spearman's Rank Correlation**.
+
+### Technique
+
+The first step of the computation of Spearman's Rank Correlation involves the sorting of the given two vectors to find the ranks of each observation in the vectors.
+
+For example, if the values of the vectors are `[12, 3, 15]`, the corresponding pairs would be `[2, 3, 1]`.
+
+Once we have obtained the ranks of both the vectors, the Spearman's Rank Correlation $\large \rho$ is calculated using the following formula:
+
+$$
+\Large \rho = 1 - \frac{6 \sum d^2_i}{n(n^2 - 1)}
+$$
+
+where $\large d_i$ is the difference in paired ranks of the two vectors and $\large n$ is the number of points.
+
+### Implementation
+
+We can now use the [SciPy](https://scipy.org) library in Python to help compute the Spearman's Rank Correlation between the attributes and the outcome of the searches.
+
+```python
+import warnings
+import math
+from scipy import stats
+
+import utils
+
+OMIT_ATTRIBUTES = [
+    'type',
+    'occurrence_date',
+    'part_of_policing_operation',
+    'latitude',
+    'longitude',
+    'outcome',
+    'object_caused_outcome',
+    'clothing_removal',
+]
+
+warnings.filterwarnings('ignore', category=RuntimeWarning)
+
+if __name__ == '__main__':
+    search_data = utils.read_csv(utils.SEARCH_DATA_FILE)
+
+    rho, pvalue = stats.spearmanr(search_data, axis=0)
+
+    outcome_idx = utils.SEARCH_DATA_ATTRIBUTES.index('outcome')
+    outcome_correlation = [
+        [utils.SEARCH_DATA_ATTRIBUTES[i], rho[outcome_idx][i]]
+        for i in range(len(utils.SEARCH_DATA_ATTRIBUTES))
+    ]
+
+    outcome_correlation = list(filter(
+        lambda x: not math.isnan(x[1]) and x[0] not in OMIT_ATTRIBUTES,
+        outcome_correlation,
+    ))
+
+    outcome_correlation = list(reversed(sorted(
+        outcome_correlation,
+        key=lambda x: abs(x[1]),
+    )))
+
+    print('{:20s} {:20s}'.format('Attribute', 'Correlation'))
+    for corr in outcome_correlation:
+        print('{:20s} {:20s}'.format(corr[0], str(corr[1])))
+```
+
+This gives us the correlation between our attributes and the outcome:
+
+```
+Attribute            Correlation
+age_range            0.09296395655124153 
+legislation          -0.016374289472876096
+object               0.01227489539072439
+gender               0.011708471018349945
+detailed_ethnicity   -0.007534401717632491
+ethnicity            0.0013679657488576144
+```
+
+This shows us that the outcome depends the mostly on the `age_range` and the `legislation`, with `object`, `gender` and `detailed_ethnicity` following (we can ignore the `ethnicity` column since it is derived from `detailed_ethnicity`)
 
 ## Feature Selection
 
@@ -1169,17 +1251,37 @@ Ethnicity Code | Description
 
 The investigation produced results against suspect ethnicities and genders.  The graphs show what percentage of people had each outcome, and the data is separated by gender and ethnicity.
 
-### Ethnicity
+### Age Range
 
-![Outcomes by Ethnicity](../img/DataMiningOutcomesByEthnicity.png)
+![Legend](../img/Legend.png)
 
-The first observation is that the majority of suspects are discharged without any further action being taken.  This is more or less evenly distributed across the ethnicities, which suggests that in general, stop and searches tend to result in no futher action.  A more interesting point of comparison is the percentage of suspects that were arrested after being searched.  While not overly dramatic, it is apparent that a larger percentage of people from the `B1`, `B2`, `B9`, ethnic groups were arrested compared to those in the `A1`, `A2`, `A3`, and `A9` groups.  The `W1`, `W2`, and `W9` ethinic groups have inconsistent results which span from as low as `A` groups to as high as `B` groups.  In simple terms, the results imply that black suspects are the most likely to be arrested, whereas south asian suspects are the least likely to be arrested.  On the other hand, white suspects may or may not have a higher chance of being arrested, but the data does not provide a strong enough case to claim one or the other.
+![Outcomes by Age Range](../img/data_mining_age_range.png)
+
+### Legislation
+
+![Legend](../img/Legend.png)
+
+![Outcomes by Legislation](../img/data_mining_legislation.png)
+
+### Object
+
+![Legend](../img/Legend.png)
+
+![Outcomes by Object](../img/data_mining_object.png)
 
 ### Gender
 
-![Outcomes by Gender](../img/DataMiningOutcomesByGender.png)
+![Legend](../img/Legend.png)
+
+![Outcomes by Gender](../img/data_mining_gender.png)
 
 We first analyze the difference between male and female suspects, due to the more or less similar results in both those categories.  Among males and females, both are equally likely to be discharged without any further action, as well as given penalties and drug warnings.  However, it appears that male suspects are slightly more likely to be arrested than female suspects.  Comparing across all three categories makes it quite apparent that those under the "other" category are more likey to get discharged without further action, and nobody under the other category was given a pentaly.  Note that the "other" catergory may also contain data for males and females whose gender was not recorded, so these findings might be slightly skewed with respect to the "other" category.
+
+### Ethnicity
+
+![Outcomes by Ethnicity](../img/data_mining_detailed_ethnicity.png)
+
+The first observation is that the majority of suspects are discharged without any further action being taken.  This is more or less evenly distributed across the ethnicities, which suggests that in general, stop and searches tend to result in no futher action.  A more interesting point of comparison is the percentage of suspects that were arrested after being searched.  While not overly dramatic, it is apparent that a larger percentage of people from the `B1`, `B2`, `B9`, ethnic groups were arrested compared to those in the `A1`, `A2`, `A3`, and `A9` groups.  The `W1`, `W2`, and `W9` ethinic groups have inconsistent results which span from as low as `A` groups to as high as `B` groups.  In simple terms, the results imply that black suspects are the most likely to be arrested, whereas south asian suspects are the least likely to be arrested.  On the other hand, white suspects may or may not have a higher chance of being arrested, but the data does not provide a strong enough case to claim one or the other.
 
 # Conclusion
 
