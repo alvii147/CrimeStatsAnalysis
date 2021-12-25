@@ -518,7 +518,7 @@ View Name | View Description
 
 ## Overview
 
-The client application serves as a front end for the database.  It uses an interactive command line interface to maintain and look up records, as well as create, delete, and populate the database.
+The client application serves as a front end for the database. It uses an interactive command line interface to maintain and look up records, as well as create, delete, and populate the database.
 
 ## Installation
 
@@ -552,10 +552,10 @@ pip3 install -r requirements.txt
 
 ## Configuration
 
-In order to run the program, you will need access to a database on Marmoset.  For best results, use a emtpy database.  You can store the database credentials in a configuration data file under `src/MySQLutils/config.ini`.
+In order to run the program, you will need access to a database on Marmoset. For best results, use a emtpy database. You can store the database credentials in a configuration data file under `src/MySQLutils/config.ini`.
 
 > :scroll: **Note**
-> Using `config.ini` is not required but is recommended.  If you choose to not use the configuration file, then the client application will prompt you for your credentials each time it connects to the database.
+> Using `config.ini` is not required but is recommended. If you choose to not use the configuration file, then the client application will prompt you for your credentials each time it connects to the database.
 
 To store your credentials in a `config.ini` file:
 
@@ -585,7 +585,7 @@ database = db356_waterlooid
 
 The client supports a variety of commands which can be broken down into multiple categories.
 
-Once the environment is configured, you can run the client application `crime.py`.  First navigate to the source directory:
+Once the environment is configured, you can run the client application `crime.py`. First navigate to the source directory:
 
 ```bash
 cd src/
@@ -597,7 +597,7 @@ Once inside `src`, you can run the client application as follows:
 python3 crime.py
 ```
 
-This should display a list of the top-level commands.  Please refer to the following sections for more information about how to use to client.
+This should display a list of the top-level commands. Please refer to the following sections for more information about how to use to client.
 
 ## Ideal command line tool
 
@@ -659,36 +659,36 @@ python3 crime.py add
 
 ### Database Creation
 
-Once the repository is configured, you can use the client to create the database.  The client cannot interact with the database until is it created.
+Once the repository is configured, you can use the client to create the database. The client cannot interact with the database until is it created.
 
 Start by creating the database tables, foreign keys, and views:
 ```bash
 python3 crime.py create
 ```
 
-Once the tables are created, load the data from the CSVs.  This may take some time depending on the server load and how many records are being loaded:
+Once the tables are created, load the data from the CSVs. This may take some time depending on the server load and how many records are being loaded:
 ```bash
 python3 crime.py load
 ```
 
-At this point, the database should be fully created and loaded with preliminary data from the CSVs.  Note that some supplementary data is obtained from additional CSVs which are located under `src/codes`.  These contain the crime codes for various crimes that are found in the database.
+At this point, the database should be fully created and loaded with preliminary data from the CSVs. Note that some supplementary data is obtained from additional CSVs which are located under `src/codes`. These contain the crime codes for various crimes that are found in the database.
 
-If you would like to delete all entries from the database tables, use the following `clear` command.  This will **not** drop the tables from the database:
+If you would like to delete all entries from the database tables, use the following `clear` command. This will **not** drop the tables from the database:
 ```bash
 python3 crime.py clear
 ```
 
-Alteratively, if you would like to remove all the tables from the database, use the `clean` command.  This will drop the tables along with their entries, and is useful when you would like to rebuild the database from scratch or if you would like to reload the records from the CSVs:
+Alteratively, if you would like to remove all the tables from the database, use the `clean` command. This will drop the tables along with their entries, and is useful when you would like to rebuild the database from scratch or if you would like to reload the records from the CSVs:
 ```bash
 python3 crime.py clean
 ```
 
 ### Subcommands
 
-`create`, `load`, `clear`, and `clean` are used for database creation and deletion only and do not have subcommands.  The commands for the client can be further broken down to allow the user greater control over the database. For example the `add` command allows you to specify which tables you want to add the data to.
+`create`, `load`, `clear`, and `clean` are used for database creation and deletion only and do not have subcommands. The commands for the client can be further broken down to allow the user greater control over the database. For example the `add` command allows you to specify which tables you want to add the data to.
 
 > :scroll: **Note**:
-In the event that the client encounters an error, any modifications to the database will not be commited.  The database will only be updated in the event of a successful command run.
+In the event that the client encounters an error, any modifications to the database will not be commited. The database will only be updated in the event of a successful command run.
 
 To see all the specific commands type the command followed by `help` :
 
@@ -976,7 +976,7 @@ $ python3 crime.py add crime
 ```
 
 > :scroll: **Note**
-When adding a crime, the client with prompt you for the necessary information.  If you don't know the information for a particular attribute, type **[Enter]** to skip it.  This will insert a `NULL` for that field.
+When adding a crime, the client with prompt you for the necessary information. If you don't know the information for a particular attribute, type **[Enter]** to skip it. This will insert a `NULL` for that field.
 
 Using the SQL `SELECT` command, we can confirm that the crime record was successfully added to the database:
 
@@ -990,7 +990,7 @@ mysql> SELECT crime_id, weapon, description FROM Crime WHERE crime_id = 1901;
 1 row in set (0.00 sec)
 ```
 
-If you do not know some information that is mandatory, the command will abort, and you will be asked to separately add the corresponding records.  For example, you cannot add a crime with a crime code and organization that does not yet exist in the database.  In this case you will need to add a new crime code using the `python3 crime.py add code` command:
+If you do not know some information that is mandatory, the command will abort, and you will be asked to separately add the corresponding records. For example, you cannot add a crime with a crime code and organization that does not yet exist in the database. In this case you will need to add a new crime code using the `python3 crime.py add code` command:
 
 ```bash
 $ python3 crime.py add crime
@@ -1002,7 +1002,7 @@ $ python3 crime.py add crime
 > Please add a new code using 'python3 crime.py add code'
 ```
 
-In other cases, the client will verify that your data is valid.  For example, it will reject crime codes that do not exist in the database:
+In other cases, the client will verify that your data is valid. For example, it will reject crime codes that do not exist in the database:
 
 ```bash
 > Do you know the ID of the victim?
@@ -1024,7 +1024,7 @@ The `filter` command prompts for mutiple sections that you can narrow your searc
 - Crime codes
 - Date
 
-You can specify one or mutiple of these in the same filter query.  The client will show you the most important imformation from the results.  You can use the resulting codes and the `python3 crime.py show` command to learn more about these records based on their IDs.
+You can specify one or mutiple of these in the same filter query. The client will show you the most important imformation from the results. You can use the resulting codes and the `python3 crime.py show` command to learn more about these records based on their IDs.
 
 Let's say that you wanted to know the crimes that took place in `Los Angeles` after `2020` and reported by the `LAPD` in the `Vehicle stolen` category.
 
@@ -1091,11 +1091,11 @@ $ python3 crime.py show code
 ```
 ## Testing Plan
 
-In order to test our client and database functionality, we made use of both manaul and automatic testing methods.  We individually tested each client command and verified the corresponding functionality using MySQL commands on the database.  For example, the `add` and `delete` commands were manually verified by crosschecking for deletions and addtions vias SQL `SELECT` queries from the same tables, both before and after running the commands.  Similar testing was conducted for `update`.  These three commands make up the DDL and DML.
+In order to test our client and database functionality, we made use of both manaul and automatic testing methods. We individually tested each client command and verified the corresponding functionality using MySQL commands on the database. For example, the `add` and `delete` commands were manually verified by crosschecking for deletions and addtions vias SQL `SELECT` queries from the same tables, both before and after running the commands. Similar testing was conducted for `update`. These three commands make up the DDL and DML.
 
-The remaining commands deal with querying only and not the SQL DDL/DML language such as `INSERT`, `DELETE`, and `UPDATE`.  These include the `update`, `show`, `filter`, and `background` commands.  These commands actually generate SQL `SELECT` queries in order to obtain the data, so it was easy to verify their output by constructing equivalent queries in the MySQL terminal.
+The remaining commands deal with querying only and not the SQL DDL/DML language such as `INSERT`, `DELETE`, and `UPDATE`. These include the `update`, `show`, `filter`, and `background` commands. These commands actually generate SQL `SELECT` queries in order to obtain the data, so it was easy to verify their output by constructing equivalent queries in the MySQL terminal.
 
-In additional to manually testing our database functionality, we also developed automated test cases that accomplish the same goal.  This test code runs various combinations of commands and subcommands and verifies the output by cross-referencing against the results that are directly queried from the database.  The coverage for these unit tests are shown below:
+In additional to manually testing our database functionality, we also developed automated test cases that accomplish the same goal. This test code runs various combinations of commands and subcommands and verifies the output by cross-referencing against the results that are directly queried from the database. The coverage for these unit tests are shown below:
 
 ```bash
 $ coverage run tests.py -b
@@ -1285,7 +1285,7 @@ It is also interesting to note the percentage of stop and search that dont resul
 
 <img alt="Legend" src="../img/Legend.png" width="250" />
 
-We first analyze the difference between male and female suspects, due to the more or less similar results in both those categories.  Among males and females, both are equally likely to be discharged without any further action, as well as given penalties and drug warnings.  However, it appears that male suspects are slightly more likely to be arrested than female suspects.  Comparing across all three categories makes it quite apparent that those under the "other" category are more likey to get discharged without further action, and nobody under the other category was given a pentaly.  Note that the "other" catergory may also contain data for males and females whose gender was not recorded, so these findings might be slightly skewed with respect to the "other" category.
+We first analyze the difference between male and female suspects, due to the more or less similar results in both those categories. Among males and females, both are equally likely to be discharged without any further action, as well as given penalties and drug warnings. However, it appears that male suspects are slightly more likely to be arrested than female suspects. Comparing across all three categories makes it quite apparent that those under the "other" category are more likey to get discharged without further action, and nobody under the other category was given a pentaly. Note that the "other" catergory may also contain data for males and females whose gender was not recorded, so these findings might be slightly skewed with respect to the "other" category.
 
 ### Ethnicity
 
@@ -1308,7 +1308,7 @@ Ethnicity Code | Description
 
 <img alt="Legend" src="../img/Legend.png" width="250" />
 
-The first observation is that the majority of suspects are discharged without any further action being taken.  This is more or less evenly distributed across the ethnicities, which suggests that in general, stop and searches tend to result in no futher action.  A more interesting point of comparison is the percentage of suspects that were arrested after being searched.  While not overly dramatic, it is apparent that a larger percentage of people from the `B1`, `B2`, `B9`, ethnic groups were arrested compared to those in the `A1`, `A2`, `A3`, and `A9` groups.  The `W1`, `W2`, and `W9` ethinic groups have inconsistent results which span from as low as `A` groups to as high as `B` groups.  In simple terms, the results imply that black suspects are the most likely to be arrested, whereas south asian suspects are the least likely to be arrested.  On the other hand, white suspects may or may not have a higher chance of being arrested, but the data does not provide a strong enough case to claim one or the other.
+The first observation is that the majority of suspects are discharged without any further action being taken. This is more or less evenly distributed across the ethnicities, which suggests that in general, stop and searches tend to result in no futher action. A more interesting point of comparison is the percentage of suspects that were arrested after being searched. While not overly dramatic, it is apparent that a larger percentage of people from the `B1`, `B2`, `B9`, ethnic groups were arrested compared to those in the `A1`, `A2`, `A3`, and `A9` groups. The `W1`, `W2`, and `W9` ethinic groups have inconsistent results which span from as low as `A` groups to as high as `B` groups. In simple terms, the results imply that black suspects are the most likely to be arrested, whereas south asian suspects are the least likely to be arrested. On the other hand, white suspects may or may not have a higher chance of being arrested, but the data does not provide a strong enough case to claim one or the other.
 
 # Conclusion
 
@@ -1318,7 +1318,7 @@ There were quite few challanges that we encountered while building this project 
 
 Starting off with the database design, one of the really tricky aspects revolved around the two subsets of the US and UK database. One of our primary objectives was to develop a database that was generic. In other words it is a database that could be used in any crime system around the world. While there were many similarities between the two datasets, there are also a certain level of differences which makes it quite difficult to generalize.
 
-We also faced challenges when developing our client command line tool.  It was difficult to find a balance between usablility and flexibility when designing the client commands, especially those which required prompting the user to enter values for attributes.  By nature, the client program does not provide the full flexibiliy of SQL querying, so we needed to decide what the user should and should not be able to do with respect to modifying and querying the database.
+We also faced challenges when developing our client command line tool. It was difficult to find a balance between usablility and flexibility when designing the client commands, especially those which required prompting the user to enter values for attributes. By nature, the client program does not provide the full flexibiliy of SQL querying, so we needed to decide what the user should and should not be able to do with respect to modifying and querying the database.
 
 ## Tradeoffs
 
@@ -1328,14 +1328,14 @@ One of the big tradeoffs we made was in regards to the gneralization of the data
 
 Another tradeoff in our database design came from the relationship of linking people to multiple crimes. With the datasets given to us, each crime record corresponded to a single inividual. Now in reality this certinly will not be the case as a single person can commit multiple crimes. That is why in reality it would be better to have a mapping between the `crime_id` and the `person_id` in a seperate table. This would allow multiple people to correspond to a single crime and reduce the number of duplicates in the database.
 
-In terms of the client too development, we had to make a tradeoff between the flexibility and usability of the UI.  We decided to using a combination of interactive prompting and command line arguments in order to implement various functionality.  For example, prompting was used when adding or searching for attribute values, which would be very confusing for the user (and difficult to implement) if it were done via command line arguments, especially since some of the tables have many attributes, each with different formats.  Having interactive prompts avoids confusing the user and allowed us to provide them with real-time feedback.  To aviod too many levels of propmpting, we separated core functions such as `add`, `delete`, `filter`, etc. into their own commands and subcommands, which preserves some granularity without becoming overwhelming for the user.
+In terms of the client too development, we had to make a tradeoff between the flexibility and usability of the UI. We decided to using a combination of interactive prompting and command line arguments in order to implement various functionality. For example, prompting was used when adding or searching for attribute values, which would be very confusing for the user (and difficult to implement) if it were done via command line arguments, especially since some of the tables have many attributes, each with different formats. Having interactive prompts avoids confusing the user and allowed us to provide them with real-time feedback. To aviod too many levels of propmpting, we separated core functions such as `add`, `delete`, `filter`, etc. into their own commands and subcommands, which preserves some granularity without becoming overwhelming for the user.
 
-We also made the decision to restrict the user from attempting to micromanage sensitive attributes, such as primary keys.  These attributes were abstracted away behind the user interface to make the database system easier to use.  Therefore the user does not need to have an in depth knowlege of how the ER model works in order to use it.  It also prevents the user from accidentally breaking contraints in the database, which would be impossibile to fix if they did not have accesses to anything but the client tool.  The overall goal was to provide the same core functionality of SQL via the client without the user having to actually write or think about the actual SQL code.
+We also made the decision to restrict the user from attempting to micromanage sensitive attributes, such as primary keys. These attributes were abstracted away behind the user interface to make the database system easier to use. Therefore the user does not need to have an in depth knowlege of how the ER model works in order to use it. It also prevents the user from accidentally breaking contraints in the database, which would be impossibile to fix if they did not have accesses to anything but the client tool. The overall goal was to provide the same core functionality of SQL via the client without the user having to actually write or think about the actual SQL code.
 
 ## Future Improvements
 
 When it comes to developing the client application one of the biggest challanges is preventing SQL injection. SQL injection is when the user can find valnerable inputs and create malicious SQL commands to execute in th database. While this may not be a massive issue now considering we allow a certin subset of instructions in the CLI, it could be a massive issue as this application grows. One of the ways to prevent SQL injection is to do extensive input validation. While we do have a level of input validation based on the types of the attributes, we could certinly do more when it comes to adding content to the database. This is certinly something to improve on in the future as it would ensure greater security for this application. Furthermore aside from implementing more input validation in the future, testing for SQL injection should also be a priority. This would ensure that development efforts in the future don't introduce any new sequrity leaks.
 
-Another improvement to our system would be to add more rigorous error checking and unit tests for the client.  Given the time constraints, there was only so much of the client that we could verify with regards to stability and robustness.  In the future, it would be wise to more thoroughly test the various client commands using invalid data.
+Another improvement to our system would be to add more rigorous error checking and unit tests for the client. Given the time constraints, there was only so much of the client that we could verify with regards to stability and robustness. In the future, it would be wise to more thoroughly test the various client commands using invalid data.
 
-Additionally, it would be worthwhile to investigate the functionality of our database with additional datasets.  The current datasets are only limited to certain areas and are not a comprehensive representation of all the types of crime records that exists around the world.  Testing with additional datasets may reveal necessary design changes that can improve the performance, reliability, and functionality of the crime database design and implementation.
+Additionally, it would be worthwhile to investigate the functionality of our database with additional datasets. The current datasets are only limited to certain areas and are not a comprehensive representation of all the types of crime records that exists around the world. Testing with additional datasets may reveal necessary design changes that can improve the performance, reliability, and functionality of the crime database design and implementation.
